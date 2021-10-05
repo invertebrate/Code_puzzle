@@ -37,20 +37,20 @@ INCLUDES = -I ./include \
 		-I$(LIB3D)/include \
 
 CFLAGS =-Wall -Wextra -Werror -O3 -flto #$(LINUX_IGNOREW)
-SOURCES = main.cpp \
+SOURCES =	main.cpp \
+			#window/window.cpp
 
-OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))
+OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.cpp=.o))
 
 all:
 ifneq ($(TYPE),invalid)
-	@make intro && make $(DIR_OBJ) && make install_sdl && make $(NAME)
-		&& make usage
+	@make intro && make $(DIR_OBJ) && make install_sdl && make $(NAME) && make usage
 else
 	$(error "OS not supported by this compilation.")
 endif
 
 $(NAME): $(OBJS)
-	# @make libs
+# @make libs
 	@printf "\033[32;1mCompiling app...\n\033[0m"
 	$(GPP) -o $@ $^ $(LIBS) $(CFLAGS)
 
@@ -71,10 +71,10 @@ intro:
 $(DIR_OBJ):
 	@printf "\033[32;1mCreate temp directories...\n\033[0m"
 	@mkdir -p temp
-	@mkdir -p temp/assets
+	@mkdir -p temp/window
 # all temp folders need to be created manually?^
 
-$(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
+$(DIR_OBJ)/%.o: $(DIR_SRC)/%.cpp
 	@printf "\033[32;1m$<\n\033[0m"
 	@$(GPP) -c -o $@ $< $(CFLAGS) $(INCLUDES)
 
@@ -107,16 +107,12 @@ endif
 	@printf "\033[32;1mCompiling...\n\033[0m"
 
 clean:
-	@make -C $(LIBFT) clean
-	@make -C $(LIB3D) clean
-	@make -C $(LIBGMATRIX) clean
+# @make -C $(LIB3D) clean
 	@/bin/rm -f $(OBJS)
 	@/bin/rm -rf $(DIR_OBJ)
 
 fclean: clean
-	@make -C $(LIBFT) fclean
-	@make -C $(LIB3D) fclean
-	@make -C $(LIBGMATRIX) fclean
+# @make -C $(LIB3D) fclean
 	@/bin/rm -f $(NAME)
 
 re: fclean all
