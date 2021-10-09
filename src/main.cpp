@@ -1,62 +1,71 @@
 #include "code_puzzle.h"
 
-void	game_init()
-{
-	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO); //error check these
-	TTF_Init();
+SDL_Texture *load_texture(SDL_Renderer *renderer, const char *file) {
+	SDL_Texture *new_texture = NULL;
+	SDL_Surface *loaded_surface = IMG_Load(file);
+	if (loaded_surface == NULL)
+		printf("unable to load the image %s! SDL_omage Error: %s\n",
+		       file, IMG_GetError());
+	else {
+		new_texture =
+		    SDL_CreateTextureFromSurface(renderer, loaded_surface);
+		if (new_texture == NULL)
+			printf("unable to create the texture from %s! SDL "
+			       "Error: %s\n",
+			       file, SDL_GetError());
+	}
+	SDL_FreeSurface(loaded_surface);
+	return (new_texture);
 }
 
-void	game_loop()
-{
+void update_window(GameRenderer *renderer) { (void)renderer; }
+
+void render_frame(GameRenderer *renderer) {
+	SDL_Texture *texture;
+	SDL_RenderClear(renderer->sdl_renderer);
+	texture = load_texture(renderer->sdl_renderer, TEST_TEXTURE);
+	SDL_Rect dstrect;
+	dstrect.x = 100;
+	dstrect.y = 100;
+	dstrect.h = 50;
+	dstrect.w = 75;
+	SDL_RenderCopy(renderer->sdl_renderer, texture, NULL, &dstrect);
+	renderer->render();
+}
+
+void game_init(SDL_Window *window) { (void)window; }
+
+void game_loop(GameRenderer *renderer) {
+	SDL_Event e;
+
 	int game_running = 1;
-	window *window1 = new window("test", 1000, 1000);
-		(void)window1;
-	while(game_running)
-	{
+	while (game_running) {
+		while (SDL_PollEvent(&e) != 0) {
+			if (e.type == SDL_QUIT ||
+			    (e.type == SDL_KEYDOWN &&
+			     e.key.keysym.sym == SDLK_ESCAPE))
+				game_running = 0;
+		}
 		// handle_events();
 		// input_script();
 		// update_game_state();
-		// render_frame();
+		render_frame(renderer);
 	}
 }
 
-void	game_run()
-{
-	game_init();
-	game_loop();
+void game_run() {
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO); // error check these
+	TTF_Init();
+	SDL_Window *window =
+	    SDL_CreateWindow("test1", SDL_WINDOWPOS_CENTERED,
+			     SDL_WINDOWPOS_CENTERED, 1000, 1000, 0);
+	GameRenderer *renderer = new GameRenderer(window);
+	game_init(window);
+	game_loop(renderer);
 }
 
-int		main()
-{
+int main() {
 	game_run();
 	// game_cleanup();
-	printf("run\n");
 	return (0);
 }
-
-
-
-// void	doom3d_run(t_doom3d *app)
-// {
-// 	int32_t	cpu_count;
-// 	int32_t	num_threads;
-
-// 	assets_load(app);
-// 	cpu_count = SDL_GetCPUCount();
-// 	num_threads = ft_max_int((int32_t[2]){
-// 			NUM_THREADS_DEFAULT, cpu_count}, 2);
-// 	app->thread_pool = thread_pool_create(num_threads);
-// 	LOG_INFO("Created thread pool with %d threads for %d logical cpus",
-// 		num_threads, cpu_count);
-// 	LOG_INFO("Initialize SDL");
-// 	error_check(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0, SDL_GetError());
-// 	error_check(TTF_Init() == -1, TTF_GetError());
-// 	LOG_INFO("Initialize App settings");
-// 	settings_init(app);
-// 	LOG_INFO("Create SDL Window & frame buffers");
-// 	window_create(&app->window, app->settings.width, app->settings.height);
-// 	window_set_fonts(app->window, &app->assets);
-// 	app_init(app);
-// 	main_loop(app);
-// 	cleanup(app);
-// }

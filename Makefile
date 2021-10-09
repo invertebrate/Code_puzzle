@@ -34,11 +34,14 @@ endif
 LIBS = $(SDL_FLAGS) $(LIB_PTHRTEAD)
 
 INCLUDES = -I ./include \
-		-I$(LIB3D)/include \
+		# -I$(LIB3D)/include \
 
 CFLAGS =-Wall -Wextra -Werror -O3 -flto #$(LINUX_IGNOREW)
 SOURCES =	main.cpp \
-			#window/window.cpp
+			window/window.cpp \
+			rendering/renderer.cpp \
+			game_objects/game_object.cpp \
+			vector/vector.cpp \
 
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.cpp=.o))
 
@@ -72,6 +75,10 @@ $(DIR_OBJ):
 	@printf "\033[32;1mCreate temp directories...\n\033[0m"
 	@mkdir -p temp
 	@mkdir -p temp/window
+	@mkdir -p temp/rendering
+	@mkdir -p temp/game_objects
+	@mkdir -p temp/vector
+
 # all temp folders need to be created manually?^
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.cpp
