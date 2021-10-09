@@ -28,12 +28,13 @@
 // 	SDL_Texture *new_texture = NULL;
 // 	SDL_Surface *loaded_surface = IMG_Load(file);
 // 	if (loaded_surface == NULL)
-// 		printf("unable to load the image %s! SDL_image Error: %s\n", file, IMG_GetError());
-// 	else
+// 		printf("unable to load the image %s! SDL_image Error: %s\n",
+// file, IMG_GetError()); 	else
 // 	{
-// 		new_texture = SDL_CreateTextureFromSurface(renderer, loaded_surface);
-// 		if (new_texture == NULL)
-// 			printf("unable to create the texture from %s! SDL Error: %s\n", file, SDL_GetError());
+// 		new_texture = SDL_CreateTextureFromSurface(renderer,
+// loaded_surface); 		if (new_texture == NULL)
+// printf("unable to create the texture from %s! SDL Error: %s\n", file,
+// SDL_GetError());
 // 	}
 // 	SDL_FreeSurface(loaded_surface);
 // 	return (new_texture);
