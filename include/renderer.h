@@ -1,17 +1,22 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "code_puzzle.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
-class GameRenderer {
-      public:
-	SDL_Window *sdl_window;
-	SDL_Renderer *sdl_renderer;
-	GameRenderer(SDL_Window *window);
-	~GameRenderer();
-	void render();
+class GameRenderer
+{
+	  public:
+		SDL_Window *sdl_window;
+		SDL_Renderer *sdl_renderer;
 
-      private:
-	GameRenderer(const GameRenderer &);
+		GameRenderer(SDL_Window *window);
+		~GameRenderer();
+		void render();
+		SDL_Texture *texture_create(const char *file);
+
+	  private:
+		GameRenderer(const GameRenderer &);
 };
 #endif

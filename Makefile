@@ -41,7 +41,8 @@ SOURCES =	main.cpp \
 			window/window.cpp \
 			rendering/renderer.cpp \
 			game_objects/game_object.cpp \
-			vector/vector.cpp \
+			game_manager/game_manager.cpp \
+			vector2/vector2.cpp \
 
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.cpp=.o))
 
@@ -77,7 +78,8 @@ $(DIR_OBJ):
 	@mkdir -p temp/window
 	@mkdir -p temp/rendering
 	@mkdir -p temp/game_objects
-	@mkdir -p temp/vector
+	@mkdir -p temp/game_manager
+	@mkdir -p temp/vector2
 
 # all temp folders need to be created manually?^
 
