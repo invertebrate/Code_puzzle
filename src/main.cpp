@@ -1,23 +1,5 @@
 #include "code_puzzle.h"
 
-SDL_Texture *load_texture(SDL_Renderer *renderer, const char *file)
-{
-		SDL_Texture *new_texture = NULL;
-		SDL_Surface *loaded_surface = IMG_Load(file);
-		if (loaded_surface == NULL)
-				printf("unable to load the image %s! SDL_omage Error: %s\n", file, IMG_GetError());
-		else
-		{
-				new_texture = SDL_CreateTextureFromSurface(renderer, loaded_surface);
-				if (new_texture == NULL)
-						printf("unable to create the texture from %s! SDL "
-							   "Error: %s\n",
-							   file, SDL_GetError());
-		}
-		SDL_FreeSurface(loaded_surface);
-		return (new_texture);
-}
-
 void update_window(GameRenderer *renderer)
 {
 		(void)renderer;
@@ -29,16 +11,8 @@ void GameManager::render_frame()
 		SDL_RenderClear(this->game_renderer_get()->sdl_renderer);
 		GameObject *object = this->game_objects[0];
 		texture = object->texture_get();
-		// // texture = this->game_renderer_get()->texture_create(TEST_TEXTURE);
-		// SDL_Rect dstrect;
-		// dstrect.x = 100;
-		// dstrect.y = 100;
-		// dstrect.h = 50;
-		// dstrect.w = 75;
 		SDL_RenderCopy(this->game_renderer_get()->sdl_renderer, texture, NULL, object->sdl_rect_get());
 		this->game_renderer_get()->render();
-		// (void)dstrect;
-		// (void)index;
 		(void)texture;
 }
 
@@ -54,12 +28,9 @@ void GameManager::game_loop()
 		float delta_time;
 		float ms_per_sec;
 		uint64_t time_diff;
+
 		float limiter = 0;
-
 		ms_per_sec = 1000.0;
-
-		// object->texture_set(game_renderer->texture_create(TEST_TEXTURE));
-		// game_manager->add_object(object); // create a  gameobject vector in gamemanager
 		int game_running = 1;
 
 		this->game_object_create("default");
