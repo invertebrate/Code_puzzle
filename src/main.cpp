@@ -23,62 +23,99 @@ void update_window(GameRenderer *renderer)
 		(void)renderer;
 }
 
-void render_frame(GameRenderer *renderer, GameObject *object)
+void GameManager::render_frame()
 {
 		SDL_Texture *texture;
-		SDL_RenderClear(renderer->sdl_renderer);
+		SDL_RenderClear(this->game_renderer_get()->sdl_renderer);
+		GameObject *object = this->game_objects[0];
 		texture = object->texture_get();
-		SDL_Rect dstrect;
-		dstrect.x = 100;
-		dstrect.y = 100;
-		dstrect.h = 50;
-		dstrect.w = 75;
-		SDL_RenderCopy(renderer->sdl_renderer, texture, NULL, &dstrect);
-		renderer->render();
+		// // texture = this->game_renderer_get()->texture_create(TEST_TEXTURE);
+		// SDL_Rect dstrect;
+		// dstrect.x = 100;
+		// dstrect.y = 100;
+		// dstrect.h = 50;
+		// dstrect.w = 75;
+		SDL_RenderCopy(this->game_renderer_get()->sdl_renderer, texture, NULL, object->sdl_rect_get());
+		this->game_renderer_get()->render();
+		// (void)dstrect;
+		// (void)index;
+		(void)texture;
 }
 
-void game_init(SDL_Window *window)
+uint64_t performance_counter_start(void)
 {
-		(void)window;
+		return (SDL_GetPerformanceCounter());
 }
 
-// TODO: CREATE GAME MANAGER OBJECT LIST AND UTILITY FUNCTIONS
-// MAKE RENDERER READ GAME OBJECT LIST FROM MANAGER AND RENDER OBJECTS
-// MAKE MAIN GAME LOGIC MEMBER FUNCTIONS OF THE GAME MANAGER
-void game_loop(GameRenderer *renderer)
+void GameManager::game_loop()
 {
 		SDL_Event e;
-		GameObject object;
-		object.texture_set(renderer->texture_create(TEST_TEXTURE));
+		uint64_t start_time;
+		float delta_time;
+		float ms_per_sec;
+		uint64_t time_diff;
+		float limiter = 0;
+
+		ms_per_sec = 1000.0;
+
+		// object->texture_set(game_renderer->texture_create(TEST_TEXTURE));
 		// game_manager->add_object(object); // create a  gameobject vector in gamemanager
 		int game_running = 1;
+
+		this->game_object_create("default");
+
 		while (game_running)
 		{
+				start_time = performance_counter_start();
+
+				///////GAME LOOP START
 				while (SDL_PollEvent(&e) != 0)
 				{
 						if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE))
 								game_running = 0;
 				}
-				// handle_events();
-				// input_script();
-				// update_game_state();
-				render_frame(renderer, &object);
+				// // handle_events();
+				// // input_script();
+				// // update_game_state();
+				this->render_frame();
+				//////GAME LOOP END
+
+				time_diff = SDL_GetPerformanceCounter() - start_time;
+				delta_time = (float)time_diff * ms_per_sec / (float)SDL_GetPerformanceFrequency();
+				limiter += delta_time;
+				if (limiter > 1000)
+				{
+						printf("fps: %f\n", 1000 / delta_time);
+						limiter = 0;
+				}
 		}
 }
 
-void game_run()
+GameManager *game_init(GameManager *game_manager)
 {
 		SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO); // error check these
 		TTF_Init();
-		SDL_Window *window = SDL_CreateWindow("test1", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 1000, 0);
-		GameRenderer *renderer = new GameRenderer(window);
-		game_init(window);
-		game_loop(renderer);
+		game_manager = new GameManager();
+		game_manager->init();
+		return (game_manager);
 }
 
+void GameManager::game_run()
+{
+		this->game_loop();
+}
+
+// TODO: CREATE GAME MANAGER OBJECT LIST AND UTILITY FUNCTIONS
+// MAKE RENDERER READ GAME OBJECT LIST FROM MANAGER AND RENDER OBJECTS
+// MAKE MAIN GAME LOGIC MEMBER FUNCTIONS OF THE GAME MANAGER
+// CREATE ASSET LOADING SYSTEM THAT IS NOT RUNTIME!
 int main()
 {
-		game_run();
+		GameManager *game_manager;
+
+		game_manager = NULL;
+		game_manager = game_init(game_manager);
+		game_manager->game_run();
 		// game_cleanup();
 		return (0);
 }

@@ -33,7 +33,7 @@ class GameWindow
 				SDL_DestroyWindow(sdl_window);
 				printf("window destroyed \n");
 		}
-		SDL_Window *get_window()
+		SDL_Window *sdl_window_get()
 		{
 				printf("window get %p\n", sdl_window);
 				return (sdl_window);

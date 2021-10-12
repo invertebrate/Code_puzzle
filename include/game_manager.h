@@ -9,14 +9,20 @@
 class GameManager
 {
 	  private:
-		GameWindow *window;
-		GameRenderer *renderer;
+		GameWindow *game_window;
+		GameRenderer *game_renderer;
 		std::vector<GameObject *> game_objects;
 
 	  public:
 		GameManager();
 		~GameManager();
-		GameRenderer *renderer_get();
+		void init();
+		GameRenderer *game_renderer_get();
+		GameWindow *game_window_get();
+		void game_run();
+		void game_loop();
+		void render_frame();
+		uint32_t game_object_create(const char *type);
 };
 
 #endif
