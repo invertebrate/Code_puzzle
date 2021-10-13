@@ -16,29 +16,14 @@ void GameManager::render_frame()
 		(void)texture;
 }
 
-uint64_t performance_counter_start(void)
-{
-		return (SDL_GetPerformanceCounter());
-}
-
 void GameManager::game_loop()
 {
 		SDL_Event e;
-		uint64_t start_time;
-		float delta_time;
-		float ms_per_sec;
-		uint64_t time_diff;
-
-		float limiter = 0;
-		ms_per_sec = 1000.0;
 		int game_running = 1;
-
 		this->game_object_create("default");
-
 		while (game_running)
 		{
-				start_time = performance_counter_start();
-
+				this->fps_start();
 				///////GAME LOOP START
 				while (SDL_PollEvent(&e) != 0)
 				{
@@ -50,20 +35,13 @@ void GameManager::game_loop()
 				// // update_game_state();
 				this->render_frame();
 				//////GAME LOOP END
-
-				time_diff = SDL_GetPerformanceCounter() - start_time;
-				delta_time = (float)time_diff * ms_per_sec / (float)SDL_GetPerformanceFrequency();
-				limiter += delta_time;
-				if (limiter > 1000)
-				{
-						printf("fps: %f\n", 1000 / delta_time);
-						limiter = 0;
-				}
+				this->fps_end();
 		}
 }
 
-GameManager *game_init(GameManager *game_manager)
+GameManager *game_init()
 {
+		GameManager *game_manager;
 		SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO); // error check these
 		TTF_Init();
 		game_manager = new GameManager();
@@ -78,14 +56,13 @@ void GameManager::game_run()
 
 // TODO: CREATE GAME MANAGER OBJECT LIST AND UTILITY FUNCTIONS
 // MAKE RENDERER READ GAME OBJECT LIST FROM MANAGER AND RENDER OBJECTS
-// MAKE MAIN GAME LOGIC MEMBER FUNCTIONS OF THE GAME MANAGER
-// CREATE ASSET LOADING SYSTEM THAT IS NOT RUNTIME!
+// CREATE A 2D GRID CLASS AND CUNTIONALITY
+// ADD OBJECT MANIPULATION FUNCTIONS
+
 int main()
 {
-		GameManager *game_manager;
-
-		game_manager = NULL;
-		game_manager = game_init(game_manager);
+		GameManager *game_manager = game_init();
+		game_manager->load_assets();
 		game_manager->game_run();
 		// game_cleanup();
 		return (0);

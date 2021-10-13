@@ -10,7 +10,7 @@ GameObject::GameObject(GameManager *manager, const char *file, Vector2 dimension
 		sdl_rect->x = pos.x;
 		sdl_rect->y = pos.y;
 		scale = 1.0;
-		sdl_texture = manager->game_renderer_get()->texture_create(file); // NON RUNTIME TEXTURE LOADING!
+		sdl_texture = manager->asset_textures[file]; // NON RUNTIME TEXTURE LOADING!
 }
 GameObject::~GameObject()
 {

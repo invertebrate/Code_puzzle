@@ -13,6 +13,12 @@ void GameManager::init()
 		game_window = new GameWindow("game_window", 1000, 1000);
 		game_renderer = new GameRenderer(game_window->sdl_window_get());
 }
+void GameManager::load_assets()
+{
+		SDL_Texture *tex;
+		tex = this->game_renderer_get()->texture_create(TEST_TEXTURE);
+		this->asset_textures.insert({TEST_TEXTURE, tex});
+}
 GameRenderer *GameManager::game_renderer_get()
 {
 		return (game_renderer);
@@ -32,4 +38,21 @@ uint32_t GameManager::game_object_create(const char *type)
 		}
 		return (0);
 		(void)object;
+}
+
+void GameManager::fps_start()
+{
+		fps_start_time = SDL_GetPerformanceCounter();
+}
+
+void GameManager::fps_end()
+{
+		time_diff = SDL_GetPerformanceCounter() - fps_start_time;
+		delta_time = (float)time_diff * ms_per_sec / (float)SDL_GetPerformanceFrequency();
+		limiter += delta_time;
+		if (limiter > 1000)
+		{
+				printf("fps: %f\n", 1000 / delta_time);
+				limiter = 0;
+		}
 }
