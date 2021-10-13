@@ -2,6 +2,7 @@
 #define GAME_MANAGER_H
 
 #include "game_object.h"
+#include "grid.h"
 #include "renderer.h"
 #include "window.h"
 #include <map>
@@ -12,7 +13,9 @@ class GameManager
 	  private:
 		GameWindow *game_window;
 		GameRenderer *game_renderer;
+		Grid *game_grid;
 		std::vector<GameObject *> game_objects;
+		bool initialized = false;
 		//--performance
 		uint64_t fps_start_time;
 		float delta_time;

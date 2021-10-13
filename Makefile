@@ -42,6 +42,7 @@ SOURCES =	main.cpp \
 			rendering/renderer.cpp \
 			game_objects/game_object.cpp \
 			game_manager/game_manager.cpp \
+			game_manager/grid.cpp \
 			vector2/vector2.cpp \
 
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.cpp=.o))

@@ -7,11 +7,20 @@ GameManager::GameManager()
 }
 GameManager::~GameManager()
 {
+		if (initialized == true)
+		{
+				delete game_window;
+				delete game_renderer;
+				asset_textures.clear();
+				game_objects.clear();
+		}
 }
 void GameManager::init()
 {
 		game_window = new GameWindow("game_window", 1000, 1000);
 		game_renderer = new GameRenderer(game_window->sdl_window_get());
+		game_grid = new Grid();
+		initialized = true;
 }
 void GameManager::load_assets()
 {
