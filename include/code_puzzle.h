@@ -1,6 +1,7 @@
 #ifndef CODE_PUZZLE_H
 #define CODE_PUZZLE_H
 #define TEST_TEXTURE "assets/test_texture.png"
+#define GRID_TEXTURE "assets/grid.png"
 #include "game_manager.h"
 #include "game_object.h"
 #include "renderer.h"

@@ -21,7 +21,8 @@ class GameObject
 		bool passable;
 
 	  public:
-		GameObject(GameManager *manager, const char *file, Vector2 dimensions, Vector2 pos);//create non runtime texture loading
+		GameObject(GameManager *manager, const char *file, Vector2 dimensions,
+				   Vector2 pos); // create non runtime texture loading
 		GameObject();
 		~GameObject();
 		void texture_set(SDL_Texture *texture);
@@ -39,6 +40,7 @@ class GameObject
 		void scale_set(float s);
 		void passable_set(bool passable);
 		bool is_passable();
+		void print();
 };
 
 #endif

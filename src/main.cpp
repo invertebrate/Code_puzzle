@@ -10,6 +10,8 @@ void GameManager::render_frame()
 		SDL_Texture *texture;
 		SDL_RenderClear(this->game_renderer_get()->sdl_renderer);
 		GameObject *object = this->game_objects[0];
+		texture = game_grid->texture_get();
+		SDL_RenderCopy(this->game_renderer_get()->sdl_renderer, texture, NULL, NULL);
 		texture = object->texture_get();
 		SDL_RenderCopy(this->game_renderer_get()->sdl_renderer, texture, NULL, object->sdl_rect_get());
 		this->game_renderer_get()->render();
@@ -21,6 +23,9 @@ void GameManager::game_loop()
 		SDL_Event e;
 		int game_running = 1;
 		this->game_object_create("default");
+		// auto pair = std::make_pair(0, 5);
+		game_grid->grid_get()->find(5)->second->push_back(game_objects[0]);
+		game_grid->grid_get()->find(5)->second->at(0)->print();
 		while (game_running)
 		{
 				this->fps_start();
@@ -46,6 +51,7 @@ GameManager *game_init()
 		TTF_Init();
 		game_manager = new GameManager();
 		game_manager->init();
+		game_manager->game_grid_get()->texture_set(game_manager->game_renderer_get()->texture_create(GRID_TEXTURE));
 		return (game_manager);
 }
 

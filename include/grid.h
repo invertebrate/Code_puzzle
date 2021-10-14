@@ -6,35 +6,46 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <vector>
-typedef std::pair<uint32_t, uint32_t> t_coord_pair;
 
 // gameobjects should know where they are on the grid and grid should know what objects are on each slot
-class Grid
+class GameGrid
 {
 	  private:
-		uint32_t width = 20;
-		uint32_t height = 20;
-		std::map<t_coord_pair, std::vector<GameObject *> *> grid;
+		uint32_t width = 10;
+		uint32_t height = 10;
+		std::map<uint32_t, std::vector<GameObject *> *> grid;
+		SDL_Texture *sdl_texture;
 
 	  public:
-		// Grid();
-		Grid()
+		GameGrid()
 		{
+
 				for (uint32_t h = 0; h < height; h++)
 				{
 						for (uint32_t w = 0; w < width; w++)
 						{
 								std::vector<GameObject *> *object_list =
 									new std::vector<GameObject *>(); // kinda sus syntax bc of pointer
-								t_coord_pair coord = std::make_pair(w, h);
-								auto pair = std::make_pair(coord, object_list);
+								auto pair = std::make_pair(w + h * w, object_list);
 								grid.insert(pair); // hopefully this makes a map with coordinates as keys and an object
 												   // vector as value
 												   // test gameobject insertion and indexing works
 						}
 				}
 		}
-		~Grid();
+		~GameGrid();
+		std::map<uint32_t, std::vector<GameObject *> *> *grid_get()
+		{
+				return (&grid);
+		}
+		void texture_set(SDL_Texture *texture)
+		{
+				sdl_texture = texture;
+		}
+		SDL_Texture *texture_get()
+		{
+				return (sdl_texture);
+		}
 };
 
 #endif

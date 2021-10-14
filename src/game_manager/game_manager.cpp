@@ -17,9 +17,9 @@ GameManager::~GameManager()
 }
 void GameManager::init()
 {
-		game_window = new GameWindow("game_window", 1000, 1000);
+		game_window = new GameWindow("game_window", 1500, 1500);
 		game_renderer = new GameRenderer(game_window->sdl_window_get());
-		game_grid = new Grid();
+		game_grid = new GameGrid();
 		initialized = true;
 }
 void GameManager::load_assets()
@@ -47,6 +47,11 @@ uint32_t GameManager::game_object_create(const char *type)
 		}
 		return (0);
 		(void)object;
+}
+
+GameGrid *GameManager::game_grid_get()
+{
+		return (game_grid);
 }
 
 void GameManager::fps_start()

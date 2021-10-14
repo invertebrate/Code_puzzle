@@ -76,3 +76,25 @@ bool GameObject::is_passable()
 {
 		return (passable);
 }
+SDL_Texture *sdl_texture;
+SDL_Rect *sdl_rect;
+uint16_t render_layer;
+GameManager *game_manager;
+Vector2 size;
+Vector2 pos;
+float scale;
+bool passable;
+void GameObject::print()
+{
+		printf("-----------------\n"
+			   "GameObject:\n"
+			   "game_manager: %p\n"
+			   "sdl_texture: %p\n"
+			   "render_layer: %u\n"
+			   "sdl_rect: %p | x: %d | y: %d | w: %d | h: %d\n"
+			   "size: w: %f, h: %f\n"
+			   "position: x: %f | y: %f\n"
+			   "-----------------\n",
+			   game_manager, sdl_texture, render_layer, sdl_rect, sdl_rect->x, sdl_rect->y, sdl_rect->w, sdl_rect->h,
+			   size.x, size.y, pos.x, pos.y);
+}

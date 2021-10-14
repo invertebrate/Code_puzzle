@@ -13,7 +13,7 @@ class GameManager
 	  private:
 		GameWindow *game_window;
 		GameRenderer *game_renderer;
-		Grid *game_grid;
+		GameGrid *game_grid;
 		std::vector<GameObject *> game_objects;
 		bool initialized = false;
 		//--performance
@@ -31,6 +31,7 @@ class GameManager
 		void load_assets();
 		GameRenderer *game_renderer_get();
 		GameWindow *game_window_get();
+		GameGrid *game_grid_get();
 		void game_run();
 		void game_loop();
 		void render_frame();
