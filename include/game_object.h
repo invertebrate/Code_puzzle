@@ -15,25 +15,27 @@ class GameObject
 		SDL_Rect *sdl_rect;
 		uint16_t render_layer;
 		GameManager *game_manager;
-		Vector2 size;
+		Vector2int size;
 		Vector2 pos;
+		Vector2int coordinates;
 		float scale;
 		bool passable;
 
 	  public:
-		GameObject(GameManager *manager, const char *file, Vector2 dimensions,
-				   Vector2 pos); // create non runtime texture loading
+		GameObject(GameManager *manager, const char *file, Vector2int dimensions, Vector2int pos);
 		GameObject();
 		~GameObject();
+		void check_bounds(Vector2int coordinates);
 		void texture_set(SDL_Texture *texture);
 		SDL_Texture *texture_get();
 		SDL_Rect *sdl_rect_get();
 		GameManager *game_manager_get();
 		void render_layer_set(uint16_t layer);
 		uint16_t render_layer_get();
-		void move_to(Vector2 location);
-		void size_set(float size);
-		Vector2 size_get();
+		void move_to(Vector2int location);
+		Vector2int coordinates_get();
+		void size_set(Vector2int size);
+		Vector2int size_get();
 		void pos_set(Vector2 pos);
 		Vector2 pos_get();
 		float scale_get();

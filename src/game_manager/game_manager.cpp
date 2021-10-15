@@ -42,9 +42,9 @@ uint32_t GameManager::game_object_create(const char *type)
 		if (!strcmp(type, "default"))
 		{
 				object = new GameObject(this, TEST_TEXTURE,
-										Vector2((float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_WIDTH),
-												(float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_HEIGHT)),
-										Vector2(0.0, 0.0));
+										Vector2int((float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_WIDTH),
+												   (float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_HEIGHT)),
+										Vector2int(1, 1));
 				game_objects.push_back(object);
 				return (game_objects.size() - 1);
 		}
@@ -72,4 +72,9 @@ void GameManager::fps_end()
 				printf("fps: %f\n", 1000 / delta_time);
 				limiter = 0;
 		}
+}
+
+Vector2int GameManager::window_size_get()
+{
+		return (window_size);
 }

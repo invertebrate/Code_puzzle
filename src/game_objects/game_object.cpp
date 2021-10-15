@@ -1,20 +1,30 @@
 #include "game_object.h"
 #include "game_manager.h"
 
-GameObject::GameObject(GameManager *manager, const char *file, Vector2 dimensions, Vector2 pos)
-	: size(dimensions), pos(pos)
+GameObject::GameObject(GameManager *manager, const char *file, Vector2int dimensions, Vector2int coords)
+	: size(dimensions), coordinates(coords)
 {
-		printf("creating a gameobject with dimensions %f, %f: \n", dimensions.x, dimensions.y);
+		game_manager = manager;
+		printf("creating a gameobject with dimensions %d, %d: \n", dimensions.x, dimensions.y);
 		sdl_rect = (SDL_Rect *)malloc(sizeof(SDL_Rect));
 		sdl_rect->h = (int)dimensions.x;
 		sdl_rect->w = (int)dimensions.y;
-		sdl_rect->x = pos.x;
-		sdl_rect->y = pos.y;
+		printf("line width %f: \n", manager->game_grid_get()->line_width_get());
+		move_to(coords);
 		scale = 1.0;
-		sdl_texture = manager->asset_textures[file]; // NON RUNTIME TEXTURE LOADING!
+		sdl_texture = manager->asset_textures[file];
+		check_bounds(coords);
+
+		// add gameobject position in pixels from location info
 }
 GameObject::~GameObject()
 {
+}
+void GameObject::check_bounds(Vector2int coordinates)
+{
+		if (coordinates.x > 9 || coordinates.x < 0 || coordinates.y > 9 || coordinates.y < 0)
+				printf("WARNING: Placed gameobject outside of bounds in coordinates: x: %d, y: %d\n", coordinates.x,
+					   coordinates.y);
 }
 void GameObject::texture_set(SDL_Texture *texture)
 {
@@ -41,15 +51,26 @@ uint16_t GameObject::render_layer_get()
 {
 		return (render_layer);
 }
-void GameObject::move_to(Vector2 location)
+void GameObject::move_to(Vector2int coords)
 {
-		(void)location;
+		sdl_rect->x = coords.x * (GRID_SQR_SIZE + game_manager->game_grid_get()->line_width_get()) *
+					  ((float)WINDOW_SIZE / GRID_WIDTH);
+		sdl_rect->y = coords.y * (GRID_SQR_SIZE + game_manager->game_grid_get()->line_width_get()) *
+					  ((float)WINDOW_SIZE / GRID_WIDTH);
+		coordinates.x = coords.x;
+		coordinates.y = coords.y;
+		check_bounds(coords);
+		// update grid object list()
 }
-void GameObject::size_set(float size)
+Vector2int GameObject::coordinates_get()
 {
-		size = size;
+		return (coordinates);
 }
-Vector2 GameObject::size_get()
+void GameObject::size_set(Vector2int s)
+{
+		size = s;
+}
+Vector2int GameObject::size_get()
 {
 		return (size);
 }
@@ -93,9 +114,10 @@ void GameObject::print()
 			   "sdl_texture: %p\n"
 			   "render_layer: %u\n"
 			   "sdl_rect: %p | x: %d | y: %d | w: %d | h: %d\n"
-			   "size: w: %f, h: %f\n"
+			   "size: w: %d, h: %d\n"
+			   "coordinates: x: %d, y: %d\n"
 			   "position: x: %f | y: %f\n"
 			   "-----------------\n",
 			   game_manager, sdl_texture, render_layer, sdl_rect, sdl_rect->x, sdl_rect->y, sdl_rect->w, sdl_rect->h,
-			   size.x, size.y, pos.x, pos.y);
+			   size.x, size.y, coordinates.x, coordinates.y, pos.x, pos.y);
 }
