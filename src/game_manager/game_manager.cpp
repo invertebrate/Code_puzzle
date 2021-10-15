@@ -17,7 +17,7 @@ GameManager::~GameManager()
 }
 void GameManager::init()
 {
-		game_window = new GameWindow("game_window", 1500, 1500);
+		game_window = new GameWindow("game_window", window_size.x, window_size.y);
 		game_renderer = new GameRenderer(game_window->sdl_window_get());
 		game_grid = new GameGrid();
 		initialized = true;
@@ -41,7 +41,10 @@ uint32_t GameManager::game_object_create(const char *type)
 		GameObject *object;
 		if (!strcmp(type, "default"))
 		{
-				object = new GameObject(this, TEST_TEXTURE, Vector2(200, 200), Vector2(0.0, 0.0));
+				object = new GameObject(this, TEST_TEXTURE,
+										Vector2((float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_WIDTH),
+												(float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_HEIGHT)),
+										Vector2(0.0, 0.0));
 				game_objects.push_back(object);
 				return (game_objects.size() - 1);
 		}

@@ -7,12 +7,20 @@
 #include <stdio.h>
 #include <vector>
 
+#define GRID_WIDTH 900
+#define GRID_HEIGHT 900
+#define GRID_SQR_SIZE 89
+#define GRID LINE_WIDTH 2
+
 // gameobjects should know where they are on the grid and grid should know what objects are on each slot
 class GameGrid
 {
 	  private:
 		uint32_t width = 10;
 		uint32_t height = 10;
+		uint32_t img_width = GRID_WIDTH;
+		uint32_t img_height = GRID_HEIGHT;
+
 		std::map<uint32_t, std::vector<GameObject *> *> grid;
 		SDL_Texture *sdl_texture;
 

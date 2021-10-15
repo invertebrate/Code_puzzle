@@ -4,9 +4,10 @@
 GameObject::GameObject(GameManager *manager, const char *file, Vector2 dimensions, Vector2 pos)
 	: size(dimensions), pos(pos)
 {
+		printf("creating a gameobject with dimensions %f, %f: \n", dimensions.x, dimensions.y);
 		sdl_rect = (SDL_Rect *)malloc(sizeof(SDL_Rect));
-		sdl_rect->h = dimensions.x;
-		sdl_rect->w = dimensions.y;
+		sdl_rect->h = (int)dimensions.x;
+		sdl_rect->w = (int)dimensions.y;
 		sdl_rect->x = pos.x;
 		sdl_rect->y = pos.y;
 		scale = 1.0;

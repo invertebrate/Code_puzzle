@@ -8,6 +8,8 @@
 #include <map>
 #include <vector>
 
+#define WINDOW_SIZE 1000
+
 class GameManager
 {
 	  private:
@@ -16,6 +18,7 @@ class GameManager
 		GameGrid *game_grid;
 		std::vector<GameObject *> game_objects;
 		bool initialized = false;
+		Vector2 window_size = {WINDOW_SIZE, WINDOW_SIZE};
 		//--performance
 		uint64_t fps_start_time;
 		float delta_time;
