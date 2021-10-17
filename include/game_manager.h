@@ -14,6 +14,12 @@
 #define GRID_DIMENSIONS 10
 #define GRID_SQR_SIZE 89
 
+enum e_object_type
+{
+		e_object_type_hero = 0,
+		e_object_type_enemy = 1
+};
+
 class GameGrid;
 
 class GameManager
@@ -22,7 +28,6 @@ class GameManager
 		GameWindow *game_window;
 		GameRenderer *game_renderer;
 		GameGrid *game_grid;
-		std::vector<GameObject *> game_objects;
 		bool initialized = false;
 		Vector2int window_size = {WINDOW_SIZE, WINDOW_SIZE};
 		//--performance
@@ -33,6 +38,7 @@ class GameManager
 		float limiter = 0;
 		//---
 	  public:
+		std::vector<GameObject *> game_objects;
 		std::map<const char *, SDL_Texture *> asset_textures;
 		GameManager();
 		~GameManager();
@@ -44,7 +50,7 @@ class GameManager
 		void game_run();
 		void game_loop();
 		void render_frame();
-		uint32_t game_object_create(const char *type);
+		uint32_t game_object_create(int type);
 		void fps_start();
 		void fps_end();
 		Vector2int window_size_get();

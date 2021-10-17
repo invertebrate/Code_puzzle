@@ -27,6 +27,11 @@ void GameManager::load_assets()
 		SDL_Texture *tex;
 		tex = this->game_renderer_get()->texture_create(TEST_TEXTURE);
 		this->asset_textures.insert({TEST_TEXTURE, tex});
+		tex = this->game_renderer_get()->texture_create(
+			HERO_TEXTURE); // shouldnt cause memory leaks bc .insert allocates and deallocates
+		this->asset_textures.insert({HERO_TEXTURE, tex});
+		tex = this->game_renderer_get()->texture_create(ENEMY_TEXTURE);
+		this->asset_textures.insert({ENEMY_TEXTURE, tex});
 }
 GameRenderer *GameManager::game_renderer_get()
 {
@@ -36,20 +41,22 @@ GameWindow *GameManager::game_window_get()
 {
 		return (game_window);
 }
-uint32_t GameManager::game_object_create(const char *type)
+uint32_t GameManager::game_object_create(int type)
 {
 		GameObject *object;
-		if (!strcmp(type, "default"))
+		object = NULL;
+		if (type == e_object_type_hero)
 		{
-				object = new GameObject(this, TEST_TEXTURE,
-										Vector2int((float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_WIDTH),
-												   (float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_HEIGHT)),
-										Vector2int(1, 1));
-				game_objects.push_back(object);
-				return (game_objects.size() - 1);
+				object = GameObject::hero_object_create(this, object);
+				return (e_object_type_hero);
+		}
+		if (type == e_object_type_enemy)
+		{
+				object = GameObject::enemy_object_create(this, object);
+				object->move_to(Vector2int{3, 3});
+				return (e_object_type_enemy);
 		}
 		return (0);
-		(void)object;
 }
 
 GameGrid *GameManager::game_grid_get()

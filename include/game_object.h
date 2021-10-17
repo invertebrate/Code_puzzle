@@ -20,11 +20,14 @@ class GameObject
 		Vector2int coordinates;
 		float scale;
 		bool passable;
+		int type;
 
 	  public:
 		GameObject(GameManager *manager, const char *file, Vector2int dimensions, Vector2int pos);
 		GameObject();
 		~GameObject();
+		static GameObject *hero_object_create(GameManager *manager, GameObject *obj);
+		static GameObject *enemy_object_create(GameManager *manager, GameObject *obj);
 		void check_bounds(Vector2int coordinates);
 		void texture_set(SDL_Texture *texture);
 		SDL_Texture *texture_get();
@@ -42,6 +45,8 @@ class GameObject
 		void scale_set(float s);
 		void passable_set(bool passable);
 		bool is_passable();
+		int type_get();
+		void type_set(int t);
 		void print();
 };
 

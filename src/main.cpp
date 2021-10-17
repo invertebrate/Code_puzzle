@@ -7,22 +7,31 @@ void update_window(GameRenderer *renderer)
 
 void GameManager::render_frame()
 {
-		SDL_Texture *texture;
+		SDL_Texture *texture_grid;
+		SDL_Texture *texture_hero;
+		SDL_Texture *texture_enemy;
+
 		SDL_RenderClear(this->game_renderer_get()->sdl_renderer);
-		GameObject *object = this->game_objects[0];
-		texture = game_grid->texture_get();
-		SDL_RenderCopy(this->game_renderer_get()->sdl_renderer, texture, NULL, NULL);
-		texture = object->texture_get();
-		SDL_RenderCopy(this->game_renderer_get()->sdl_renderer, texture, NULL, object->sdl_rect_get());
+
+		texture_grid = game_grid->texture_get();
+		SDL_RenderCopy(this->game_renderer_get()->sdl_renderer, texture_grid, NULL, NULL);
+
+		GameObject *object_hero = this->game_objects[0];
+		GameObject *object_enemy = this->game_objects[1];
+		texture_hero = object_hero->texture_get();
+		texture_enemy = object_enemy->texture_get();
+		SDL_RenderCopy(this->game_renderer_get()->sdl_renderer, texture_hero, NULL, object_hero->sdl_rect_get());
+		SDL_RenderCopy(this->game_renderer_get()->sdl_renderer, texture_enemy, NULL, object_enemy->sdl_rect_get());
 		this->game_renderer_get()->render();
-		(void)texture;
 }
 
 void GameManager::game_loop()
 {
 		SDL_Event e;
 		int game_running = 1;
-		this->game_object_create("default");
+		int obj = this->game_object_create(e_object_type_hero);
+		this->game_object_create(e_object_type_enemy);
+		printf("created object %d\n", obj);
 		// auto pair = std::make_pair(0, 5);
 		game_grid->grid_get()->find(5)->second->push_back(game_objects[0]);
 		game_grid->grid_get()->find(5)->second->at(0)->print();
@@ -64,7 +73,7 @@ void GameManager::game_run()
 // MAKE RENDERER READ GAME OBJECT LIST FROM MANAGER AND RENDER OBJECTS
 // CREATE A 2D GRID CLASS AND CUNTIONALITY
 // ADD OBJECT MANIPULATION FUNCTIONS
-
+// CREATE SUPPORT FOR MULTIPLE OBJECT RENDERING
 int main()
 {
 		GameManager *game_manager = game_init();

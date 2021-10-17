@@ -1,4 +1,5 @@
 #include "game_object.h"
+#include "code_puzzle.h"
 #include "game_manager.h"
 
 GameObject::GameObject(GameManager *manager, const char *file, Vector2int dimensions, Vector2int coords)
@@ -19,6 +20,26 @@ GameObject::GameObject(GameManager *manager, const char *file, Vector2int dimens
 }
 GameObject::~GameObject()
 {
+}
+GameObject *GameObject::hero_object_create(GameManager *manager, GameObject *obj)
+{
+		obj = new GameObject(manager, HERO_TEXTURE,
+							 Vector2int((float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_WIDTH),
+										(float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_HEIGHT)),
+							 Vector2int(0, 0));
+		obj->type_set(e_object_type_hero);
+		manager->game_objects.push_back(obj);
+		return (obj);
+}
+GameObject *GameObject::enemy_object_create(GameManager *manager, GameObject *obj)
+{
+		obj = new GameObject(manager, ENEMY_TEXTURE,
+							 Vector2int((float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_WIDTH),
+										(float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_HEIGHT)),
+							 Vector2int(0, 0));
+		obj->type_set(e_object_type_enemy);
+		manager->game_objects.push_back(obj);
+		return (obj);
 }
 void GameObject::check_bounds(Vector2int coordinates)
 {
@@ -98,14 +119,15 @@ bool GameObject::is_passable()
 {
 		return (passable);
 }
-SDL_Texture *sdl_texture;
-SDL_Rect *sdl_rect;
-uint16_t render_layer;
-GameManager *game_manager;
-Vector2 size;
-Vector2 pos;
-float scale;
-bool passable;
+int GameObject::type_get()
+{
+		return (type);
+}
+void GameObject::type_set(int t)
+{
+		type = t;
+}
+void type_set(int t);
 void GameObject::print()
 {
 		printf("-----------------\n"
