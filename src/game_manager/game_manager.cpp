@@ -48,15 +48,31 @@ uint32_t GameManager::game_object_create(int type)
 		if (type == e_object_type_hero)
 		{
 				object = GameObject::hero_object_create(this, object);
+				object_count++;
+				game_grid_get()->add_object_at(object, {0, 0});
 				return (e_object_type_hero);
 		}
 		if (type == e_object_type_enemy)
 		{
 				object = GameObject::enemy_object_create(this, object);
-				object->move_to(Vector2int{3, 3});
+				// object->move_to(Vector2int{3, 3});
+				object_count++;
+				game_grid_get()->add_object_at(object, {0, 0});
+				return (e_object_type_enemy);
+		}
+		if (type == e_object_type_enemy_2)
+		{
+				object = GameObject::enemy_2_object_create(this, object);
+				// object->move_to(Vector2int{3, 3});
+				object_count++;
+				game_grid_get()->add_object_at(object, {0, 0});
 				return (e_object_type_enemy);
 		}
 		return (0);
+}
+void GameManager::game_object_destroy()
+{
+		object_count--;
 }
 
 GameGrid *GameManager::game_grid_get()

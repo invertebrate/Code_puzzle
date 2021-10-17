@@ -5,23 +5,28 @@ void update_window(GameRenderer *renderer)
 		(void)renderer;
 }
 
-void GameManager::render_frame()
+void GameManager::render_objects()
+{
+		for (auto iterator = game_objects.begin(); iterator != game_objects.end(); iterator++)
+		{
+				SDL_Texture *tex;
+				GameObject *obj;
+				obj = *iterator;
+				tex = obj->texture_get();
+				SDL_RenderCopy(this->game_renderer_get()->sdl_renderer, tex, NULL, obj->sdl_rect_get());
+		}
+}
+void GameManager::render_grid()
 {
 		SDL_Texture *texture_grid;
-		SDL_Texture *texture_hero;
-		SDL_Texture *texture_enemy;
-
-		SDL_RenderClear(this->game_renderer_get()->sdl_renderer);
-
 		texture_grid = game_grid->texture_get();
 		SDL_RenderCopy(this->game_renderer_get()->sdl_renderer, texture_grid, NULL, NULL);
-
-		GameObject *object_hero = this->game_objects[0];
-		GameObject *object_enemy = this->game_objects[1];
-		texture_hero = object_hero->texture_get();
-		texture_enemy = object_enemy->texture_get();
-		SDL_RenderCopy(this->game_renderer_get()->sdl_renderer, texture_hero, NULL, object_hero->sdl_rect_get());
-		SDL_RenderCopy(this->game_renderer_get()->sdl_renderer, texture_enemy, NULL, object_enemy->sdl_rect_get());
+}
+void GameManager::render_frame()
+{
+		SDL_RenderClear(this->game_renderer_get()->sdl_renderer);
+		render_grid();
+		render_objects();
 		this->game_renderer_get()->render();
 }
 
@@ -30,11 +35,11 @@ void GameManager::game_loop()
 		SDL_Event e;
 		int game_running = 1;
 		int obj = this->game_object_create(e_object_type_hero);
+		(void)obj;
 		this->game_object_create(e_object_type_enemy);
-		printf("created object %d\n", obj);
-		// auto pair = std::make_pair(0, 5);
-		game_grid->grid_get()->find(5)->second->push_back(game_objects[0]);
-		game_grid->grid_get()->find(5)->second->at(0)->print();
+		this->game_object_create(e_object_type_enemy_2);
+
+		game_grid_get()->resolve_objects_at({0, 0});
 		while (game_running)
 		{
 				this->fps_start();
@@ -71,9 +76,7 @@ void GameManager::game_run()
 
 // TODO: CREATE GAME MANAGER OBJECT LIST AND UTILITY FUNCTIONS
 // MAKE RENDERER READ GAME OBJECT LIST FROM MANAGER AND RENDER OBJECTS
-// CREATE A 2D GRID CLASS AND CUNTIONALITY
 // ADD OBJECT MANIPULATION FUNCTIONS
-// CREATE SUPPORT FOR MULTIPLE OBJECT RENDERING
 int main()
 {
 		GameManager *game_manager = game_init();

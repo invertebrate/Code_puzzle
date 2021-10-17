@@ -17,7 +17,8 @@
 enum e_object_type
 {
 		e_object_type_hero = 0,
-		e_object_type_enemy = 1
+		e_object_type_enemy = 1,
+		e_object_type_enemy_2 = 2
 };
 
 class GameGrid;
@@ -39,6 +40,7 @@ class GameManager
 		//---
 	  public:
 		std::vector<GameObject *> game_objects;
+		int object_count = 0;
 		std::map<const char *, SDL_Texture *> asset_textures;
 		GameManager();
 		~GameManager();
@@ -50,7 +52,10 @@ class GameManager
 		void game_run();
 		void game_loop();
 		void render_frame();
+		void render_objects();
+		void render_grid();
 		uint32_t game_object_create(int type);
+		void game_object_destroy();
 		void fps_start();
 		void fps_end();
 		Vector2int window_size_get();
@@ -102,6 +107,41 @@ class GameGrid
 		float line_width_get()
 		{
 				return (grid_line_width);
+		}
+		uint32_t grid_index_get(Vector2int coords)
+		{
+				return (coords.x + coords.y * width);
+		}
+		Vector2int grid_coords_get(uint32_t index)
+		{
+				Vector2int coords;
+
+				coords.x = index % width;
+				coords.y = index / width;
+				return (coords);
+		}
+		void resolve_objects_at(Vector2int coords)
+		{
+				int index = grid_index_get(coords);
+				auto objects = grid.at(index);
+				printf("resolve objects at: %d %d\n", coords.x, coords.y);
+				printf("objects vector size: %lu\n", objects->size());
+				for (uint32_t i = 0; i < objects->size() - 1; i++) // supposed to loop through object pairs without
+																   // repetitio
+				{
+						for (auto iterator = objects->begin() + i + 1; iterator != objects->end(); iterator++)
+						{
+								auto comp1 = objects->at(i);
+								auto comp2 = *iterator;
+								printf("Compared obj: %p to obj: %p\n with types: %d to %d\n", comp1, comp2,
+									   comp1->type_get(), comp2->type_get());
+						}
+				}
+		}
+		void add_object_at(GameObject *obj, Vector2int coords)
+		{
+				auto objects = grid.at(grid_index_get(coords));
+				objects->push_back(obj);
 		}
 };
 
