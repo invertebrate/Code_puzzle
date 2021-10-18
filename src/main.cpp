@@ -54,6 +54,18 @@ void GameManager::events_handle(SDL_Event *e)
 		{
 				if (e->type == SDL_QUIT || (e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_ESCAPE))
 						game_running = 0;
+				else if ((e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_w))
+				{
+				} // move up;
+				else if ((e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_s))
+				{
+				} // move down;
+				else if ((e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_a))
+				{
+				} // move left;
+				else if ((e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_d))
+				{
+				} // move right;
 		}
 }
 void GameManager::game_state_update()
@@ -63,8 +75,6 @@ void GameManager::game_state_update()
 void GameManager::game_loop()
 {
 		SDL_Event e;
-		int obj = this->game_object_create(e_object_type_hero);
-		(void)obj;
 		this->game_object_create(e_object_type_enemy);
 		this->game_object_create(e_object_type_enemy_2);
 		this->game_object_create(e_object_type_finish);
@@ -85,7 +95,7 @@ void GameManager::game_loop()
 		}
 }
 
-GameManager *game_init()
+GameManager *game_manager_init()
 {
 		GameManager *game_manager;
 		SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO); // error check these
@@ -95,7 +105,10 @@ GameManager *game_init()
 		game_manager->game_grid_get()->texture_set(game_manager->game_renderer_get()->texture_create(GRID_TEXTURE));
 		return (game_manager);
 }
-
+void GameManager::game_init()
+{
+		this->game_object_create(e_object_type_hero);
+}
 void GameManager::game_run()
 {
 		this->game_loop();
@@ -106,8 +119,9 @@ void GameManager::game_run()
 // ADD OBJECT MANIPULATION FUNCTIONS
 int main()
 {
-		GameManager *game_manager = game_init();
+		GameManager *game_manager = game_manager_init();
 		game_manager->load_assets();
+		game_manager->game_init();
 		game_manager->game_run();
 		// game_cleanup();
 		return (0);

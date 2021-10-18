@@ -52,6 +52,7 @@ uint32_t GameManager::game_object_create(int type)
 				object = GameObject::hero_object_create(this, object);
 				object_count++;
 				game_grid_get()->add_object_at(object, {0, 0});
+				player = object;
 				return (e_object_type_hero);
 		}
 		if (type == e_object_type_enemy)

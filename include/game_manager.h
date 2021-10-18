@@ -45,12 +45,14 @@ class GameManager
 		//---
 	  public:
 		std::vector<GameObject *> game_objects;
+		GameObject *player;
 		int object_count = 0;
 		std::map<const char *, SDL_Texture *> asset_textures;
 		bool game_running = 1;
 		GameManager();
 		~GameManager();
 		void init();
+		void game_init();
 		void load_assets();
 		void game_state_update();
 		GameRenderer *game_renderer_get();
@@ -169,6 +171,16 @@ class GameGrid
 		{
 				auto objects = grid.at(grid_index_get(coords));
 				objects->push_back(obj);
+		}
+		void remove_object_at(GameObject *obj, Vector2int coords)
+		{
+				auto objects = grid.at(grid_index_get(coords));
+				for (auto it = objects->begin(); it != objects->end(); it++)
+				{
+						if ((*it) == obj)
+								objects->erase(it);
+				}
+				objects->shrink_to_fit();
 		}
 };
 

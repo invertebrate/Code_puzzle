@@ -95,6 +95,7 @@ uint16_t GameObject::render_layer_get()
 }
 void GameObject::move_to(Vector2int coords)
 {
+		// game_manager->game_grid_get()->remove_object_at(this, this->coordinates_get());
 		sdl_rect->x = coords.x * (GRID_SQR_SIZE + game_manager->game_grid_get()->line_width_get()) *
 					  ((float)WINDOW_SIZE / GRID_WIDTH);
 		sdl_rect->y = coords.y * (GRID_SQR_SIZE + game_manager->game_grid_get()->line_width_get()) *
@@ -102,7 +103,7 @@ void GameObject::move_to(Vector2int coords)
 		coordinates.x = coords.x;
 		coordinates.y = coords.y;
 		bounds_check(coords);
-		// update grid object list()
+		game_manager->game_grid_get()->add_object_at(this, coords);
 }
 Vector2int GameObject::coordinates_get()
 {
