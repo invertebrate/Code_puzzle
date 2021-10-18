@@ -5,6 +5,7 @@
 #include "grid.h"
 #include "renderer.h"
 #include "window.h"
+#include <functional>
 #include <map>
 #include <vector>
 
@@ -14,11 +15,15 @@
 #define GRID_DIMENSIONS 10
 #define GRID_SQR_SIZE 89
 
+typedef std::function<void(GameObject *, GameObject *, void *)> f_gameobject_operation;
+typedef std::function<void(GameObject *, GameObject *, void *, void *)> f_gameobject_operation_param;
+
 enum e_object_type
 {
-		e_object_type_hero = 0,
-		e_object_type_enemy = 1,
-		e_object_type_enemy_2 = 2
+		e_object_type_hero = 10,
+		e_object_type_enemy = 11,
+		e_object_type_enemy_2 = 12,
+		e_object_type_finish = 13,
 };
 
 class GameGrid;
@@ -42,15 +47,18 @@ class GameManager
 		std::vector<GameObject *> game_objects;
 		int object_count = 0;
 		std::map<const char *, SDL_Texture *> asset_textures;
+		bool game_running = 1;
 		GameManager();
 		~GameManager();
 		void init();
 		void load_assets();
+		void game_state_update();
 		GameRenderer *game_renderer_get();
 		GameWindow *game_window_get();
 		GameGrid *game_grid_get();
 		void game_run();
 		void game_loop();
+		void events_handle(SDL_Event *e);
 		void render_frame();
 		void render_objects();
 		void render_grid();
@@ -59,6 +67,9 @@ class GameManager
 		void fps_start();
 		void fps_end();
 		Vector2int window_size_get();
+		void end_condition_check();
+		static void win_condition_check(GameObject *obj1, GameObject *obj2, void *res);
+		static void lose_condition_check(GameObject *obj1, GameObject *obj2, void *res);
 };
 
 // gameobjects should know where they are on the grid and grid should know what objects are on each slot
@@ -120,21 +131,37 @@ class GameGrid
 				coords.y = index / width;
 				return (coords);
 		}
-		void resolve_objects_at(Vector2int coords)
+		void operate_on_objects_at(f_gameobject_operation f_operation, Vector2int coords, void *res)
 		{
 				int index = grid_index_get(coords);
 				auto objects = grid.at(index);
-				printf("resolve objects at: %d %d\n", coords.x, coords.y);
-				printf("objects vector size: %lu\n", objects->size());
+				// printf("resolve objects at: %d %d\n", coords.x, coords.y);
+				// printf("objects vector size: %lu\n", objects->size());
 				for (uint32_t i = 0; i < objects->size() - 1; i++) // supposed to loop through object pairs without
-																   // repetitio
+																   // repetition
 				{
 						for (auto iterator = objects->begin() + i + 1; iterator != objects->end(); iterator++)
 						{
-								auto comp1 = objects->at(i);
-								auto comp2 = *iterator;
-								printf("Compared obj: %p to obj: %p\n with types: %d to %d\n", comp1, comp2,
-									   comp1->type_get(), comp2->type_get());
+								f_operation(objects->at(i), *iterator, res);
+								// printf("Compared obj: %p to obj: %p\n with types: %d to %d\n", comp1, comp2,
+								//    comp1->type_get(), comp2->type_get());
+						}
+				}
+		}
+		void operate_on_objects_at(f_gameobject_operation_param f_operation, Vector2int coords, void *param, void *res)
+		{
+				int index = grid_index_get(coords);
+				auto objects = grid.at(index);
+				// printf("resolve objects at: %d %d\n", coords.x, coords.y);
+				// printf("objects vector size: %lu\n", objects->size());
+				for (uint32_t i = 0; i < objects->size() - 1; i++) // supposed to loop through object pairs without
+																   // repetition
+				{
+						for (auto iterator = objects->begin() + i + 1; iterator != objects->end(); iterator++)
+						{
+								f_operation(objects->at(i), *iterator, param, res);
+								// printf("Compared obj: %p to obj: %p\n with types: %d to %d\n", comp1, comp2,
+								//    comp1->type_get(), comp2->type_get());
 						}
 				}
 		}

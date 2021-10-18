@@ -14,7 +14,7 @@ GameObject::GameObject(GameManager *manager, const char *file, Vector2int dimens
 		move_to(coords);
 		scale = 1.0;
 		sdl_texture = manager->asset_textures[file];
-		check_bounds(coords);
+		bounds_check(coords);
 
 		// add gameobject position in pixels from location info
 }
@@ -51,12 +51,13 @@ GameObject *GameObject::enemy_2_object_create(GameManager *manager, GameObject *
 		manager->game_objects.push_back(obj);
 		return (obj);
 }
-void GameObject::check_bounds(Vector2int coordinates)
+void GameObject::bounds_check(Vector2int coordinates)
 {
 		if (coordinates.x > 9 || coordinates.x < 0 || coordinates.y > 9 || coordinates.y < 0)
 				printf("WARNING: Placed gameobject outside of bounds in coordinates: x: %d, y: %d\n", coordinates.x,
 					   coordinates.y);
 }
+
 void GameObject::texture_set(SDL_Texture *texture)
 {
 		sdl_texture = texture;
@@ -90,7 +91,7 @@ void GameObject::move_to(Vector2int coords)
 					  ((float)WINDOW_SIZE / GRID_WIDTH);
 		coordinates.x = coords.x;
 		coordinates.y = coords.y;
-		check_bounds(coords);
+		bounds_check(coords);
 		// update grid object list()
 }
 Vector2int GameObject::coordinates_get()

@@ -101,3 +101,60 @@ Vector2int GameManager::window_size_get()
 {
 		return (window_size);
 }
+void GameManager::win_condition_check(GameObject *obj1, GameObject *obj2, void *res)
+{
+		if (*(int *)res == 1)
+				return;
+		if (obj1->type_get() == e_object_type_hero)
+		{
+				if (obj2->type_get() == e_object_type_finish)
+				{
+						*(int *)res = 1;
+						return; // win;
+				}
+		}
+		else if (obj2->type_get() == e_object_type_hero)
+		{
+				if (obj1->type_get() == e_object_type_finish)
+				{
+						*(int *)res = 1;
+						return; // win;
+				}
+		}
+		else
+		{
+				*(int *)res = 0;
+				return;
+		}
+}
+void GameManager::lose_condition_check(GameObject *obj1, GameObject *obj2, void *res)
+{
+		if (*(int *)res == 1)
+				return;
+		if (obj1->type_get() == e_object_type_hero)
+		{
+				// printf("obj1 was hero\n");
+				if (obj2->type_get() == e_object_type_enemy || obj2->type_get() == e_object_type_enemy_2)
+				{
+
+						*(int *)res = 1;
+						return;
+						// lose;
+				}
+		}
+		else if (obj2->type_get() == e_object_type_hero)
+		{
+
+				if (obj1->type_get() == e_object_type_enemy || obj1->type_get() == e_object_type_enemy_2)
+				{
+						*(int *)res = 1;
+						return;
+						// lose;
+				}
+		}
+		else
+		{
+				*(int *)res = 0;
+				return;
+		}
+}

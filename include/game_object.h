@@ -29,7 +29,7 @@ class GameObject
 		static GameObject *hero_object_create(GameManager *manager, GameObject *obj);
 		static GameObject *enemy_object_create(GameManager *manager, GameObject *obj);
 		static GameObject *enemy_2_object_create(GameManager *manager, GameObject *obj);
-		void check_bounds(Vector2int coordinates);
+		void bounds_check(Vector2int coordinates);
 		void texture_set(SDL_Texture *texture);
 		SDL_Texture *texture_get();
 		SDL_Rect *sdl_rect_get();

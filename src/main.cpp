@@ -30,25 +30,51 @@ void GameManager::render_frame()
 		this->game_renderer_get()->render();
 }
 
+void GameManager::end_condition_check()
+{
+		int res = -1;
+		game_grid_get()->operate_on_objects_at(lose_condition_check, {0, 0}, &res);
+		printf("RES1: %d\n", res);
+		if (res == true)
+		{
+				printf("GAME OVER!\n");
+		}
+		res = -1;
+		game_grid_get()->operate_on_objects_at(win_condition_check, {0, 0}, &res);
+		printf("RES2: %d\n", res);
+
+		if (res == true)
+		{
+				printf("GAME WON!\n");
+		}
+}
+void GameManager::events_handle(SDL_Event *e)
+{
+		while (SDL_PollEvent(e) != 0)
+		{
+				if (e->type == SDL_QUIT || (e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_ESCAPE))
+						game_running = 0;
+		}
+}
+void GameManager::game_state_update()
+{
+		end_condition_check();
+}
 void GameManager::game_loop()
 {
 		SDL_Event e;
-		int game_running = 1;
 		int obj = this->game_object_create(e_object_type_hero);
 		(void)obj;
 		this->game_object_create(e_object_type_enemy);
 		this->game_object_create(e_object_type_enemy_2);
 
-		game_grid_get()->resolve_objects_at({0, 0});
 		while (game_running)
 		{
 				this->fps_start();
 				///////GAME LOOP START
-				while (SDL_PollEvent(&e) != 0)
-				{
-						if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE))
-								game_running = 0;
-				}
+				events_handle(&e);
+
+				game_state_update();
 				// // handle_events();
 				// // input_script();
 				// // update_game_state();
