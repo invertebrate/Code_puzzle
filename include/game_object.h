@@ -50,6 +50,7 @@ class GameObject
 		int type_get();
 		void type_set(int t);
 		void print();
+		bool operator==(const GameObject &other);
 };
 
 #endif

@@ -58,25 +58,25 @@ uint32_t GameManager::game_object_create(int type)
 		if (type == e_object_type_enemy)
 		{
 				object = GameObject::enemy_object_create(this, object);
+				game_grid_get()->add_object_at(object, {0, 0});
 				object->move_to(Vector2int{3, 3});
 				object_count++;
-				game_grid_get()->add_object_at(object, {3, 3});
 				return (e_object_type_enemy);
 		}
 		if (type == e_object_type_enemy_2)
 		{
 				object = GameObject::enemy_2_object_create(this, object);
+				game_grid_get()->add_object_at(object, {0, 0});
 				object->move_to(Vector2int{2, 5});
 				object_count++;
-				game_grid_get()->add_object_at(object, {2, 5});
 				return (e_object_type_enemy);
 		}
 		if (type == e_object_type_finish)
 		{
 				object = GameObject::finish_object_create(this, object);
+				game_grid_get()->add_object_at(object, {0, 0});
 				object->move_to(Vector2int{9, 9});
 				object_count++;
-				game_grid_get()->add_object_at(object, {9, 9});
 				return (e_object_type_finish);
 		}
 		return (0);

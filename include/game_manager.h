@@ -178,7 +178,9 @@ class GameGrid
 				for (auto it = objects->begin(); it != objects->end(); it++)
 				{
 						if ((*it) == obj)
+						{
 								objects->erase(it);
+						}
 				}
 				objects->shrink_to_fit();
 		}
