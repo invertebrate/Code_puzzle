@@ -34,18 +34,18 @@ void GameManager::end_condition_check()
 {
 		int res = -1;
 		game_grid_get()->operate_on_objects_at(lose_condition_check, {0, 0}, &res);
-		printf("RES1: %d\n", res);
+		// printf("RES1: %d\n", res);
 		if (res == true)
 		{
-				printf("GAME OVER!\n");
+				// printf("GAME OVER!\n");
 		}
 		res = -1;
 		game_grid_get()->operate_on_objects_at(win_condition_check, {0, 0}, &res);
-		printf("RES2: %d\n", res);
+		// printf("RES2: %d\n", res);
 
 		if (res == true)
 		{
-				printf("GAME WON!\n");
+				// printf("GAME WON!\n");
 		}
 }
 void GameManager::events_handle(SDL_Event *e)

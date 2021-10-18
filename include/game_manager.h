@@ -95,7 +95,7 @@ class GameGrid
 						{
 								std::vector<GameObject *> *object_list =
 									new std::vector<GameObject *>(); // kinda sus syntax bc of pointer
-								auto pair = std::make_pair(w + h * w, object_list);
+								auto pair = std::make_pair(w + h * width, object_list);
 								grid.insert(pair); // hopefully this makes a map with coordinates as keys and an object
 												   // vector as value
 												   // test gameobject insertion and indexing works

@@ -51,6 +51,16 @@ GameObject *GameObject::enemy_2_object_create(GameManager *manager, GameObject *
 		manager->game_objects.push_back(obj);
 		return (obj);
 }
+GameObject *GameObject::finish_object_create(GameManager *manager, GameObject *obj)
+{
+		obj = new GameObject(manager, FINISH_TEXTURE,
+							 Vector2int((float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_WIDTH),
+										(float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_HEIGHT)),
+							 Vector2int(0, 0));
+		obj->type_set(e_object_type_finish);
+		manager->game_objects.push_back(obj);
+		return (obj);
+}
 void GameObject::bounds_check(Vector2int coordinates)
 {
 		if (coordinates.x > 9 || coordinates.x < 0 || coordinates.y > 9 || coordinates.y < 0)
