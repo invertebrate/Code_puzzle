@@ -32,6 +32,8 @@ void GameManager::load_assets()
 		this->asset_textures.insert({HERO_TEXTURE, tex});
 		tex = this->game_renderer_get()->texture_create(ENEMY_TEXTURE);
 		this->asset_textures.insert({ENEMY_TEXTURE, tex});
+		tex = this->game_renderer_get()->texture_create(FINISH_TEXTURE);
+		this->asset_textures.insert({FINISH_TEXTURE, tex});
 }
 GameRenderer *GameManager::game_renderer_get()
 {

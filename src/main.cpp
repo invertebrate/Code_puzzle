@@ -67,6 +67,7 @@ void GameManager::game_loop()
 		(void)obj;
 		this->game_object_create(e_object_type_enemy);
 		this->game_object_create(e_object_type_enemy_2);
+		this->game_object_create(e_object_type_finish);
 
 		while (game_running)
 		{
