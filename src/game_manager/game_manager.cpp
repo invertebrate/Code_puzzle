@@ -275,3 +275,116 @@ void GameManager::game_loop()
 				this->fps_end();
 		}
 }
+
+GameGrid::GameGrid()
+{
+		grid_line_width = (GRID_WIDTH - (width * GRID_SQR_SIZE)) / (width - 1);
+		for (uint32_t h = 0; h < height; h++)
+		{
+				for (uint32_t w = 0; w < width; w++)
+				{
+						std::vector<GameObject *> *object_list =
+							new std::vector<GameObject *>(); // kinda sus syntax bc of pointer
+						auto pair = std::make_pair(w + h * width, object_list);
+						grid.insert(pair); // hopefully this makes a map with coordinates as keys and an object
+										   // vector as value
+										   // test gameobject insertion and indexing works
+				}
+		}
+}
+std::map<uint32_t, std::vector<GameObject *> *> *GameGrid::grid_get()
+{
+		return (&grid);
+}
+void GameGrid::texture_set(SDL_Texture *texture)
+{
+		sdl_texture = texture;
+}
+SDL_Texture *GameGrid::texture_get()
+{
+		return (sdl_texture);
+}
+float GameGrid::line_width_get()
+{
+		return (grid_line_width);
+}
+int GameGrid::grid_width_get()
+{
+		return (width);
+}
+int GameGrid::grid_height_get()
+{
+		return (height);
+}
+uint32_t GameGrid::grid_index_get(Vector2int coords)
+{
+		return (coords.x + coords.y * width);
+}
+Vector2int GameGrid::grid_coords_get(uint32_t index)
+{
+		Vector2int coords;
+
+		coords.x = index % width;
+		coords.y = index / width;
+		return (coords);
+}
+void GameGrid::operate_pairwise_at(f_gameobject_operation f_operation, Vector2int coords, void *res)
+{
+		int index = grid_index_get(coords);
+		auto objects = grid.at(index);
+		if (objects->size() < 1)
+				return;
+		for (uint32_t i = 0; i < objects->size() - 1; i++) // supposed to loop through object pairs without
+														   // repetition
+		{
+				for (auto iterator = objects->begin() + i + 1; iterator != objects->end(); iterator++)
+				{
+						f_operation(objects->at(i), *iterator, res);
+				}
+		}
+}
+void GameGrid::operate_pairwise_at(f_gameobject_operation_param f_operation, Vector2int coords, void *param, void *res)
+{
+		int index = grid_index_get(coords);
+		auto objects = grid.at(index);
+		for (uint32_t i = 0; i < objects->size() - 1; i++) // supposed to loop through object pairs without
+														   // repetition
+		{
+				for (auto iterator = objects->begin() + i + 1; iterator != objects->end(); iterator++)
+				{
+						f_operation(objects->at(i), *iterator, param, res);
+				}
+		}
+}
+void GameGrid::add_object_at(GameObject *obj, Vector2int coords)
+{
+		auto objects = grid.at(grid_index_get(coords));
+		objects->push_back(obj);
+}
+void GameGrid::remove_object_at(GameObject *obj, Vector2int coords)
+{
+		auto objects = grid.at(grid_index_get(coords));
+		if (objects->size() > 0)
+		{
+				objects->erase(std::remove(objects->begin(), objects->end(), obj), objects->end());
+		}
+}
+void GameGrid::grid_objects_print()
+{
+		printf("PRINTING OBJECTS:++++++++++++++++++++++++\n");
+
+		for (uint32_t i = 0; i < width * height - 1; i++)
+		{
+				if (grid.at(i)->size() > 0)
+				{
+						for (auto it = grid.at(i)->begin(); it != grid.at(i)->end(); it++)
+						{
+								printf("object at %d %d: \n", grid_coords_get(i).x, grid_coords_get(i).y);
+								(*it)->print();
+						}
+				}
+				else
+						printf("NO OBJECTS AT %d %d: \n", grid_coords_get(i).x, grid_coords_get(i).y);
+		}
+		printf("END OF PRINT========================\n");
+}

@@ -91,145 +91,21 @@ class GameGrid
 		SDL_Texture *sdl_texture;
 
 	  public:
-		GameGrid()
-		{
-				grid_line_width = (GRID_WIDTH - (width * GRID_SQR_SIZE)) / (width - 1);
-				for (uint32_t h = 0; h < height; h++)
-				{
-						for (uint32_t w = 0; w < width; w++)
-						{
-								std::vector<GameObject *> *object_list =
-									new std::vector<GameObject *>(); // kinda sus syntax bc of pointer
-								auto pair = std::make_pair(w + h * width, object_list);
-								grid.insert(pair); // hopefully this makes a map with coordinates as keys and an object
-												   // vector as value
-												   // test gameobject insertion and indexing works
-						}
-				}
-		}
+		GameGrid();
 		~GameGrid();
-		std::map<uint32_t, std::vector<GameObject *> *> *grid_get()
-		{
-				return (&grid);
-		}
-		void texture_set(SDL_Texture *texture)
-		{
-				sdl_texture = texture;
-		}
-		SDL_Texture *texture_get()
-		{
-				return (sdl_texture);
-		}
-		float line_width_get()
-		{
-				return (grid_line_width);
-		}
-		int grid_width_get()
-		{
-				return (width);
-		}
-		int grid_height_get()
-		{
-				return (height);
-		}
-		uint32_t grid_index_get(Vector2int coords)
-		{
-				return (coords.x + coords.y * width);
-		}
-		Vector2int grid_coords_get(uint32_t index)
-		{
-				Vector2int coords;
-
-				coords.x = index % width;
-				coords.y = index / width;
-				return (coords);
-		}
-		void operate_pairwise_at(f_gameobject_operation f_operation, Vector2int coords, void *res)
-		{
-				int index = grid_index_get(coords);
-				auto objects = grid.at(index);
-				// printf("resolve objects at: %d %d\n", coords.x, coords.y);
-				// printf("objects vector size: %lu\n", objects->size());
-				if (objects->size() < 1)
-						return;
-				for (uint32_t i = 0; i < objects->size() - 1; i++) // supposed to loop through object pairs without
-																   // repetition
-				{
-						for (auto iterator = objects->begin() + i + 1; iterator != objects->end(); iterator++)
-						{
-								f_operation(objects->at(i), *iterator, res);
-								// printf("Compared obj: %p to obj: %p\n with types: %d to %d\n", comp1, comp2,
-								//    comp1->type_get(), comp2->type_get());
-						}
-				}
-		}
-		void operate_pairwise_at(f_gameobject_operation_param f_operation, Vector2int coords, void *param, void *res)
-		{
-				int index = grid_index_get(coords);
-				auto objects = grid.at(index);
-				// printf("resolve objects at: %d %d\n", coords.x, coords.y);
-				// printf("objects vector size: %lu\n", objects->size());
-				for (uint32_t i = 0; i < objects->size() - 1; i++) // supposed to loop through object pairs without
-																   // repetition
-				{
-						for (auto iterator = objects->begin() + i + 1; iterator != objects->end(); iterator++)
-						{
-								f_operation(objects->at(i), *iterator, param, res);
-								// printf("Compared obj: %p to obj: %p\n with types: %d to %d\n", comp1, comp2,
-								//    comp1->type_get(), comp2->type_get());
-						}
-				}
-		}
-		void add_object_at(GameObject *obj, Vector2int coords)
-		{
-				// printf("ADD OBJECT AT: %d %d\n", coords.x, coords.y);
-				// printf("indexing grid at %u\n", grid_index_get(coords));
-				auto objects = grid.at(grid_index_get(coords));
-				objects->push_back(obj);
-		}
-		void remove_object_at(GameObject *obj, Vector2int coords) // doesnt remove?
-		{
-				// printf("REMOVE OBJECT %p AT: %d %d\n", obj, coords.x, coords.y);
-				// 			std::vector<int>& vec = myNumbers; // use shorter name
-				// vec.erase(std::remove(vec.begin(), vec.end(), number_in), vec.end());
-
-				auto objects = grid.at(grid_index_get(coords));
-				// printf("size before at %d %d : %lu\n", coords.x, coords.y, objects->size());
-				if (objects->size() > 0)
-				{
-						objects->erase(std::remove(objects->begin(), objects->end(), obj), objects->end());
-				}
-				// printf("size after at %d %d : %lu\n", coords.x, coords.y, objects->size());
-
-				// for (auto it = objects->begin(); it != objects->end(); it++)
-				// {
-				// 		if ((*it) == obj && (*it) != NULL)
-				// 		{
-				// 				objects->erase(it);
-				// 		}
-				// }
-				// objects->shrink_to_fit();
-				(void)objects;
-		}
-		void grid_objects_print()
-		{
-				printf("PRINTING OBJECTS:++++++++++++++++++++++++\n");
-
-				for (uint32_t i = 0; i < width * height - 1; i++)
-				{
-						if (grid.at(i)->size() > 0)
-						{
-								for (auto it = grid.at(i)->begin(); it != grid.at(i)->end(); it++)
-								{
-										printf("object at %d %d: \n", grid_coords_get(i).x, grid_coords_get(i).y);
-										(*it)->print();
-								}
-						}
-						else
-								printf("NO OBJECTS AT %d %d: \n", grid_coords_get(i).x, grid_coords_get(i).y);
-				}
-				printf("END OF PRINT========================\n");
-		}
+		std::map<uint32_t, std::vector<GameObject *> *> *grid_get();
+		void texture_set(SDL_Texture *texture);
+		SDL_Texture *texture_get();
+		float line_width_get();
+		int grid_width_get();
+		int grid_height_get();
+		uint32_t grid_index_get(Vector2int coords);
+		Vector2int grid_coords_get(uint32_t index);
+		void operate_pairwise_at(f_gameobject_operation f_operation, Vector2int coords, void *res);
+		void operate_pairwise_at(f_gameobject_operation_param f_operation, Vector2int coords, void *param, void *res);
+		void add_object_at(GameObject *obj, Vector2int coords);
+		void remove_object_at(GameObject *obj, Vector2int coords);
+		void grid_objects_print();
 };
 
 #endif
