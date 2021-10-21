@@ -11,7 +11,10 @@ GameObject::GameObject(GameManager *manager, const char *file, Vector2int dimens
 		sdl_rect->h = (int)dimensions.x;
 		sdl_rect->w = (int)dimensions.y;
 		printf("line width %f: \n", manager->game_grid_get()->line_width_get());
-		move_to(coords);
+		sdl_rect->x = coords.x * (GRID_SQR_SIZE + game_manager->game_grid_get()->line_width_get()) *
+					  ((float)WINDOW_SIZE / GRID_WIDTH);
+		sdl_rect->y = coords.y * (GRID_SQR_SIZE + game_manager->game_grid_get()->line_width_get()) *
+					  ((float)WINDOW_SIZE / GRID_WIDTH);
 		scale = 1.0;
 		sdl_texture = manager->asset_textures[file];
 		bounds_check(coords);
@@ -64,8 +67,10 @@ GameObject *GameObject::finish_object_create(GameManager *manager, GameObject *o
 void GameObject::bounds_check(Vector2int coordinates)
 {
 		if (coordinates.x > 9 || coordinates.x < 0 || coordinates.y > 9 || coordinates.y < 0)
+		{
 				printf("WARNING: Placed gameobject outside of bounds in coordinates: x: %d, y: %d\n", coordinates.x,
 					   coordinates.y);
+		}
 }
 
 void GameObject::texture_set(SDL_Texture *texture)
@@ -95,6 +100,10 @@ uint16_t GameObject::render_layer_get()
 }
 void GameObject::move_to(Vector2int coords)
 {
+		// printf("MOVE OBJECT\n");
+		// printf("from %d %d\n", this->coordinates_get().x, this->coordinates_get().y);
+
+		// printf("moving to %d %d\n", coords.x, coords.y);
 		game_manager->game_grid_get()->remove_object_at(this, this->coordinates_get());
 		sdl_rect->x = coords.x * (GRID_SQR_SIZE + game_manager->game_grid_get()->line_width_get()) *
 					  ((float)WINDOW_SIZE / GRID_WIDTH);
@@ -153,7 +162,7 @@ void type_set(int t);
 void GameObject::print()
 {
 		printf("-----------------\n"
-			   "GameObject:\n"
+			   "GameObject: %p\n"
 			   "game_manager: %p\n"
 			   "sdl_texture: %p\n"
 			   "render_layer: %u\n"
@@ -162,8 +171,8 @@ void GameObject::print()
 			   "coordinates: x: %d, y: %d\n"
 			   "position: x: %f | y: %f\n"
 			   "-----------------\n",
-			   game_manager, sdl_texture, render_layer, sdl_rect, sdl_rect->x, sdl_rect->y, sdl_rect->w, sdl_rect->h,
-			   size.x, size.y, coordinates.x, coordinates.y, pos.x, pos.y);
+			   this, game_manager, sdl_texture, render_layer, sdl_rect, sdl_rect->x, sdl_rect->y, sdl_rect->w,
+			   sdl_rect->h, size.x, size.y, coordinates.x, coordinates.y, pos.x, pos.y);
 }
 // bool GameObject::operator==(const GameObject &other)
 // {

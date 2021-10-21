@@ -33,19 +33,24 @@ void GameManager::render_frame()
 void GameManager::end_condition_check()
 {
 		int res = -1;
-		game_grid_get()->operate_on_objects_at(lose_condition_check, {0, 0}, &res);
-		// printf("RES1: %d\n", res);
-		if (res == true)
+		for (int w = 0; w < this->game_grid_get()->grid_width_get(); w++)
 		{
-				// printf("GAME OVER!\n");
-		}
-		res = -1;
-		game_grid_get()->operate_on_objects_at(win_condition_check, {0, 0}, &res);
-		// printf("RES2: %d\n", res);
+				for (int h = 0; h < this->game_grid_get()->grid_width_get(); h++)
+				{
+						game_grid_get()->operate_pairwise_at(lose_condition_check, {w, h}, &res);
+						if (res == true)
+						{
+								printf("GAME OVER!\n");
+						}
+						res = -1;
+						game_grid_get()->operate_pairwise_at(win_condition_check, {w, h}, &res);
+						// printf("RES2: %d\n", res);
 
-		if (res == true)
-		{
-				// printf("GAME WON!\n");
+						if (res == true)
+						{
+								printf("GAME WON!\n");
+						}
+				}
 		}
 }
 void GameManager::events_handle(SDL_Event *e)

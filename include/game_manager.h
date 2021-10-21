@@ -5,6 +5,7 @@
 #include "grid.h"
 #include "renderer.h"
 #include "window.h"
+#include <algorithm>
 #include <functional>
 #include <map>
 #include <vector>
@@ -121,6 +122,10 @@ class GameGrid
 		{
 				return (grid_line_width);
 		}
+		int grid_width_get()
+		{
+				return (width);
+		}
 		uint32_t grid_index_get(Vector2int coords)
 		{
 				return (coords.x + coords.y * width);
@@ -133,12 +138,14 @@ class GameGrid
 				coords.y = index / width;
 				return (coords);
 		}
-		void operate_on_objects_at(f_gameobject_operation f_operation, Vector2int coords, void *res)
+		void operate_pairwise_at(f_gameobject_operation f_operation, Vector2int coords, void *res)
 		{
 				int index = grid_index_get(coords);
 				auto objects = grid.at(index);
 				// printf("resolve objects at: %d %d\n", coords.x, coords.y);
 				// printf("objects vector size: %lu\n", objects->size());
+				if (objects->size() < 1)
+						return;
 				for (uint32_t i = 0; i < objects->size() - 1; i++) // supposed to loop through object pairs without
 																   // repetition
 				{
@@ -150,7 +157,7 @@ class GameGrid
 						}
 				}
 		}
-		void operate_on_objects_at(f_gameobject_operation_param f_operation, Vector2int coords, void *param, void *res)
+		void operate_pairwise_at(f_gameobject_operation_param f_operation, Vector2int coords, void *param, void *res)
 		{
 				int index = grid_index_get(coords);
 				auto objects = grid.at(index);
@@ -169,20 +176,53 @@ class GameGrid
 		}
 		void add_object_at(GameObject *obj, Vector2int coords)
 		{
+				// printf("ADD OBJECT AT: %d %d\n", coords.x, coords.y);
+				// printf("indexing grid at %u\n", grid_index_get(coords));
 				auto objects = grid.at(grid_index_get(coords));
 				objects->push_back(obj);
 		}
-		void remove_object_at(GameObject *obj, Vector2int coords)
+		void remove_object_at(GameObject *obj, Vector2int coords) // doesnt remove?
 		{
+				// printf("REMOVE OBJECT %p AT: %d %d\n", obj, coords.x, coords.y);
+				// 			std::vector<int>& vec = myNumbers; // use shorter name
+				// vec.erase(std::remove(vec.begin(), vec.end(), number_in), vec.end());
+
 				auto objects = grid.at(grid_index_get(coords));
-				for (auto it = objects->begin(); it != objects->end(); it++)
+				// printf("size before at %d %d : %lu\n", coords.x, coords.y, objects->size());
+				if (objects->size() > 0)
 				{
-						if ((*it) == obj)
-						{
-								objects->erase(it);
-						}
+						objects->erase(std::remove(objects->begin(), objects->end(), obj), objects->end());
 				}
-				objects->shrink_to_fit();
+				// printf("size after at %d %d : %lu\n", coords.x, coords.y, objects->size());
+
+				// for (auto it = objects->begin(); it != objects->end(); it++)
+				// {
+				// 		if ((*it) == obj && (*it) != NULL)
+				// 		{
+				// 				objects->erase(it);
+				// 		}
+				// }
+				// objects->shrink_to_fit();
+				(void)objects;
+		}
+		void grid_objects_print()
+		{
+				printf("PRINTING OBJECTS:++++++++++++++++++++++++\n");
+
+				for (uint32_t i = 0; i < width * height - 1; i++)
+				{
+						if (grid.at(i)->size() > 0)
+						{
+								for (auto it = grid.at(i)->begin(); it != grid.at(i)->end(); it++)
+								{
+										printf("object at %d %d: \n", grid_coords_get(i).x, grid_coords_get(i).y);
+										(*it)->print();
+								}
+						}
+						else
+								printf("NO OBJECTS AT %d %d: \n", grid_coords_get(i).x, grid_coords_get(i).y);
+				}
+				printf("END OF PRINT========================\n");
 		}
 };
 

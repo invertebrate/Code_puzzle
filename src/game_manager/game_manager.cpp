@@ -45,6 +45,7 @@ GameWindow *GameManager::game_window_get()
 }
 uint32_t GameManager::game_object_create(int type)
 {
+		printf("Creating a game object of type %d\n", type);
 		GameObject *object;
 		object = NULL;
 		if (type == e_object_type_hero)
@@ -52,6 +53,9 @@ uint32_t GameManager::game_object_create(int type)
 				object = GameObject::hero_object_create(this, object);
 				object_count++;
 				game_grid_get()->add_object_at(object, {0, 0});
+				printf("create add ^ \n");
+				// object->move_to(Vector2int{0, 0});
+
 				player = object;
 				return (e_object_type_hero);
 		}
@@ -67,7 +71,7 @@ uint32_t GameManager::game_object_create(int type)
 		{
 				object = GameObject::enemy_2_object_create(this, object);
 				game_grid_get()->add_object_at(object, {0, 0});
-				object->move_to(Vector2int{2, 5});
+				object->move_to(Vector2int{0, 0});
 				object_count++;
 				return (e_object_type_enemy);
 		}
@@ -103,7 +107,9 @@ void GameManager::fps_end()
 		limiter += delta_time;
 		if (limiter > 1000)
 		{
+				// game_grid_get()->grid_objects_print();
 				printf("fps: %f\n", 1000 / delta_time);
+				this->player->move_to(player->coordinates_get() + Vector2int(1, 1));
 				limiter = 0;
 		}
 }
