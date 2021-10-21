@@ -1,10 +1,10 @@
 #include "game_object.h"
 #include "code_puzzle.h"
-#include "game_manager.h"
 
 GameObject::GameObject(GameManager *manager, const char *file, Vector2int dimensions, Vector2int coords)
 	: size(dimensions), coordinates(coords)
 {
+		// new ai_object
 		game_manager = manager;
 		printf("creating a gameobject with dimensions %d, %d: \n", dimensions.x, dimensions.y);
 		sdl_rect = (SDL_Rect *)malloc(sizeof(SDL_Rect));
@@ -23,6 +23,8 @@ GameObject::GameObject(GameManager *manager, const char *file, Vector2int dimens
 }
 GameObject::~GameObject()
 {
+		// delete ai_object
+		free(sdl_rect);
 }
 GameObject *GameObject::hero_object_create(GameManager *manager, GameObject *obj)
 {

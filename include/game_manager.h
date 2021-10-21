@@ -22,10 +22,11 @@ typedef std::function<void(GameObject *, GameObject *, void *, void *)> f_gameob
 
 enum e_object_type
 {
-		e_object_type_hero = 10,
-		e_object_type_enemy = 11,
-		e_object_type_enemy_2 = 12,
-		e_object_type_finish = 13,
+		e_object_type_null = 10,
+		e_object_type_hero = 11,
+		e_object_type_enemy = 12,
+		e_object_type_enemy_2 = 13,
+		e_object_type_finish = 14,
 };
 
 class GameGrid;

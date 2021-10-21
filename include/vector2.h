@@ -16,6 +16,7 @@ class Vector2
 		Vector2 operator=(const Vector2 &other);
 		bool operator<=(const Vector2 &other);
 		bool operator>=(const Vector2 &other);
+		bool operator==(const Vector2 &other);
 		float operator*(const Vector2 &other);
 };
 
@@ -32,6 +33,7 @@ class Vector2int
 		Vector2int operator=(const Vector2int &other);
 		bool operator<=(const Vector2int &other);
 		bool operator>=(const Vector2int &other);
+		bool operator==(const Vector2int &other);
 		int operator*(const Vector2int &other);
 };
 #endif

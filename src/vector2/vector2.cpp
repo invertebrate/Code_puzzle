@@ -45,6 +45,13 @@ bool Vector2::operator>=(const Vector2 &other)
 		else
 				return (false);
 }
+bool Vector2::operator==(const Vector2 &other)
+{
+		if (this->x == other.x && this->y == other.y)
+				return (true);
+		else
+				return (false);
+}
 float Vector2::operator*(const Vector2 &other)
 {
 		return (sqrt(this->x * other.x + this->y * other.y));
@@ -91,6 +98,13 @@ bool Vector2int::operator<=(const Vector2int &other)
 bool Vector2int::operator>=(const Vector2int &other)
 {
 		if (this->x >= other.x && this->y >= other.y)
+				return (true);
+		else
+				return (false);
+}
+bool Vector2int::operator==(const Vector2int &other)
+{
+		if (this->x == other.x && this->y == other.y)
 				return (true);
 		else
 				return (false);

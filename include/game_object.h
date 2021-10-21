@@ -7,6 +7,7 @@
 #include <SDL2/SDL_ttf.h>
 
 class GameManager;
+class AIObject;
 
 class GameObject
 {
@@ -15,12 +16,13 @@ class GameObject
 		SDL_Rect *sdl_rect;
 		uint16_t render_layer;
 		GameManager *game_manager;
+		AIObject *ai_object;
 		Vector2int size;
 		Vector2 pos;
-		Vector2int coordinates;
 		float scale;
 		bool passable;
 		int type;
+		Vector2int coordinates;
 
 	  public:
 		GameObject(GameManager *manager, const char *file, Vector2int dimensions, Vector2int pos);
