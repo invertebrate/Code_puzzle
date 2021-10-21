@@ -61,15 +61,19 @@ void GameManager::events_handle(SDL_Event *e)
 						game_running = 0;
 				else if ((e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_w))
 				{
+						player->move_to({player->coordinates_get().x, player->coordinates_get().y - 1});
 				} // move up;
 				else if ((e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_s))
 				{
+						player->move_to({player->coordinates_get().x, player->coordinates_get().y + 1});
 				} // move down;
 				else if ((e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_a))
 				{
+						player->move_to({player->coordinates_get().x - 1, player->coordinates_get().y});
 				} // move left;
 				else if ((e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_d))
 				{
+						player->move_to({player->coordinates_get().x + 1, player->coordinates_get().y});
 				} // move right;
 		}
 }

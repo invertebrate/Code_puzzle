@@ -109,7 +109,6 @@ void GameManager::fps_end()
 		{
 				// game_grid_get()->grid_objects_print();
 				printf("fps: %f\n", 1000 / delta_time);
-				this->player->move_to(player->coordinates_get() + Vector2int(1, 1));
 				limiter = 0;
 		}
 }
