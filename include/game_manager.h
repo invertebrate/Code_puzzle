@@ -13,7 +13,8 @@
 #define WINDOW_SIZE 1800
 #define GRID_WIDTH 900
 #define GRID_HEIGHT 900
-#define GRID_DIMENSIONS 10
+#define GRID_DIMENSIONS_X 10
+#define GRID_DIMENSIONS_Y 10
 #define GRID_SQR_SIZE 89
 
 typedef std::function<void(GameObject *, GameObject *, void *)> f_gameobject_operation;
@@ -79,8 +80,8 @@ class GameManager
 class GameGrid
 {
 	  private:
-		uint32_t width = GRID_DIMENSIONS;
-		uint32_t height = GRID_DIMENSIONS;
+		uint32_t width = GRID_DIMENSIONS_X;
+		uint32_t height = GRID_DIMENSIONS_Y;
 		uint32_t img_width = GRID_WIDTH;
 		uint32_t img_height = GRID_HEIGHT;
 		float grid_line_width = 0;
@@ -125,6 +126,10 @@ class GameGrid
 		int grid_width_get()
 		{
 				return (width);
+		}
+		int grid_height_get()
+		{
+				return (height);
 		}
 		uint32_t grid_index_get(Vector2int coords)
 		{

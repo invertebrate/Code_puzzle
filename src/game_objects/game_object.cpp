@@ -66,7 +66,8 @@ GameObject *GameObject::finish_object_create(GameManager *manager, GameObject *o
 }
 bool GameObject::bounds_check(Vector2int coordinates)
 {
-		if (coordinates.x > 9 || coordinates.x < 0 || coordinates.y > 9 || coordinates.y < 0)
+		if (coordinates.x > game_manager_get()->game_grid_get()->grid_width_get() - 1 || coordinates.x < 0 ||
+			coordinates.y > game_manager_get()->game_grid_get()->grid_height_get() - 1 || coordinates.y < 0)
 		{
 				printf("WARNING: Attempted to place gameobject outside of bounds in coordinates: x: %d, y: %d\n",
 					   coordinates.x, coordinates.y);
