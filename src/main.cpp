@@ -44,7 +44,6 @@ void GameManager::end_condition_check()
 						}
 						res = -1;
 						game_grid_get()->operate_pairwise_at(win_condition_check, {w, h}, &res);
-						// printf("RES2: %d\n", res);
 
 						if (res == true)
 						{

@@ -64,13 +64,16 @@ GameObject *GameObject::finish_object_create(GameManager *manager, GameObject *o
 		manager->game_objects.push_back(obj);
 		return (obj);
 }
-void GameObject::bounds_check(Vector2int coordinates)
+bool GameObject::bounds_check(Vector2int coordinates)
 {
 		if (coordinates.x > 9 || coordinates.x < 0 || coordinates.y > 9 || coordinates.y < 0)
 		{
-				printf("WARNING: Placed gameobject outside of bounds in coordinates: x: %d, y: %d\n", coordinates.x,
-					   coordinates.y);
+				printf("WARNING: Attempted to place gameobject outside of bounds in coordinates: x: %d, y: %d\n",
+					   coordinates.x, coordinates.y);
+				return (false);
 		}
+		else
+				return (true);
 }
 
 void GameObject::texture_set(SDL_Texture *texture)
@@ -100,19 +103,17 @@ uint16_t GameObject::render_layer_get()
 }
 void GameObject::move_to(Vector2int coords)
 {
-		// printf("MOVE OBJECT\n");
-		// printf("from %d %d\n", this->coordinates_get().x, this->coordinates_get().y);
-
-		// printf("moving to %d %d\n", coords.x, coords.y);
-		game_manager->game_grid_get()->remove_object_at(this, this->coordinates_get());
-		sdl_rect->x = coords.x * (GRID_SQR_SIZE + game_manager->game_grid_get()->line_width_get()) *
-					  ((float)WINDOW_SIZE / GRID_WIDTH);
-		sdl_rect->y = coords.y * (GRID_SQR_SIZE + game_manager->game_grid_get()->line_width_get()) *
-					  ((float)WINDOW_SIZE / GRID_WIDTH);
-		coordinates.x = coords.x;
-		coordinates.y = coords.y;
-		bounds_check(coords);
-		game_manager->game_grid_get()->add_object_at(this, coords);
+		if (bounds_check(coords))
+		{
+				game_manager->game_grid_get()->remove_object_at(this, this->coordinates_get());
+				sdl_rect->x = coords.x * (GRID_SQR_SIZE + game_manager->game_grid_get()->line_width_get()) *
+							  ((float)WINDOW_SIZE / GRID_WIDTH);
+				sdl_rect->y = coords.y * (GRID_SQR_SIZE + game_manager->game_grid_get()->line_width_get()) *
+							  ((float)WINDOW_SIZE / GRID_WIDTH);
+				coordinates.x = coords.x;
+				coordinates.y = coords.y;
+				game_manager->game_grid_get()->add_object_at(this, coords);
+		}
 }
 Vector2int GameObject::coordinates_get()
 {

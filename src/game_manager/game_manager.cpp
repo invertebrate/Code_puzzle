@@ -53,9 +53,6 @@ uint32_t GameManager::game_object_create(int type)
 				object = GameObject::hero_object_create(this, object);
 				object_count++;
 				game_grid_get()->add_object_at(object, {0, 0});
-				printf("create add ^ \n");
-				// object->move_to(Vector2int{0, 0});
-
 				player = object;
 				return (e_object_type_hero);
 		}
@@ -149,7 +146,6 @@ void GameManager::lose_condition_check(GameObject *obj1, GameObject *obj2, void 
 				return;
 		if (obj1->type_get() == e_object_type_hero)
 		{
-				// printf("obj1 was hero\n");
 				if (obj2->type_get() == e_object_type_enemy || obj2->type_get() == e_object_type_enemy_2)
 				{
 
