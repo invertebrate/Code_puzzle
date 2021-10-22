@@ -154,11 +154,11 @@ bool GameObject::is_passable()
 {
 		return (passable);
 }
-int GameObject::type_get()
+e_object_type GameObject::type_get()
 {
 		return (type);
 }
-void GameObject::type_set(int t)
+void GameObject::type_set(e_object_type t)
 {
 		type = t;
 }

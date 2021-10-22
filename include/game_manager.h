@@ -20,7 +20,7 @@
 typedef std::function<void(GameObject *, GameObject *, void *)> f_gameobject_operation;
 typedef std::function<void(GameObject *, GameObject *, void *, void *)> f_gameobject_operation_param;
 
-enum e_object_type
+enum e_object_type : unsigned int
 {
 		e_object_type_null = 10,
 		e_object_type_hero = 11,
@@ -40,11 +40,11 @@ class GameManager
 		bool initialized = false;
 		Vector2int window_size = {WINDOW_SIZE, WINDOW_SIZE};
 		//--performance
+		float target_fps = 60;
 		uint64_t fps_start_time;
 		float delta_time;
 		float ms_per_sec = 1000.0;
 		uint64_t time_diff;
-		float limiter = 0;
 		//---
 	  public:
 		std::vector<GameObject *> game_objects;
@@ -67,10 +67,11 @@ class GameManager
 		void render_frame();
 		void render_objects();
 		void render_grid();
-		uint32_t game_object_create(int type);
+		uint32_t game_object_create(e_object_type type);
 		void game_object_destroy();
 		void fps_start();
 		void fps_end();
+		void limit_fps();
 		Vector2int window_size_get();
 		void end_condition_check();
 		static void win_condition_check(GameObject *obj1, GameObject *obj2, void *res);

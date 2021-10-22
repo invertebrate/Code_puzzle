@@ -8,23 +8,24 @@
 
 class GameManager;
 class AIObject;
+enum e_object_type : unsigned int;
 
 class GameObject
 {
 	  private:
-		SDL_Texture *sdl_texture;
-		SDL_Rect *sdl_rect;
+		SDL_Texture *sdl_texture = NULL;
+		SDL_Rect *sdl_rect = NULL;
 		uint16_t render_layer;
-		GameManager *game_manager;
-		AIObject *ai_object;
+		GameManager *game_manager = NULL;
 		Vector2int size;
 		Vector2 pos;
 		float scale;
 		bool passable;
-		int type;
+		e_object_type type;
 		Vector2int coordinates;
 
 	  public:
+		AIObject *ai_object = NULL;
 		GameObject(GameManager *manager, const char *file, Vector2int dimensions, Vector2int pos);
 		GameObject();
 		~GameObject();
@@ -49,8 +50,8 @@ class GameObject
 		void scale_set(float s);
 		void passable_set(bool passable);
 		bool is_passable();
-		int type_get();
-		void type_set(int t);
+		e_object_type type_get();
+		void type_set(e_object_type t);
 		void print();
 		bool operator==(const GameObject &other);
 };

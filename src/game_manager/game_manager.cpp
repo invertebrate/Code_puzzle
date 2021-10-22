@@ -1,4 +1,5 @@
 #include "game_manager.h"
+#include "ai_object.h"
 #include "code_puzzle.h"
 #include <unistd.h>
 
@@ -43,7 +44,7 @@ GameWindow *GameManager::game_window_get()
 {
 		return (game_window);
 }
-uint32_t GameManager::game_object_create(int type)
+uint32_t GameManager::game_object_create(e_object_type type)
 {
 		printf("Creating a game object of type %d\n", type);
 		GameObject *object;
@@ -51,6 +52,7 @@ uint32_t GameManager::game_object_create(int type)
 		if (type == e_object_type_hero)
 		{
 				object = GameObject::hero_object_create(this, object);
+				object->type_set(type);
 				object_count++;
 				game_grid_get()->add_object_at(object, {0, 0});
 				player = object;
@@ -59,6 +61,7 @@ uint32_t GameManager::game_object_create(int type)
 		if (type == e_object_type_enemy)
 		{
 				object = GameObject::enemy_object_create(this, object);
+				object->type_set(type);
 				game_grid_get()->add_object_at(object, {0, 0});
 				object->move_to(Vector2int{3, 3});
 				object_count++;
@@ -66,15 +69,21 @@ uint32_t GameManager::game_object_create(int type)
 		}
 		if (type == e_object_type_enemy_2)
 		{
+				Vector2int *patrol_path = (Vector2int *)malloc(sizeof(Vector2int) * 2);
+				patrol_path[0] = {2, 2};
+				patrol_path[1] = {5, 5};
 				object = GameObject::enemy_2_object_create(this, object);
+				object->type_set(type);
+				object->ai_object = new AIObject(object, e_behaviour_type_follow, patrol_path);
 				game_grid_get()->add_object_at(object, {0, 0});
-				object->move_to(Vector2int{0, 0});
+				object->move_to(Vector2int{3, 1});
 				object_count++;
 				return (e_object_type_enemy);
 		}
 		if (type == e_object_type_finish)
 		{
 				object = GameObject::finish_object_create(this, object);
+				object->type_set(type);
 				game_grid_get()->add_object_at(object, {0, 0});
 				object->move_to(Vector2int{9, 9});
 				object_count++;
@@ -86,27 +95,45 @@ void GameManager::game_object_destroy()
 {
 		object_count--;
 }
-
 GameGrid *GameManager::game_grid_get()
 {
 		return (game_grid);
 }
-
 void GameManager::fps_start()
 {
 		fps_start_time = SDL_GetPerformanceCounter();
 }
-
 void GameManager::fps_end()
 {
+		static float timer = 0;
+
+		limit_fps();
 		time_diff = SDL_GetPerformanceCounter() - fps_start_time;
 		delta_time = (float)time_diff * ms_per_sec / (float)SDL_GetPerformanceFrequency();
-		limiter += delta_time;
-		if (limiter > 1000)
+		timer += ms_per_sec / target_fps;
+		if (timer > ms_per_sec)
 		{
 				// game_grid_get()->grid_objects_print();
-				printf("fps: %f\n", 1000 / delta_time);
-				limiter = 0;
+				printf("fps: %f / %f\n", ms_per_sec / delta_time, target_fps);
+				timer = 0;
+				for (auto it = this->game_objects.begin(); it != this->game_objects.end(); it++)
+				{
+						if ((*it)->type_get() == e_object_type_enemy_2)
+						{
+								(*it)->ai_object->position_resolve();
+						}
+				}
+		}
+}
+void GameManager::limit_fps()
+{
+		float wait = ms_per_sec / target_fps;
+		time_diff = SDL_GetPerformanceCounter() - fps_start_time;
+		delta_time = (float)time_diff * ms_per_sec / (float)SDL_GetPerformanceFrequency();
+		wait -= delta_time;
+		if (wait > 0)
+		{
+				SDL_Delay(wait);
 		}
 }
 
@@ -205,14 +232,14 @@ void GameManager::end_condition_check()
 						game_grid_get()->operate_pairwise_at(lose_condition_check, {w, h}, &res);
 						if (res == true)
 						{
-								printf("GAME OVER!\n");
+								// printf("GAME OVER!\n");
 						}
 						res = -1;
 						game_grid_get()->operate_pairwise_at(win_condition_check, {w, h}, &res);
 
 						if (res == true)
 						{
-								printf("GAME WON!\n");
+								// printf("GAME WON!\n");
 						}
 				}
 		}
@@ -256,7 +283,7 @@ void GameManager::game_state_update()
 void GameManager::game_loop()
 {
 		SDL_Event e;
-		this->game_object_create(e_object_type_enemy);
+		// this->game_object_create(e_object_type_enemy);
 		this->game_object_create(e_object_type_enemy_2);
 		this->game_object_create(e_object_type_finish);
 
