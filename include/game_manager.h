@@ -29,6 +29,12 @@ enum e_object_type : unsigned int
 		e_object_type_finish = 14,
 };
 
+enum e_event_code
+{
+		e_event_code_gamewon = 100,
+		e_event_code_gamelost = 101
+};
+
 class GameGrid;
 
 class GameManager
@@ -39,6 +45,8 @@ class GameManager
 		GameGrid *game_grid;
 		bool initialized = false;
 		Vector2int window_size = {WINDOW_SIZE, WINDOW_SIZE};
+		uint32_t custom_event_type = 0;
+		std::map<e_event_code, void *> custom_events;
 		//--performance
 		float target_fps = 60;
 		uint64_t fps_start_time;
@@ -63,6 +71,9 @@ class GameManager
 		GameGrid *game_grid_get();
 		void game_run();
 		void game_loop();
+		void custom_event_handles_register();
+		void custom_event_add(e_event_code event_code, void *data1, void *data2);
+		void custom_event_add(e_event_code event_code, void *data1);
 		void events_handle(SDL_Event *e);
 		void render_frame();
 		void render_objects();

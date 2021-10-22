@@ -1,6 +1,7 @@
 #include "game_manager.h"
 #include "ai_object.h"
 #include "code_puzzle.h"
+#include "events.h"
 #include <unistd.h>
 
 GameManager::GameManager()
@@ -21,6 +22,8 @@ void GameManager::init()
 		game_window = new GameWindow("game_window", window_size.x, window_size.y);
 		game_renderer = new GameRenderer(game_window->sdl_window_get());
 		game_grid = new GameGrid();
+		custom_event_type = SDL_RegisterEvents(1);
+		custom_event_handles_register();
 		initialized = true;
 }
 void GameManager::load_assets()
@@ -244,6 +247,40 @@ void GameManager::end_condition_check()
 				}
 		}
 }
+
+void GameManager::custom_event_handles_register()
+{
+		auto pair = std::make_pair(e_event_code_gamewon, (void *)game_won);
+		custom_events.insert(pair);
+}
+
+void GameManager::custom_event_add(e_event_code event_code, void *data1, void *data2) // create map of events
+{
+		if (custom_event_type != ((Uint32)-1))
+		{
+				SDL_Event event;
+				SDL_memset(&event, 0, sizeof(event));
+				event.type = custom_event_type;
+				event.user.code = event_code;
+				event.user.data1 = data1;
+				event.user.data2 = data2;
+				SDL_PushEvent(&event);
+		}
+}
+void GameManager::custom_event_add(e_event_code event_code, void *data1) // create map of events
+{
+		if (custom_event_type != ((Uint32)-1))
+		{
+				SDL_Event event;
+				SDL_memset(&event, 0, sizeof(event));
+				event.type = custom_event_type;
+				event.user.code = event_code;
+				event.user.data1 = data1;
+				event.user.data2 = 0;
+				SDL_PushEvent(&event);
+		}
+}
+
 void GameManager::events_handle(SDL_Event *e)
 {
 		while (SDL_PollEvent(e) != 0)

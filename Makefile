@@ -45,6 +45,7 @@ SOURCES =	main.cpp \
 			game_manager/game_manager.cpp \
 			game_manager/grid.cpp \
 			vector2/vector2.cpp \
+			events/events.cpp
 
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.cpp=.o))
 
@@ -82,6 +83,7 @@ $(DIR_OBJ):
 	@mkdir -p temp/game_objects
 	@mkdir -p temp/game_manager
 	@mkdir -p temp/vector2
+	@mkdir -p temp/events
 
 # all temp folders need to be created manually?^
 
