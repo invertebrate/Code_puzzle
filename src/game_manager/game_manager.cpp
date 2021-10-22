@@ -236,6 +236,7 @@ void GameManager::end_condition_check()
 						if (res == true)
 						{
 								// printf("GAME OVER!\n");
+								custom_event_add(e_event_code_gamelost, NULL, NULL);
 						}
 						res = -1;
 						game_grid_get()->operate_pairwise_at(win_condition_check, {w, h}, &res);
@@ -260,11 +261,8 @@ void GameManager::custom_event_handles_register()
 
 void GameManager::custom_event_handle(SDL_Event *event)
 {
-		if (event->user.code == e_event_code_gamewon)
-		{
-				auto handle = custom_events.find((e_event_code)event->user.code);
-				handle->second(event->user.data1, event->user.data2);
-		}
+		auto handle = custom_events.find((e_event_code)event->user.code);
+		handle->second(event->user.data1, event->user.data2);
 }
 
 void GameManager::custom_event_add(e_event_code event_code, void *data1, void *data2)
@@ -285,8 +283,9 @@ void GameManager::events_handle(SDL_Event *e)
 {
 		while (SDL_PollEvent(e) != 0)
 		{
-				custom_event_handle(e);
-				if (e->type == SDL_QUIT || (e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_ESCAPE))
+				if (e->type == SDL_USEREVENT)
+						custom_event_handle(e);
+				else if (e->type == SDL_QUIT || (e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_ESCAPE))
 						game_running = 0;
 				else if ((e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_w))
 				{
