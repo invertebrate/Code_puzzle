@@ -242,6 +242,8 @@ void GameManager::end_condition_check()
 
 						if (res == true)
 						{
+								custom_event_add(e_event_code_gamewon, NULL, NULL);
+
 								// printf("GAME WON!\n");
 						}
 				}
@@ -250,11 +252,22 @@ void GameManager::end_condition_check()
 
 void GameManager::custom_event_handles_register()
 {
-		auto pair = std::make_pair(e_event_code_gamewon, (void *)game_won);
+		auto pair = std::make_pair(e_event_code_gamewon, game_won);
+		custom_events.insert(pair);
+		pair = std::make_pair(e_event_code_gamelost, game_lost);
 		custom_events.insert(pair);
 }
 
-void GameManager::custom_event_add(e_event_code event_code, void *data1, void *data2) // create map of events
+void GameManager::custom_event_handle(SDL_Event *event)
+{
+		if (event->user.code == e_event_code_gamewon)
+		{
+				auto handle = custom_events.find((e_event_code)event->user.code);
+				handle->second(event->user.data1, event->user.data2);
+		}
+}
+
+void GameManager::custom_event_add(e_event_code event_code, void *data1, void *data2)
 {
 		if (custom_event_type != ((Uint32)-1))
 		{
@@ -267,24 +280,12 @@ void GameManager::custom_event_add(e_event_code event_code, void *data1, void *d
 				SDL_PushEvent(&event);
 		}
 }
-void GameManager::custom_event_add(e_event_code event_code, void *data1) // create map of events
-{
-		if (custom_event_type != ((Uint32)-1))
-		{
-				SDL_Event event;
-				SDL_memset(&event, 0, sizeof(event));
-				event.type = custom_event_type;
-				event.user.code = event_code;
-				event.user.data1 = data1;
-				event.user.data2 = 0;
-				SDL_PushEvent(&event);
-		}
-}
 
 void GameManager::events_handle(SDL_Event *e)
 {
 		while (SDL_PollEvent(e) != 0)
 		{
+				custom_event_handle(e);
 				if (e->type == SDL_QUIT || (e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_ESCAPE))
 						game_running = 0;
 				else if ((e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_w))

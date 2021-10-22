@@ -46,7 +46,7 @@ class GameManager
 		bool initialized = false;
 		Vector2int window_size = {WINDOW_SIZE, WINDOW_SIZE};
 		uint32_t custom_event_type = 0;
-		std::map<e_event_code, void *> custom_events;
+		std::map<e_event_code, void *(*)(void *, void *)> custom_events;
 		//--performance
 		float target_fps = 60;
 		uint64_t fps_start_time;
@@ -73,8 +73,8 @@ class GameManager
 		void game_loop();
 		void custom_event_handles_register();
 		void custom_event_add(e_event_code event_code, void *data1, void *data2);
-		void custom_event_add(e_event_code event_code, void *data1);
 		void events_handle(SDL_Event *e);
+		void custom_event_handle(SDL_Event *event);
 		void render_frame();
 		void render_objects();
 		void render_grid();
