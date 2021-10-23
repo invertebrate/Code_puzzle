@@ -50,7 +50,8 @@ SOURCES =	main.cpp \
 			game_manager/game_manager.cpp \
 			game_manager/grid.cpp \
 			vector2/vector2.cpp \
-			events/events.cpp
+			events/events.cpp \
+			lua_app/lua_app.cpp \
 
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.cpp=.o))
 
@@ -89,6 +90,7 @@ $(DIR_OBJ):
 	@mkdir -p temp/game_manager
 	@mkdir -p temp/vector2
 	@mkdir -p temp/events
+	@mkdir -p temp/lua_app
 
 # all temp folders need to be created manually?^
 

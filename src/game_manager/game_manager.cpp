@@ -1,7 +1,7 @@
-#include "game_manager.h"
-#include "ai_object.h"
-#include "code_puzzle.h"
-#include "events.h"
+#include "game_manager.hpp"
+#include "ai_object.hpp"
+#include "code_puzzle.hpp"
+#include "events.hpp"
 #include <unistd.h>
 
 GameManager::GameManager()

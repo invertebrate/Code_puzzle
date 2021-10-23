@@ -1,10 +1,10 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
 
-#include "game_object.h"
-#include "grid.h"
-#include "renderer.h"
-#include "window.h"
+#include "game_object.hpp"
+#include "grid.hpp"
+#include "renderer.hpp"
+#include "window.hpp"
 #include <algorithm>
 #include <functional>
 #include <map>

@@ -1,5 +1,5 @@
-#include "game_manager.h"
-#include "game_object.h"
+#include "game_manager.hpp"
+#include "game_object.hpp"
 
 enum e_behaviour_type
 {

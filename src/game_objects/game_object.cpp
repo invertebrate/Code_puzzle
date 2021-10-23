@@ -1,5 +1,5 @@
-#include "game_object.h"
-#include "code_puzzle.h"
+#include "game_object.hpp"
+#include "code_puzzle.hpp"
 
 GameObject::GameObject(GameManager *manager, const char *file, Vector2int dimensions, Vector2int coords)
 	: size(dimensions), coordinates(coords)

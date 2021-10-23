@@ -1,5 +1,5 @@
 
-#include "renderer.h"
+#include "renderer.hpp"
 
 GameRenderer::GameRenderer(SDL_Window *window)
 {

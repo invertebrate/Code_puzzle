@@ -1,4 +1,4 @@
-#include "lua_app.h"
+#include "lua_app.hpp"
 
 // function that reads the settings file and assigns the settings to game at init
 void settings_parse(GameManager *manager, const char *file)

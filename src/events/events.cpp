@@ -1,4 +1,4 @@
-#include "events.h"
+#include "events.hpp"
 
 void *game_lost(void *data1, void *data2)
 {

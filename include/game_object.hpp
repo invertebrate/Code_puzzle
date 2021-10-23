@@ -1,7 +1,7 @@
 #ifndef GAME_OBJECT_H
 #define GAME_OBJECT_H
 
-#include "vector2.h"
+#include "vector2.hpp"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
