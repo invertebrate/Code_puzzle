@@ -7,6 +7,7 @@
 #define FINISH_TEXTURE "assets/finish.png"
 #include "game_manager.h"
 #include "game_object.h"
+#include "lua.hpp"
 #include "renderer.h"
 #include "vector2.h"
 #include "window.h"

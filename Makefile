@@ -2,6 +2,7 @@ GPP = g++
 NAME=luagame
 DIR_SRC = ./src
 DIR_OBJ = temp
+
 #LIB3D = ./lib/lib3d
 #LIB3DFLAGS = -L$(LIB3D) -l3d
 DEBUGFLAG = -g
@@ -12,6 +13,8 @@ UNAME := $(shell uname)
 TYPE := $(shell uname -m)
 ifeq ($(UNAME),Linux)
 	ifeq ($(TYPE),x86_64)
+		LIBLUA = ./lib/lua
+		LIBLUAFLAGS = -L$(LIBLUA) -llua54
 		SDL_FLAGS = `sdl2-config --cflags --libs` -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
 		LIB_MATH = -lm
 		LIB_PTHRTEAD = -lpthread
@@ -31,10 +34,12 @@ else
 endif
 # ====================
 
-LIBS = $(SDL_FLAGS) $(LIB_PTHRTEAD)
+LIBS = $(SDL_FLAGS) $(LIB_PTHRTEAD) $(LIBLUAFLAGS)
 
 INCLUDES = -I ./include \
+		-I$(LIBLUA)/include \
 		# -I$(LIB3D)/include \
+
 
 CFLAGS =-Wall -Wextra -Werror -O3 -flto #$(LINUX_IGNOREW)
 SOURCES =	main.cpp \
