@@ -88,3 +88,4 @@ void settings_read(GameManager *manager, const char *file)
 		}
 		lua_close(L);
 }
+// try to make macros work
