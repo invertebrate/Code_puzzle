@@ -377,15 +377,16 @@ GameGrid::GameGrid(GameManager *manager)
 		}
 		if (manager->window_size_get() >= (Vector2int){1, 1})
 		{
-				img_width = manager->window_size_get().x;
-				img_height = manager->window_size_get().y;
+				// img_width = manager->window_size_get().x;
+				// img_height = manager->window_size_get().y;
 				;
 		}
 		if (manager->grid_size_get() >= (Vector2int){1, 1})
 		{
+
 				;
 		}
-		grid_line_width = (img_width - (width * GRID_SQR_SIZE)) / (width - 1);
+		grid_line_width = (img_width - (width * grid_sqr_size)) / (width - 1);
 		for (uint32_t h = 0; h < height; h++)
 		{
 				for (uint32_t w = 0; w < width; w++)
@@ -479,6 +480,14 @@ void GameGrid::remove_object_at(GameObject *obj, Vector2int coords)
 uint32_t GameGrid::grid_sqr_size_get()
 {
 		return (grid_sqr_size);
+}
+uint32_t GameGrid::img_width_get()
+{
+		return (img_width);
+}
+uint32_t GameGrid::img_height_get()
+{
+		return (img_height);
 }
 void GameGrid::grid_objects_print()
 {

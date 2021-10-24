@@ -137,6 +137,9 @@ class GameGrid
 		void add_object_at(GameObject *obj, Vector2int coords);
 		void remove_object_at(GameObject *obj, Vector2int coords);
 		uint32_t grid_sqr_size_get();
+		uint32_t img_width_get();
+		uint32_t img_height_get();
+
 		void grid_objects_print();
 };
 

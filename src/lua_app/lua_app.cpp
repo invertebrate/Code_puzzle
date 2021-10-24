@@ -40,8 +40,8 @@ void settings_parse(GameManager *manager, const char *file)
 		int r = luaL_dofile(L, file);
 		if ((r = check_lua(L, r)))
 		{
-				manager->grid_size_set({setting_get(L, F_GRID_SIZE_X), setting_get(L, F_GRID_SIZE_X)});
-				manager->window_size_set({setting_get(L, F_WINDOW_SIZE_X), setting_get(L, F_WINDOW_SIZE_X)});
+				// manager->grid_size_set({setting_get(L, F_GRID_SIZE_X), setting_get(L, F_GRID_SIZE_Y)});
+				manager->window_size_set({setting_get(L, F_WINDOW_SIZE_X), setting_get(L, F_WINDOW_SIZE_Y)});
 				manager->step_time_set(setting_get(L, F_TIME_STEP));
 				manager->fps_cap_set((float)setting_get(L, F_FPS_CAP));
 

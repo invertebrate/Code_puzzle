@@ -4,69 +4,84 @@
 GameObject::GameObject(GameManager *manager, const char *file, Vector2int dimensions, Vector2int coords)
 	: size(dimensions), coordinates(coords)
 {
-		// new ai_object
+
+		// if (bounds_check(coords))
+		// {
 		game_manager = manager;
+		GameGrid *grid = manager->game_grid_get();
 		printf("creating a gameobject with dimensions %d, %d: \n", dimensions.x, dimensions.y);
 		sdl_rect = (SDL_Rect *)malloc(sizeof(SDL_Rect));
-		sdl_rect->h = (int)dimensions.x;
-		sdl_rect->w = (int)dimensions.y;
+		sdl_rect->w = (int)dimensions.x;
+		sdl_rect->h = (int)dimensions.y;
 		printf("line width %f: \n", manager->game_grid_get()->line_width_get());
-		sdl_rect->x = coords.x * (GRID_SQR_SIZE + game_manager->game_grid_get()->line_width_get()) *
-					  ((float)WINDOW_SIZE / GRID_WIDTH);
-		sdl_rect->y = coords.y * (GRID_SQR_SIZE + game_manager->game_grid_get()->line_width_get()) *
-					  ((float)WINDOW_SIZE / GRID_WIDTH);
+		sdl_rect->x = coords.x * (grid->grid_sqr_size_get() + game_manager->game_grid_get()->line_width_get()) *
+					  ((float)manager->window_size_get().x / grid->img_width_get());
+		sdl_rect->y = coords.y * (grid->grid_sqr_size_get() + game_manager->game_grid_get()->line_width_get()) *
+					  ((float)manager->window_size_get().y / grid->img_height_get());
 		scale = 1.0;
 		sdl_texture = manager->asset_textures[file];
-		bounds_check(coords);
-
-		// add gameobject position in pixels from location info
+		// }
 }
 GameObject::~GameObject()
 {
-		// delete ai_object
 		free(sdl_rect);
 }
 GameObject *GameObject::hero_object_create(GameManager *manager, GameObject *obj)
 {
-		// manager->window_size_get().x;
-		// manager->window_size_get().y;
-		// manager->grid_size_get().x;
-		// manager->grid_size_get().y;
-		// manager->game_grid_get()->grid_sqr_size_get();
-		obj = new GameObject(manager, HERO_TEXTURE,
-							 Vector2int((float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_WIDTH),
-										(float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_HEIGHT)),
-							 Vector2int(0, 0));
+		uint32_t window_x = manager->window_size_get().x;
+		uint32_t window_y = manager->window_size_get().y;
+		uint32_t grid_x = manager->game_grid_get()->img_width_get();
+		uint32_t grid_y = manager->game_grid_get()->img_height_get();
+		uint32_t sqr_size = manager->game_grid_get()->grid_sqr_size_get();
+		obj = new GameObject(
+			manager, HERO_TEXTURE,
+			Vector2int((float)sqr_size * ((float)window_x / grid_x), (float)sqr_size * ((float)window_y / grid_y)),
+			Vector2int(0, 0));
 		obj->type_set(e_object_type_hero);
 		manager->game_objects.push_back(obj);
 		return (obj);
 }
 GameObject *GameObject::enemy_object_create(GameManager *manager, GameObject *obj)
 {
-		obj = new GameObject(manager, ENEMY_TEXTURE,
-							 Vector2int((float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_WIDTH),
-										(float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_HEIGHT)),
-							 Vector2int(0, 0));
+		uint32_t window_x = manager->window_size_get().x;
+		uint32_t window_y = manager->window_size_get().y;
+		uint32_t grid_x = manager->game_grid_get()->img_width_get();
+		uint32_t grid_y = manager->game_grid_get()->img_height_get();
+		uint32_t sqr_size = manager->game_grid_get()->grid_sqr_size_get();
+		obj = new GameObject(
+			manager, ENEMY_TEXTURE,
+			Vector2int((float)sqr_size * ((float)window_x / grid_x), (float)sqr_size * ((float)window_y / grid_y)),
+			Vector2int(0, 0));
 		obj->type_set(e_object_type_enemy);
 		manager->game_objects.push_back(obj);
 		return (obj);
 }
 GameObject *GameObject::enemy_2_object_create(GameManager *manager, GameObject *obj)
 {
-		obj = new GameObject(manager, ENEMY_TEXTURE,
-							 Vector2int((float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_WIDTH),
-										(float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_HEIGHT)),
-							 Vector2int(0, 0));
+		uint32_t window_x = manager->window_size_get().x;
+		uint32_t window_y = manager->window_size_get().y;
+		uint32_t grid_x = manager->game_grid_get()->img_width_get();
+		uint32_t grid_y = manager->game_grid_get()->img_height_get();
+		uint32_t sqr_size = manager->game_grid_get()->grid_sqr_size_get();
+		obj = new GameObject(
+			manager, ENEMY_TEXTURE,
+			Vector2int((float)sqr_size * ((float)window_x / grid_x), (float)sqr_size * ((float)window_y / grid_y)),
+			Vector2int(0, 0));
 		obj->type_set(e_object_type_enemy_2);
 		manager->game_objects.push_back(obj);
 		return (obj);
 }
 GameObject *GameObject::finish_object_create(GameManager *manager, GameObject *obj)
 {
-		obj = new GameObject(manager, FINISH_TEXTURE,
-							 Vector2int((float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_WIDTH),
-										(float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_HEIGHT)),
-							 Vector2int(0, 0));
+		uint32_t window_x = manager->window_size_get().x;
+		uint32_t window_y = manager->window_size_get().y;
+		uint32_t grid_x = manager->game_grid_get()->img_width_get();
+		uint32_t grid_y = manager->game_grid_get()->img_height_get();
+		uint32_t sqr_size = manager->game_grid_get()->grid_sqr_size_get();
+		obj = new GameObject(
+			manager, FINISH_TEXTURE,
+			Vector2int((float)sqr_size * ((float)window_x / grid_x), (float)sqr_size * ((float)window_y / grid_y)),
+			Vector2int(0, 0));
 		obj->type_set(e_object_type_finish);
 		manager->game_objects.push_back(obj);
 		return (obj);
@@ -113,14 +128,23 @@ void GameObject::move_to(Vector2int coords)
 {
 		if (bounds_check(coords))
 		{
-				game_manager->game_grid_get()->remove_object_at(this, this->coordinates_get());
-				sdl_rect->x = coords.x * (GRID_SQR_SIZE + game_manager->game_grid_get()->line_width_get()) *
-							  ((float)WINDOW_SIZE / GRID_WIDTH);
-				sdl_rect->y = coords.y * (GRID_SQR_SIZE + game_manager->game_grid_get()->line_width_get()) *
-							  ((float)WINDOW_SIZE / GRID_WIDTH);
-				coordinates.x = coords.x;
-				coordinates.y = coords.y;
-				game_manager->game_grid_get()->add_object_at(this, coords);
+				GameManager *manager = this->game_manager_get();
+				GameGrid *grid = manager->game_grid_get();
+				uint32_t grid_x = grid->img_width_get();
+				uint32_t grid_y = grid->img_height_get();
+				uint32_t sqr_size = grid->grid_sqr_size_get();
+				uint32_t window_x = manager->window_size_get().x;
+				uint32_t window_y = manager->window_size_get().y;
+				{
+						game_manager->game_grid_get()->remove_object_at(this, this->coordinates_get());
+						sdl_rect->x = coords.x * (sqr_size + game_manager->game_grid_get()->line_width_get()) *
+									  ((float)window_x / grid_x);
+						sdl_rect->y = coords.y * (sqr_size + game_manager->game_grid_get()->line_width_get()) *
+									  ((float)window_y / grid_y);
+						coordinates.x = coords.x;
+						coordinates.y = coords.y;
+						game_manager->game_grid_get()->add_object_at(this, coords);
+				}
 		}
 }
 Vector2int GameObject::coordinates_get()
@@ -183,10 +207,3 @@ void GameObject::print()
 			   this, game_manager, sdl_texture, render_layer, sdl_rect, sdl_rect->x, sdl_rect->y, sdl_rect->w,
 			   sdl_rect->h, size.x, size.y, coordinates.x, coordinates.y, pos.x, pos.y);
 }
-// bool GameObject::operator==(const GameObject &other)
-// {
-// 		if (this == other)
-// 				return (true);
-// 		else
-// 				return (false)
-// }
