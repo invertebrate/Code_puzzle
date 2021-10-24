@@ -28,7 +28,6 @@ GameManager *game_manager_init()
 ///// -CREATE A WRAPPER FOR THE "LUA CODING GAME LANGUAGE"
 int main()
 {
-		settings_parse(NULL, "settings.lua");
 		GameManager *game_manager = game_manager_init();
 		game_manager->load_assets();
 		game_manager->game_init();

@@ -1,10 +1,6 @@
 #ifndef CODE_PUZZLE_H
 #define CODE_PUZZLE_H
-#define TEST_TEXTURE "assets/test_texture.png"
-#define HERO_TEXTURE "assets/hero.png"
-#define ENEMY_TEXTURE "assets/enemy.png"
-#define GRID_TEXTURE "assets/grid.png"
-#define FINISH_TEXTURE "assets/finish.png"
+
 #include "game_manager.hpp"
 #include "game_object.hpp"
 #include "lua.hpp"

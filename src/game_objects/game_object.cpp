@@ -28,6 +28,11 @@ GameObject::~GameObject()
 }
 GameObject *GameObject::hero_object_create(GameManager *manager, GameObject *obj)
 {
+		// manager->window_size_get().x;
+		// manager->window_size_get().y;
+		// manager->grid_size_get().x;
+		// manager->grid_size_get().y;
+		// manager->game_grid_get()->grid_sqr_size_get();
 		obj = new GameObject(manager, HERO_TEXTURE,
 							 Vector2int((float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_WIDTH),
 										(float)GRID_SQR_SIZE * ((float)WINDOW_SIZE / GRID_HEIGHT)),

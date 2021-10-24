@@ -19,9 +19,10 @@ GameManager::~GameManager()
 }
 void GameManager::init()
 {
+		settings_parse(this, SETTINGS_FILE);
 		game_window = new GameWindow("game_window", window_size.x, window_size.y);
 		game_renderer = new GameRenderer(game_window->sdl_window_get());
-		game_grid = new GameGrid();
+		game_grid = new GameGrid(this);
 		custom_event_type = SDL_RegisterEvents(1);
 		custom_event_handles_register();
 		initialized = true;
@@ -102,6 +103,38 @@ GameGrid *GameManager::game_grid_get()
 {
 		return (game_grid);
 }
+void GameManager::grid_size_set(Vector2int size)
+{
+		this->grid_size = size;
+}
+Vector2int GameManager::grid_size_get()
+{
+		return (this->grid_size);
+}
+void GameManager::window_size_set(Vector2int size)
+{
+		this->window_size = size;
+}
+Vector2int GameManager::window_size_get()
+{
+		return (this->window_size);
+}
+void GameManager::step_time_set(float step)
+{
+		this->step_time = step;
+}
+float GameManager::step_time_get()
+{
+		return (this->step_time);
+}
+void GameManager::fps_cap_set(int cap)
+{
+		this->target_fps = cap;
+}
+int GameManager::fps_cap_get()
+{
+		return (this->target_fps);
+}
 void GameManager::fps_start()
 {
 		fps_start_time = SDL_GetPerformanceCounter();
@@ -138,11 +171,6 @@ void GameManager::limit_fps()
 		{
 				SDL_Delay(wait);
 		}
-}
-
-Vector2int GameManager::window_size_get()
-{
-		return (window_size);
 }
 void GameManager::win_condition_check(GameObject *obj1, GameObject *obj2, void *res)
 {
@@ -340,9 +368,24 @@ void GameManager::game_loop()
 		}
 }
 
-GameGrid::GameGrid()
+GameGrid::GameGrid(GameManager *manager)
 {
-		grid_line_width = (GRID_WIDTH - (width * GRID_SQR_SIZE)) / (width - 1);
+		if (manager->grid_size_get() >= (Vector2int){1, 1})
+		{
+				width = manager->grid_size_get().x;
+				height = manager->grid_size_get().y;
+		}
+		if (manager->window_size_get() >= (Vector2int){1, 1})
+		{
+				img_width = manager->window_size_get().x;
+				img_height = manager->window_size_get().y;
+				;
+		}
+		if (manager->grid_size_get() >= (Vector2int){1, 1})
+		{
+				;
+		}
+		grid_line_width = (img_width - (width * GRID_SQR_SIZE)) / (width - 1);
 		for (uint32_t h = 0; h < height; h++)
 		{
 				for (uint32_t w = 0; w < width; w++)
@@ -432,6 +475,10 @@ void GameGrid::remove_object_at(GameObject *obj, Vector2int coords)
 		{
 				objects->erase(std::remove(objects->begin(), objects->end(), obj), objects->end());
 		}
+}
+uint32_t GameGrid::grid_sqr_size_get()
+{
+		return (grid_sqr_size);
 }
 void GameGrid::grid_objects_print()
 {

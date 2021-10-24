@@ -3,6 +3,7 @@
 
 #include "game_object.hpp"
 #include "grid.hpp"
+#include "lua_app.hpp"
 #include "renderer.hpp"
 #include "window.hpp"
 #include <algorithm>
@@ -10,12 +11,20 @@
 #include <map>
 #include <vector>
 
+#define TEST_TEXTURE "assets/test_texture.png"
+#define HERO_TEXTURE "assets/hero.png"
+#define ENEMY_TEXTURE "assets/enemy.png"
+#define GRID_TEXTURE "assets/grid.png"
+#define FINISH_TEXTURE "assets/finish.png"
+#define SETTINGS_FILE "settings.lua"
+
 #define WINDOW_SIZE 1800
 #define GRID_WIDTH 900
 #define GRID_HEIGHT 900
 #define GRID_DIMENSIONS_X 10
 #define GRID_DIMENSIONS_Y 10
 #define GRID_SQR_SIZE 89
+#define TARGET_FPS 60
 
 typedef std::function<void(GameObject *, GameObject *, void *)> f_gameobject_operation;
 typedef std::function<void(GameObject *, GameObject *, void *, void *)> f_gameobject_operation_param;
@@ -45,10 +54,12 @@ class GameManager
 		GameGrid *game_grid;
 		bool initialized = false;
 		Vector2int window_size = {WINDOW_SIZE, WINDOW_SIZE};
+		Vector2int grid_size = {GRID_DIMENSIONS_X, GRID_DIMENSIONS_Y};
+		float step_time;
 		uint32_t custom_event_type = 0;
 		std::map<e_event_code, void *(*)(void *, void *)> custom_events;
 		//--performance
-		float target_fps = 60;
+		float target_fps = TARGET_FPS;
 		uint64_t fps_start_time;
 		float delta_time;
 		float ms_per_sec = 1000.0;
@@ -69,6 +80,14 @@ class GameManager
 		GameRenderer *game_renderer_get();
 		GameWindow *game_window_get();
 		GameGrid *game_grid_get();
+		void grid_size_set(Vector2int size);
+		Vector2int grid_size_get();
+		void window_size_set(Vector2int size);
+		Vector2int window_size_get();
+		void step_time_set(float step);
+		float step_time_get();
+		void fps_cap_set(int cap);
+		int fps_cap_get();
 		void game_run();
 		void game_loop();
 		void custom_event_handles_register();
@@ -83,7 +102,6 @@ class GameManager
 		void fps_start();
 		void fps_end();
 		void limit_fps();
-		Vector2int window_size_get();
 		void end_condition_check();
 		static void win_condition_check(GameObject *obj1, GameObject *obj2, void *res);
 		static void lose_condition_check(GameObject *obj1, GameObject *obj2, void *res);
@@ -98,12 +116,13 @@ class GameGrid
 		uint32_t img_width = GRID_WIDTH;
 		uint32_t img_height = GRID_HEIGHT;
 		float grid_line_width = 0;
+		uint32_t grid_sqr_size = GRID_SQR_SIZE;
 
 		std::map<uint32_t, std::vector<GameObject *> *> grid;
 		SDL_Texture *sdl_texture;
 
 	  public:
-		GameGrid();
+		GameGrid(GameManager *manager);
 		~GameGrid();
 		std::map<uint32_t, std::vector<GameObject *> *> *grid_get();
 		void texture_set(SDL_Texture *texture);
@@ -117,6 +136,7 @@ class GameGrid
 		void operate_pairwise_at(f_gameobject_operation_param f_operation, Vector2int coords, void *param, void *res);
 		void add_object_at(GameObject *obj, Vector2int coords);
 		void remove_object_at(GameObject *obj, Vector2int coords);
+		uint32_t grid_sqr_size_get();
 		void grid_objects_print();
 };
 
