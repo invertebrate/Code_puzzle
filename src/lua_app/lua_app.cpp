@@ -1,10 +1,8 @@
 #include "lua_app.hpp"
-#define F_GRID_SIZE_X "grid_size_x"
-#define F_GRID_SIZE_Y "grid_size_y"
-#define F_WINDOW_SIZE_X "window_size_x"
-#define F_WINDOW_SIZE_Y "window_size_y"
-#define F_TIME_STEP "time_step"
-#define F_FPS_CAP "fps_cap"
+#define S_WINDOW_SIZE_X "window_size_x"
+#define S_WINDOW_SIZE_Y "window_size_y"
+#define S_STEP_TIME "step_time"
+#define S_FPS_CAP "fps_cap"
 
 static int check_lua(lua_State *L, int r)
 {
@@ -14,43 +12,79 @@ static int check_lua(lua_State *L, int r)
 		}
 		else
 		{
-				printf("ERROR LUA: %s", lua_tostring(L, -1));
+				printf("ERROR LUA: %d", (int)lua_tonumber(L, -1));
 				return (0);
 		}
 		return (0);
 }
 
-static int setting_get(lua_State *L, const char *s)
+static void settings_window_size_get(GameManager *manager, lua_State *L)
 {
-		lua_getglobal(L, s);
+		Vector2int size = {0, 0};
+		lua_pushstring(L, S_WINDOW_SIZE_X);
+		lua_gettable(L, -2);
 		if (lua_isnumber(L, -1))
 		{
-				return ((int)lua_tonumber(L, -1));
+				size.x = (int)lua_tonumber(L, -1);
 		}
-		else
-				return (0);
+		lua_pop(L, 1);
+
+		lua_pushstring(L, S_WINDOW_SIZE_Y);
+		lua_gettable(L, -2);
+		if (lua_isnumber(L, -1))
+		{
+				size.y = (int)lua_tonumber(L, -1);
+		}
+		lua_pop(L, 1);
+
+		if (size >= Vector2int{1, 1})
+		{
+				manager->window_size_set(size);
+		}
+}
+static void settings_fps_cap_get(GameManager *manager, lua_State *L)
+{
+
+		lua_pushstring(L, S_FPS_CAP);
+		lua_gettable(L, -2);
+		if (lua_isnumber(L, -1))
+		{
+				manager->fps_cap_set((int)lua_tonumber(L, -1));
+		}
+		lua_pop(L, 1);
+}
+static void settings_step_time_get(GameManager *manager, lua_State *L)
+{
+
+		lua_pushstring(L, S_STEP_TIME);
+		lua_gettable(L, -2);
+		if (lua_isnumber(L, -1))
+		{
+				manager->step_time_set((float)lua_tonumber(L, -1));
+				lua_pop(L, 1);
+		}
+		lua_pop(L, 1);
+}
+static void settings_parse(GameManager *manager, lua_State *L)
+{
+		settings_window_size_get(manager, L);
+		settings_fps_cap_get(manager, L);
+		settings_step_time_get(manager, L);
 }
 
 // function that reads the settings file and assigns the settings to game at init
-void settings_parse(GameManager *manager, const char *file)
+void settings_read(GameManager *manager, const char *file)
 {
 		lua_State *L = luaL_newstate();
 		// luaL_openlibs(L);
-		int grid_size;
 		int r = luaL_dofile(L, file);
 		if ((r = check_lua(L, r)))
 		{
-				// manager->grid_size_set({setting_get(L, F_GRID_SIZE_X), setting_get(L, F_GRID_SIZE_Y)});
-				manager->window_size_set({setting_get(L, F_WINDOW_SIZE_X), setting_get(L, F_WINDOW_SIZE_Y)});
-				manager->step_time_set(setting_get(L, F_TIME_STEP));
-				manager->fps_cap_set((float)setting_get(L, F_FPS_CAP));
-
-				// grid_size = 10
-				// window_size = 1000
-				// time_step = 1.0
-				// fps_cap = 60
+				r = lua_getglobal(L, "settings");
+				if (lua_istable(L, -1))
+				{
+						settings_parse(manager, L);
+				}
 		}
-		printf("grid_size read from file: %d\n", grid_size);
 		lua_close(L);
-		(void)manager;
 }

@@ -52,6 +52,7 @@ SOURCES =	main.cpp \
 			vector2/vector2.cpp \
 			events/events.cpp \
 			lua_app/lua_app.cpp \
+			lua_app/lua_commands.cpp \
 
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.cpp=.o))
 

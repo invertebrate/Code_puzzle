@@ -19,7 +19,7 @@ GameManager::~GameManager()
 }
 void GameManager::init()
 {
-		settings_parse(this, SETTINGS_FILE);
+		settings_read(this, SETTINGS_FILE);
 		game_window = new GameWindow("game_window", window_size.x, window_size.y);
 		game_renderer = new GameRenderer(game_window->sdl_window_get());
 		game_grid = new GameGrid(this);
