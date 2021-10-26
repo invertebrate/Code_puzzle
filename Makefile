@@ -33,11 +33,14 @@ else
 	TYPE="invalid"
 endif
 # ====================
+#Place -llua5.1 after ../samples/ctest.c. Objects should be linked in reverse order of dependency.
+
+#cc -o ../samples/ctest -Wall ../samples/ctest.c -llua5.1
 
 LIBS = $(SDL_FLAGS) $(LIB_PTHRTEAD) $(LIBLUAFLAGS)
 
-INCLUDES = -I ./include \
-		-I$(LIBLUA)/include \
+INCLUDES = 	-I ./include \
+			-I$(LIBLUA)/include \
 		# -I$(LIB3D)/include \
 
 
@@ -69,8 +72,8 @@ $(NAME): $(OBJS)
 	$(GPP) -o $@ $^ $(LIBS) $(CFLAGS)
 
 #libs:
-	# @printf "\033[32;1mCompiling libs...\n\033[0m"
-	# make -C $(LIB3D)
+# @printf "\033[32;1mCompiling libs...\n\033[0m"
+# make -C $(LIB3D)
 
 usage:
 	@printf "\033[32;1mDone.\n\n\033[0m"

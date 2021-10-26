@@ -12,7 +12,7 @@ static int check_lua(lua_State *L, int r)
 		}
 		else
 		{
-				printf("ERROR LUA: %d", (int)lua_tonumber(L, -1));
+				printf("ERROR LUA: %s", lua_tostring(L, -1));
 				return (0);
 		}
 		return (0);
@@ -72,11 +72,14 @@ static void settings_parse(GameManager *manager, lua_State *L)
 		settings_step_time_get(manager, L);
 }
 
+void commands_read(GameManager *manager, const char *file);
 // function that reads the settings file and assigns the settings to game at init
+// LUA COROUTINES! for something//
+// LUA REGISTRY INDEX store
 void settings_read(GameManager *manager, const char *file)
 {
 		lua_State *L = luaL_newstate();
-		// luaL_openlibs(L);
+		luaL_openlibs(L);
 		int r = luaL_dofile(L, file);
 		if ((r = check_lua(L, r)))
 		{
@@ -87,5 +90,24 @@ void settings_read(GameManager *manager, const char *file)
 				}
 		}
 		lua_close(L);
+		commands_read(manager, "commands.lua");
 }
 // try to make macros work
+
+void commands_read(GameManager *manager, const char *file)
+{
+		lua_State *L = luaL_newstate();
+		luaL_openlibs(L);
+		int r = luaL_dofile(L, file);
+		if ((r = check_lua(L, r)))
+		{
+				// r = lua_getglobal(L, "commands");
+				// if (lua_istable(L, -1))
+				// {
+				// 		settings_parse(manager, L);
+				// }
+				printf("commands read\n");
+		}
+		lua_close(L);
+		(void)manager;
+}
