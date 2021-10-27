@@ -13,8 +13,8 @@ UNAME := $(shell uname)
 TYPE := $(shell uname -m)
 ifeq ($(UNAME),Linux)
 	ifeq ($(TYPE),x86_64)
-		LIBLUA = ./lib/lua
-		LIBLUAFLAGS = -L$(LIBLUA) -llua54
+		LIBLUA = ./lib/lua-5.4.2_Linux54_64_lib
+		LIBLUAFLAGS = -L$(LIBLUA) -llua54 -Wl,-rpath=$(LIBLUA)
 		SDL_FLAGS = `sdl2-config --cflags --libs` -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
 		LIB_MATH = -lm
 		LIB_PTHRTEAD = -lpthread
@@ -37,7 +37,7 @@ endif
 
 #cc -o ../samples/ctest -Wall ../samples/ctest.c -llua5.1
 
-LIBS = $(SDL_FLAGS) $(LIB_PTHRTEAD) $(LIBLUAFLAGS)
+LIBS = $(SDL_FLAGS) $(LIB_PTHRTEAD) $(LIBLUAFLAGS)	#-rpath links the dynamic .so library
 
 INCLUDES = 	-I ./include \
 			-I$(LIBLUA)/include \

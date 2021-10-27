@@ -83,21 +83,45 @@ void settings_read(GameManager *manager, const char *file)
 		int r = luaL_dofile(L, file);
 		if ((r = check_lua(L, r)))
 		{
-				r = lua_getglobal(L, "settings");
+				r = lua_getglobal(L, SETTINGS_FILE);
 				if (lua_istable(L, -1))
 				{
 						settings_parse(manager, L);
 				}
 		}
 		lua_close(L);
-		commands_read(manager, "commands.lua");
 }
-// try to make macros work
+
+int fromlua_move_player(lua_State *L)
+{
+		int a = 0;
+		int b = 0;
+		GameManager *manager = NULL;
+		if (lua_gettop(L) == 3)
+		{
+				manager = *((GameManager **)lua_topointer(L, 1));
+				a = (int)lua_tonumber(L, 2);
+				b = (int)lua_tonumber(L, 3);
+		}
+		else
+		{
+				lua_pushnumber(L, e_command_error_narguments);
+				return (1);
+		}
+		manager->player->move_to(Vector2int{a, b});
+		lua_pushnumber(L, e_command_log_success);
+
+		return (1);
+}
 
 void commands_read(GameManager *manager, const char *file)
 {
 		lua_State *L = luaL_newstate();
 		luaL_openlibs(L);
+		lua_register(L, "inlua_move_player", fromlua_move_player);
+		void *managerptr = lua_newuserdata(L, sizeof(GameManager *)); // allocates space in the stack
+		*((GameManager **)managerptr) = manager;
+		lua_setglobal(L, "manager");
 		int r = luaL_dofile(L, file);
 		if ((r = check_lua(L, r)))
 		{

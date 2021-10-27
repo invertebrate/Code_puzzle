@@ -27,8 +27,22 @@
 #define LUA_APP_H
 
 #include "game_manager.hpp"
+#include "game_object.hpp"
 #include "lua.hpp"
 
+#define F_COMMANDS_FILE "commands.lua"
+#define F_SETTINGS_FILE "settings.lua"
+
+enum e_command_error
+{
+		e_command_error_narguments = -1
+};
+enum e_command_log
+{
+		e_command_log_success = 1000
+};
+
 void settings_read(GameManager *manager, const char *file);
+void commands_read(GameManager *manager, const char *file);
 
 #endif

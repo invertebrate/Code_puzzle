@@ -339,6 +339,10 @@ void GameManager::game_init()
 }
 void GameManager::game_run()
 {
+		printf("[C++] game manager in C is: %p\n", this);
+		printf("[C++] player in C is: %p\n", this->player);
+
+		commands_read(this, F_COMMANDS_FILE);
 		this->game_loop();
 }
 void GameManager::game_state_update()
