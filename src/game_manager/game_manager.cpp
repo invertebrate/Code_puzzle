@@ -339,9 +339,6 @@ void GameManager::game_init()
 }
 void GameManager::game_run()
 {
-		printf("[C++] game manager in C is: %p\n", this);
-		printf("[C++] player in C is: %p\n", this->player);
-
 		commands_read(this, F_COMMANDS_FILE);
 		this->game_loop();
 }
@@ -395,12 +392,9 @@ GameGrid::GameGrid(GameManager *manager)
 		{
 				for (uint32_t w = 0; w < width; w++)
 				{
-						std::vector<GameObject *> *object_list =
-							new std::vector<GameObject *>(); // kinda sus syntax bc of pointer
+						std::vector<GameObject *> *object_list = new std::vector<GameObject *>();
 						auto pair = std::make_pair(w + h * width, object_list);
-						grid.insert(pair); // hopefully this makes a map with coordinates as keys and an object
-										   // vector as value
-										   // test gameobject insertion and indexing works
+						grid.insert(pair);
 				}
 		}
 }

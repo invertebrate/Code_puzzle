@@ -4,23 +4,17 @@
 GameObject::GameObject(GameManager *manager, const char *file, Vector2int dimensions, Vector2int coords)
 	: size(dimensions), coordinates(coords)
 {
-
-		// if (bounds_check(coords))
-		// {
 		game_manager = manager;
 		GameGrid *grid = manager->game_grid_get();
-		printf("creating a gameobject with dimensions %d, %d: \n", dimensions.x, dimensions.y);
 		sdl_rect = (SDL_Rect *)malloc(sizeof(SDL_Rect));
 		sdl_rect->w = (int)dimensions.x;
 		sdl_rect->h = (int)dimensions.y;
-		printf("line width %f: \n", manager->game_grid_get()->line_width_get());
 		sdl_rect->x = coords.x * (grid->grid_sqr_size_get() + game_manager->game_grid_get()->line_width_get()) *
 					  ((float)manager->window_size_get().x / grid->img_width_get());
 		sdl_rect->y = coords.y * (grid->grid_sqr_size_get() + game_manager->game_grid_get()->line_width_get()) *
 					  ((float)manager->window_size_get().y / grid->img_height_get());
 		scale = 1.0;
 		sdl_texture = manager->asset_textures[file];
-		// }
 }
 GameObject::~GameObject()
 {
