@@ -1,11 +1,10 @@
-
-
 MOVE = function (x, y)
 print("[LUA] MOVE " .. x .. " " .. y)
 c = inlua_move_player(manager, x, y)
-print("[LUA] C function returned: " .. c)
+print("[LUA] C move function returned: " .. c)
 --call move function in C++
 end
 
-MOVE(8, 8)
+
+MOVE(1, 0)
 

@@ -72,10 +72,6 @@ static void settings_parse(GameManager *manager, lua_State *L)
 		settings_step_time_get(manager, L);
 }
 
-void commands_read(GameManager *manager, const char *file);
-// function that reads the settings file and assigns the settings to game at init
-// LUA COROUTINES! for something//
-// LUA REGISTRY INDEX store
 void settings_read(GameManager *manager, const char *file)
 {
 		lua_State *L = luaL_newstate();
@@ -94,23 +90,24 @@ void settings_read(GameManager *manager, const char *file)
 
 int fromlua_move_player(lua_State *L)
 {
-		int a = 0;
-		int b = 0;
+		int x = 0;
+		int y = 0;
 		GameManager *manager = NULL;
+		GameObject *player = NULL;
 		if (lua_gettop(L) == 3)
 		{
 				manager = *((GameManager **)lua_topointer(L, 1));
-				a = (int)lua_tonumber(L, 2);
-				b = (int)lua_tonumber(L, 3);
+				player = manager->player;
+				x = (int)lua_tonumber(L, 2);
+				y = (int)lua_tonumber(L, 3);
 		}
 		else
 		{
 				lua_pushnumber(L, e_command_error_narguments);
 				return (1);
 		}
-		manager->player->move_to(Vector2int{a, b});
+		player->move_to(Vector2int{player->coordinates_get().x + x, player->coordinates_get().y + y});
 		lua_pushnumber(L, e_command_log_success);
-
 		return (1);
 }
 
@@ -119,17 +116,12 @@ void commands_read(GameManager *manager, const char *file)
 		lua_State *L = luaL_newstate();
 		luaL_openlibs(L);
 		lua_register(L, "inlua_move_player", fromlua_move_player);
-		void *managerptr = lua_newuserdata(L, sizeof(GameManager *)); // allocates space in the stack
+		void *managerptr = lua_newuserdata(L, sizeof(GameManager *));
 		*((GameManager **)managerptr) = manager;
 		lua_setglobal(L, "manager");
 		int r = luaL_dofile(L, file);
 		if ((r = check_lua(L, r)))
 		{
-				// r = lua_getglobal(L, "commands");
-				// if (lua_istable(L, -1))
-				// {
-				// 		settings_parse(manager, L);
-				// }
 				printf("commands read\n");
 		}
 		lua_close(L);

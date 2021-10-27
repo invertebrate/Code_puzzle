@@ -18,7 +18,7 @@ class AIObject // an addon object to GameObject that has runtime functionality
 {
 	  public:
 		GameObject *host;
-		Vector2int patrol_path[2] = {{-1, -1}, {-1, -1}}; // figure out a good default value
+		Vector2int patrol_path[2] = {{-1, -1}, {-1, -1}};
 		Vector2int current_target = {-1, -1};
 		e_behaviour_type behaviour = e_behaviour_type_null;
 		e_task_type task = e_task_type_null;
