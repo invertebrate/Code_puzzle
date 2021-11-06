@@ -90,8 +90,3 @@ class AIObject // an addon object to GameObject that has runtime functionality
 		{
 		}
 };
-
-// possible patterns:
-// patrol
-// follow
-// go perform a task

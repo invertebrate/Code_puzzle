@@ -107,7 +107,6 @@ class GameManager
 		static void lose_condition_check(GameObject *obj1, GameObject *obj2, void *res);
 };
 
-// gameobjects should know where they are on the grid and grid should know what objects are on each slot
 class GameGrid
 {
 	  private:

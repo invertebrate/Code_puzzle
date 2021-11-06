@@ -149,7 +149,6 @@ void GameManager::fps_end()
 		timer += ms_per_sec / target_fps;
 		if (timer > ms_per_sec)
 		{
-				// game_grid_get()->grid_objects_print();
 				printf("fps: %f / %f\n", ms_per_sec / delta_time, target_fps);
 				timer = 0;
 				for (auto it = this->game_objects.begin(); it != this->game_objects.end(); it++)
@@ -440,8 +439,7 @@ void GameGrid::operate_pairwise_at(f_gameobject_operation f_operation, Vector2in
 		auto objects = grid.at(index);
 		if (objects->size() < 1)
 				return;
-		for (uint32_t i = 0; i < objects->size() - 1; i++) // supposed to loop through object pairs without
-														   // repetition
+		for (uint32_t i = 0; i < objects->size() - 1; i++)
 		{
 				for (auto iterator = objects->begin() + i + 1; iterator != objects->end(); iterator++)
 				{
@@ -453,8 +451,7 @@ void GameGrid::operate_pairwise_at(f_gameobject_operation_param f_operation, Vec
 {
 		int index = grid_index_get(coords);
 		auto objects = grid.at(index);
-		for (uint32_t i = 0; i < objects->size() - 1; i++) // supposed to loop through object pairs without
-														   // repetition
+		for (uint32_t i = 0; i < objects->size() - 1; i++)
 		{
 				for (auto iterator = objects->begin() + i + 1; iterator != objects->end(); iterator++)
 				{

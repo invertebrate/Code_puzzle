@@ -8,7 +8,7 @@ void update_window(GameRenderer *renderer)
 GameManager *game_manager_init()
 {
 		GameManager *game_manager;
-		SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO); // error check these
+		SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 		TTF_Init();
 		game_manager = new GameManager();
 		game_manager->init();
