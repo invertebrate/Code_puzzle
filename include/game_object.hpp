@@ -20,7 +20,8 @@ class GameObject
 		Vector2int size;
 		Vector2 pos;
 		float scale;
-		bool passable;
+		bool collision;
+		bool solid;
 		e_object_type type;
 		Vector2int coordinates;
 
@@ -32,8 +33,11 @@ class GameObject
 		static GameObject *hero_object_create(GameManager *manager, GameObject *obj);
 		static GameObject *enemy_object_create(GameManager *manager, GameObject *obj);
 		static GameObject *enemy_2_object_create(GameManager *manager, GameObject *obj);
+		static GameObject *obstacle_1_object_create(GameManager *manager, GameObject *obj);
 		static GameObject *finish_object_create(GameManager *manager, GameObject *obj);
+		static void has_solid_collider(GameObject *object, void *param, void *res);
 		bool bounds_check(Vector2int coordinates);
+		bool solid_collision_check(Vector2int coordinates);
 		void texture_set(SDL_Texture *texture);
 		SDL_Texture *texture_get();
 		SDL_Rect *sdl_rect_get();
@@ -48,8 +52,9 @@ class GameObject
 		Vector2 pos_get();
 		float scale_get();
 		void scale_set(float s);
-		void passable_set(bool passable);
-		bool is_passable();
+		void collision_set(bool passable);
+		bool is_collision();
+		bool is_solid();
 		e_object_type type_get();
 		void type_set(e_object_type t);
 		void print();

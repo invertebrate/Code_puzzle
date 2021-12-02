@@ -11,9 +11,9 @@
 #include <map>
 #include <vector>
 
-#define TEST_TEXTURE "assets/test_texture.png"
 #define HERO_TEXTURE "assets/hero.png"
 #define ENEMY_TEXTURE "assets/enemy.png"
+#define OBSTACLE_TEXTURE "assets/obstacle.png"
 #define GRID_TEXTURE "assets/grid.png"
 #define FINISH_TEXTURE "assets/finish.png"
 #define SETTINGS_FILE "settings.lua"
@@ -27,7 +27,8 @@
 #define TARGET_FPS 60
 
 typedef std::function<void(GameObject *, GameObject *, void *)> f_gameobject_operation;
-typedef std::function<void(GameObject *, GameObject *, void *, void *)> f_gameobject_operation_param;
+typedef std::function<void(GameObject *, GameObject *, void *, void *)> f_gameobject_operation_pair_param;
+typedef std::function<void(GameObject *, void *, void *)> f_gameobject_operation_single_param;
 
 enum e_object_type : unsigned int
 {
@@ -35,7 +36,8 @@ enum e_object_type : unsigned int
 		e_object_type_hero = 11,
 		e_object_type_enemy = 12,
 		e_object_type_enemy_2 = 13,
-		e_object_type_finish = 14,
+		e_object_type_obstacle_1 = 14,
+		e_object_type_finish = 15,
 };
 
 enum e_event_code
@@ -132,7 +134,10 @@ class GameGrid
 		uint32_t grid_index_get(Vector2int coords);
 		Vector2int grid_coords_get(uint32_t index);
 		void operate_pairwise_at(f_gameobject_operation f_operation, Vector2int coords, void *res);
-		void operate_pairwise_at(f_gameobject_operation_param f_operation, Vector2int coords, void *param, void *res);
+		void operate_pairwise_at(f_gameobject_operation_pair_param f_operation, Vector2int coords, void *param,
+								 void *res);
+		void operate_on_objects_at(f_gameobject_operation_single_param f_operation, Vector2int coords, void *param,
+								   void *res);
 		void add_object_at(GameObject *obj, Vector2int coords);
 		void remove_object_at(GameObject *obj, Vector2int coords);
 		uint32_t grid_sqr_size_get();

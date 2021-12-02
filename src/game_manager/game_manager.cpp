@@ -30,8 +30,6 @@ void GameManager::init()
 void GameManager::load_assets()
 {
 		SDL_Texture *tex;
-		tex = this->game_renderer_get()->texture_create(TEST_TEXTURE);
-		this->asset_textures.insert({TEST_TEXTURE, tex});
 		tex = this->game_renderer_get()->texture_create(
 			HERO_TEXTURE); // shouldnt cause memory leaks bc .insert allocates and deallocates
 		this->asset_textures.insert({HERO_TEXTURE, tex});
@@ -39,6 +37,8 @@ void GameManager::load_assets()
 		this->asset_textures.insert({ENEMY_TEXTURE, tex});
 		tex = this->game_renderer_get()->texture_create(FINISH_TEXTURE);
 		this->asset_textures.insert({FINISH_TEXTURE, tex});
+		tex = this->game_renderer_get()->texture_create(OBSTACLE_TEXTURE);
+		this->asset_textures.insert({OBSTACLE_TEXTURE, tex});
 }
 GameRenderer *GameManager::game_renderer_get()
 {
@@ -83,6 +83,15 @@ uint32_t GameManager::game_object_create(e_object_type type)
 				object->move_to(Vector2int{3, 1});
 				object_count++;
 				return (e_object_type_enemy);
+		}
+		if (type == e_object_type_obstacle_1)
+		{
+				object = GameObject::obstacle_1_object_create(this, object);
+				object->type_set(type);
+				game_grid_get()->add_object_at(object, {0, 0});
+				object->move_to(Vector2int{5, 5});
+				object_count++;
+				return (e_object_type_obstacle_1);
 		}
 		if (type == e_object_type_finish)
 		{
@@ -343,6 +352,7 @@ void GameManager::game_run()
 }
 void GameManager::game_state_update()
 {
+		// collisions check()
 		end_condition_check();
 }
 void GameManager::game_loop()
@@ -350,6 +360,7 @@ void GameManager::game_loop()
 		SDL_Event e;
 		// this->game_object_create(e_object_type_enemy);
 		this->game_object_create(e_object_type_enemy_2);
+		this->game_object_create(e_object_type_obstacle_1);
 		this->game_object_create(e_object_type_finish);
 
 		while (game_running)
@@ -447,7 +458,8 @@ void GameGrid::operate_pairwise_at(f_gameobject_operation f_operation, Vector2in
 				}
 		}
 }
-void GameGrid::operate_pairwise_at(f_gameobject_operation_param f_operation, Vector2int coords, void *param, void *res)
+void GameGrid::operate_pairwise_at(f_gameobject_operation_pair_param f_operation, Vector2int coords, void *param,
+								   void *res)
 {
 		int index = grid_index_get(coords);
 		auto objects = grid.at(index);
@@ -457,6 +469,16 @@ void GameGrid::operate_pairwise_at(f_gameobject_operation_param f_operation, Vec
 				{
 						f_operation(objects->at(i), *iterator, param, res);
 				}
+		}
+}
+void GameGrid::operate_on_objects_at(f_gameobject_operation_single_param f_operation, Vector2int coords, void *param,
+									 void *res)
+{
+		int index = grid_index_get(coords);
+		auto objects = grid.at(index);
+		for (uint32_t i = 0; i < objects->size(); i++)
+		{
+				f_operation(objects->at(i), param, res);
 		}
 }
 void GameGrid::add_object_at(GameObject *obj, Vector2int coords)

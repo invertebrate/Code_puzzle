@@ -14,6 +14,8 @@ GameObject::GameObject(GameManager *manager, const char *file, Vector2int dimens
 		sdl_rect->y = coords.y * (grid->grid_sqr_size_get() + game_manager->game_grid_get()->line_width_get()) *
 					  ((float)manager->window_size_get().y / grid->img_height_get());
 		scale = 1.0;
+		collision = false;
+		solid = false;
 		sdl_texture = manager->asset_textures[file];
 }
 GameObject::~GameObject()
@@ -31,6 +33,8 @@ GameObject *GameObject::hero_object_create(GameManager *manager, GameObject *obj
 			manager, HERO_TEXTURE,
 			Vector2int((float)sqr_size * ((float)window_x / grid_x), (float)sqr_size * ((float)window_y / grid_y)),
 			Vector2int(0, 0));
+		obj->collision = true;
+		obj->solid = false;
 		obj->type_set(e_object_type_hero);
 		manager->game_objects.push_back(obj);
 		return (obj);
@@ -46,6 +50,8 @@ GameObject *GameObject::enemy_object_create(GameManager *manager, GameObject *ob
 			manager, ENEMY_TEXTURE,
 			Vector2int((float)sqr_size * ((float)window_x / grid_x), (float)sqr_size * ((float)window_y / grid_y)),
 			Vector2int(0, 0));
+		obj->collision = true;
+		obj->solid = false;
 		obj->type_set(e_object_type_enemy);
 		manager->game_objects.push_back(obj);
 		return (obj);
@@ -61,7 +67,26 @@ GameObject *GameObject::enemy_2_object_create(GameManager *manager, GameObject *
 			manager, ENEMY_TEXTURE,
 			Vector2int((float)sqr_size * ((float)window_x / grid_x), (float)sqr_size * ((float)window_y / grid_y)),
 			Vector2int(0, 0));
+		obj->collision = true;
+		obj->solid = false;
 		obj->type_set(e_object_type_enemy_2);
+		manager->game_objects.push_back(obj);
+		return (obj);
+}
+GameObject *GameObject::obstacle_1_object_create(GameManager *manager, GameObject *obj)
+{
+		uint32_t window_x = manager->window_size_get().x;
+		uint32_t window_y = manager->window_size_get().y;
+		uint32_t grid_x = manager->game_grid_get()->img_width_get();
+		uint32_t grid_y = manager->game_grid_get()->img_height_get();
+		uint32_t sqr_size = manager->game_grid_get()->grid_sqr_size_get();
+		obj = new GameObject(
+			manager, OBSTACLE_TEXTURE,
+			Vector2int((float)sqr_size * ((float)window_x / grid_x), (float)sqr_size * ((float)window_y / grid_y)),
+			Vector2int(0, 0));
+		obj->collision = true;
+		obj->solid = true;
+		obj->type_set(e_object_type_obstacle_1);
 		manager->game_objects.push_back(obj);
 		return (obj);
 }
@@ -76,6 +101,8 @@ GameObject *GameObject::finish_object_create(GameManager *manager, GameObject *o
 			manager, FINISH_TEXTURE,
 			Vector2int((float)sqr_size * ((float)window_x / grid_x), (float)sqr_size * ((float)window_y / grid_y)),
 			Vector2int(0, 0));
+		obj->collision = true;
+		obj->solid = false;
 		obj->type_set(e_object_type_finish);
 		manager->game_objects.push_back(obj);
 		return (obj);
@@ -91,6 +118,29 @@ bool GameObject::bounds_check(Vector2int coordinates)
 		}
 		else
 				return (true);
+}
+void GameObject::has_solid_collider(GameObject *object, void *param, void *res)
+{
+		if (object->is_solid())
+		{
+				*((bool *)res) = true;
+				printf("was solid\n");
+		}
+		else
+		{
+				*((bool *)res) = false;
+				printf("was not solid\n");
+		}
+		(void)param;
+}
+bool GameObject::solid_collision_check(Vector2int coordinates)
+{
+		bool is_solid = false;
+		GameGrid *grid = this->game_manager_get()->game_grid_get();
+		grid->operate_on_objects_at(has_solid_collider, coordinates, NULL, &is_solid);
+		(void)coordinates;
+		(void)grid;
+		return (is_solid);
 }
 
 void GameObject::texture_set(SDL_Texture *texture)
@@ -120,7 +170,7 @@ uint16_t GameObject::render_layer_get()
 }
 void GameObject::move_to(Vector2int coords)
 {
-		if (bounds_check(coords))
+		if (bounds_check(coords) && !(this->solid_collision_check(coords)))
 		{
 				GameManager *manager = this->game_manager_get();
 				GameGrid *grid = manager->game_grid_get();
@@ -169,13 +219,17 @@ void GameObject::scale_set(float s)
 {
 		scale = s;
 }
-void GameObject::passable_set(bool pass)
+void GameObject::collision_set(bool collision)
 {
-		passable = pass;
+		this->collision = collision;
 }
-bool GameObject::is_passable()
+bool GameObject::is_collision()
 {
-		return (passable);
+		return (this->collision);
+}
+bool GameObject::is_solid()
+{
+		return (this->solid);
 }
 e_object_type GameObject::type_get()
 {

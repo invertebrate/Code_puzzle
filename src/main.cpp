@@ -25,3 +25,10 @@ int main()
 		// game_cleanup();
 		return (0);
 }
+
+//TODO!
+//Game start, game end, paused states
+//Static obstacles
+//Dynamic obstacles
+//More complex enemy behaviour
+
