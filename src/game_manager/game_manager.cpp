@@ -16,10 +16,15 @@ GameManager::~GameManager()
 				asset_textures.clear();
 				game_objects.clear();
 		}
+		if (lua_main_instance != NULL)
+		{
+				lua_close(lua_main_instance);
+		}
+		// delete rest of the pointers?
 }
 void GameManager::init()
 {
-		settings_read(this, SETTINGS_FILE);
+		settings_read(this, F_SETTINGS_FILE);
 		game_window = new GameWindow("game_window", window_size.x, window_size.y);
 		game_renderer = new GameRenderer(game_window->sdl_window_get());
 		game_grid = new GameGrid(this);
@@ -116,6 +121,22 @@ void GameManager::grid_size_set(Vector2int size)
 {
 		this->grid_size = size;
 }
+lua_State *GameManager::lua_instance_get()
+{
+		return (lua_main_instance);
+}
+void GameManager::lua_instance_set(lua_State *L)
+{
+		lua_main_instance = L;
+}
+std::string *GameManager::command_string_get()
+{
+		return (command_string);
+}
+void GameManager::command_string_set(std::string *commands)
+{
+		command_string = commands;
+}
 Vector2int GameManager::grid_size_get()
 {
 		return (this->grid_size);
@@ -160,13 +181,6 @@ void GameManager::fps_end()
 		{
 				printf("fps: %f / %f\n", ms_per_sec / delta_time, target_fps);
 				timer = 0;
-				for (auto it = this->game_objects.begin(); it != this->game_objects.end(); it++)
-				{
-						if ((*it)->type_get() == e_object_type_enemy_2)
-						{
-								(*it)->ai_object->position_resolve();
-						}
-				}
 		}
 }
 void GameManager::limit_fps()
@@ -347,13 +361,33 @@ void GameManager::game_init()
 }
 void GameManager::game_run()
 {
-		commands_read(this, F_COMMANDS_FILE);
+		commands_init(this, F_COMMANDS_INIT_FILE);
 		this->game_loop();
 }
 void GameManager::game_state_update()
 {
 		// collisions check()
 		end_condition_check();
+}
+void GameManager::time_step_handle()
+{
+		static float timer = 0;
+		static int step_counter = 0;
+
+		timer += ms_per_sec / target_fps;
+		if (timer > step_time)
+		{
+				// printf("advancing time step: %d\n", step_counter);
+				step_counter++;
+				timer = 0;
+				for (auto it = this->game_objects.begin(); it != this->game_objects.end(); it++)
+				{
+						if ((*it)->type_get() == e_object_type_enemy_2)
+						{
+								(*it)->ai_object->position_resolve();
+						}
+				}
+		}
 }
 void GameManager::game_loop()
 {
@@ -374,6 +408,7 @@ void GameManager::game_loop()
 				// // input_script();
 				// // update_game_state();
 				this->render_frame();
+				time_step_handle();
 				//////GAME LOOP END
 				this->fps_end();
 		}

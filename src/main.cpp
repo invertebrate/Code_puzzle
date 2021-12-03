@@ -26,9 +26,10 @@ int main()
 		return (0);
 }
 
-//TODO!
-//Game start, game end, paused states
-//Static obstacles
-//Dynamic obstacles
-//More complex enemy behaviour
-
+// TODO!
+// Game start, game end, paused states
+// Static obstacles >> 0.1 done
+// Dynamic obstacles
+// More complex enemy behaviour
+// Pathfinding for enemies?
+// Turn based command reading -adds comments after command lines for executed commands<-

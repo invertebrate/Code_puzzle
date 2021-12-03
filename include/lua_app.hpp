@@ -25,11 +25,15 @@
 
 #ifndef LUA_APP_H
 #define LUA_APP_H
+#include "lua.hpp"
 
 #include "game_manager.hpp"
 #include "game_object.hpp"
-#include "lua.hpp"
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
+#define F_COMMANDS_INIT_FILE "init.lua"
 #define F_COMMANDS_FILE "commands.lua"
 #define F_SETTINGS_FILE "settings.lua"
 
@@ -43,6 +47,6 @@ enum e_command_log
 };
 
 void settings_read(GameManager *manager, const char *file);
-void commands_read(GameManager *manager, const char *file);
+void commands_init(GameManager *manager, const char *file);
 
 #endif

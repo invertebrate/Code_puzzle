@@ -1,9 +1,9 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
+#include "lua_app.hpp"
 
 #include "game_object.hpp"
 #include "grid.hpp"
-#include "lua_app.hpp"
 #include "renderer.hpp"
 #include "window.hpp"
 #include <algorithm>
@@ -51,25 +51,27 @@ class GameGrid;
 class GameManager
 {
 	  private:
-		GameWindow *game_window;
-		GameRenderer *game_renderer;
-		GameGrid *game_grid;
+		GameWindow *game_window = NULL;
+		GameRenderer *game_renderer = NULL;
+		GameGrid *game_grid = NULL;
+		lua_State *lua_main_instance;
+		std::string *command_string = NULL;
 		bool initialized = false;
 		Vector2int window_size = {WINDOW_SIZE, WINDOW_SIZE};
 		Vector2int grid_size = {GRID_DIMENSIONS_X, GRID_DIMENSIONS_Y};
-		float step_time;
+		float step_time = 0.0;
 		uint32_t custom_event_type = 0;
 		std::map<e_event_code, void *(*)(void *, void *)> custom_events;
 		//--performance
 		float target_fps = TARGET_FPS;
-		uint64_t fps_start_time;
-		float delta_time;
+		uint64_t fps_start_time = 0;
+		float delta_time = 0.0;
 		float ms_per_sec = 1000.0;
-		uint64_t time_diff;
+		uint64_t time_diff = 0;
 		//---
 	  public:
 		std::vector<GameObject *> game_objects;
-		GameObject *player;
+		GameObject *player = NULL;
 		int object_count = 0;
 		std::map<const char *, SDL_Texture *> asset_textures;
 		bool game_running = 1;
@@ -82,6 +84,10 @@ class GameManager
 		GameRenderer *game_renderer_get();
 		GameWindow *game_window_get();
 		GameGrid *game_grid_get();
+		lua_State *lua_instance_get();
+		void lua_instance_set(lua_State *L);
+		std::string *command_string_get();
+		void command_string_set(std::string *commands);
 		void grid_size_set(Vector2int size);
 		Vector2int grid_size_get();
 		void window_size_set(Vector2int size);
@@ -96,6 +102,7 @@ class GameManager
 		void custom_event_add(e_event_code event_code, void *data1, void *data2);
 		void events_handle(SDL_Event *e);
 		void custom_event_handle(SDL_Event *event);
+		void time_step_handle();
 		void render_frame();
 		void render_objects();
 		void render_grid();
