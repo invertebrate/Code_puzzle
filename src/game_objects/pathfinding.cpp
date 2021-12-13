@@ -30,7 +30,9 @@ size_t find_smallest(t_pf_data *data, t_upair *coordinates, size_t size)
 		std::vector<uint32_t> values;
 		for (uint32_t i = 0; i < size; i++)
 		{
-				values.push_back(data->map[get_index(data, coordinates[i].first, coordinates[i].second)]);
+				values.push_back(
+					data->map[get_index(data, coordinates[i].first,
+										coordinates[i].second)]); // TODO FIX start finish issue when next to each other
 		}
 		return (std::min_element(values.begin(), values.end()) - values.begin());
 }
@@ -79,11 +81,13 @@ t_upair find_smallest_neighbour(t_pf_data *data, t_upair coords)
 void trace_path(t_pf_data *data, t_upair end_coords)
 {
 		t_upair coords = end_coords;
-		data->path->push_back(end_coords);
-		while (data->map[get_index(data, coords.first, coords.second)] != 0)
+		data->path->push_front(end_coords);
+		while (true)
 		{
 				coords = find_smallest_neighbour(data, coords);
-				data->path->push_back(coords);
+				data->path->push_front(coords);
+				if (data->map[get_index(data, coords.first, coords.second)] == PF_VALUE_START)
+						break;
 		}
 		printf("route size i.e. step amount: %lu\n", data->path->size());
 }
@@ -103,6 +107,7 @@ uint32_t update_node(t_pf_data *data, uint32_t x, uint32_t y, uint32_t current_w
 		}
 		if (data->map[index] == PF_VALUE_FINISH)
 		{ // found finish
+				data->path->push_front(t_upair(x, y));
 				return (2);
 		}
 		if (data->node_states[index] & e_node_visited)
@@ -249,7 +254,8 @@ void print_map(t_pf_data *data)
 		printf("%s\n", map_string.c_str());
 }
 
-void path_find(uint32_t *map, t_upair start, uint32_t width, uint32_t height, t_path *path)
+void path_find(uint32_t *map, t_upair start, uint32_t width, uint32_t height,
+			   t_path *path) // path should contain both the target and start points
 {
 		srand(time(NULL));
 		t_pf_data data;

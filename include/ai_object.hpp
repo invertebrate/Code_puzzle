@@ -18,6 +18,10 @@ enum e_task_type
 		e_task_type_sabotage = 31
 };
 
+void ai_check_for_obstacles(GameObject *object, void *param, void *res);
+uint32_t *ai_map_create(GameGrid *game_grid, Vector2int start, Vector2int target);
+void ai_find_path_to_target(GameGrid *game_grid, t_upair start, t_upair target, t_path *path);
+
 class AIObject // an addon object to GameObject that has runtime functionality
 {
 	  public:
@@ -44,17 +48,32 @@ class AIObject // an addon object to GameObject that has runtime functionality
 				}
 				if (behaviour == e_behaviour_type_follow)
 				{
-						follow_step_resolve();
+						follow_step_resolve(); // follows player
 				}
 		}
-		void follow_step_resolve()
+		void follow_step_resolve() // follows player
 		{
 				Vector2int step;
 				Vector2int distance;
 
-				distance = host->game_manager_get()->player->coordinates_get() - host->coordinates_get();
-				step = calculate_next_step(distance);
-				host->move_to(step + host->coordinates_get());
+				t_path *path = new t_path();
+				ai_find_path_to_target(host->game_manager_get()->game_grid_get(),
+									   t_upair(this->host->coordinates_get().x, this->host->coordinates_get().y),
+									   t_upair(host->game_manager_get()->player->coordinates_get().x,
+											   host->game_manager_get()->player->coordinates_get().y),
+									   path);
+
+				// distance = host->game_manager_get()->player->coordinates_get() - host->coordinates_get();
+				// step = calculate_next_step(distance);
+				step = Vector2int((path->begin() + 1)->first, (path->begin() + 1)->second);
+				printf("path: \n");
+				for (auto i = path->begin(); i < path->end(); i++)
+				{
+						printf("%u %u\n", i->first, i->second);
+				}
+				printf("step: %u %u\n", step.x, step.y);
+				// host->move_to(step);
+				// delete path; // unnecessary?>
 		}
 		void patrol_step_resolve()
 		{
@@ -94,9 +113,5 @@ class AIObject // an addon object to GameObject that has runtime functionality
 		{
 		}
 };
-
-void ai_check_for_obstacles(GameObject *object, void *param, void *res);
-uint32_t *ai_map_create(GameGrid *game_grid, Vector2int start, Vector2int target);
-void ai_find_path_to_target(GameGrid *game_grid, t_upair start, t_upair target, t_path *path);
 
 #endif

@@ -396,6 +396,14 @@ void GameManager::game_loop()
 		auto enemy1 = this->game_object_create(e_object_type_enemy);
 		auto enemy2 = this->game_object_create(e_object_type_enemy_2);
 		auto obstacle1 = this->game_object_create(e_object_type_obstacle_1);
+		auto obstacle2 = this->game_object_create(e_object_type_obstacle_1);
+		auto obstacle3 = this->game_object_create(e_object_type_obstacle_1);
+		auto obstacle4 = this->game_object_create(e_object_type_obstacle_1);
+		auto obstacle5 = this->game_object_create(e_object_type_obstacle_1);
+		obstacle2->move_to(Vector2int(6, 6));
+		obstacle3->move_to(Vector2int(7, 7));
+		obstacle4->move_to(Vector2int(4, 5));
+		obstacle5->move_to(Vector2int(8, 5));
 		auto finish1 = this->game_object_create(e_object_type_finish);
 		(void)enemy1;
 		(void)enemy2;
@@ -404,10 +412,6 @@ void GameManager::game_loop()
 
 		while (game_running)
 		{
-				t_path *path = new t_path();
-				ai_find_path_to_target(
-					this->game_grid_get(), t_upair(enemy2->coordinates_get().x, enemy2->coordinates_get().y),
-					t_upair(this->player->coordinates_get().x, this->player->coordinates_get().y), path);
 				this->fps_start();
 				///////GAME LOOP START
 				events_handle(&e);
@@ -420,7 +424,6 @@ void GameManager::game_loop()
 				time_step_handle();
 				//////GAME LOOP END
 				this->fps_end();
-				delete path;
 		}
 }
 

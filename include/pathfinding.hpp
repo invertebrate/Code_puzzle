@@ -25,7 +25,7 @@
 
 typedef std::pair<uint32_t, uint32_t> t_upair;
 typedef std::deque<t_upair> t_queue;
-typedef std::vector<t_upair> t_path;
+typedef std::deque<t_upair> t_path;
 
 enum e_node_status
 {
