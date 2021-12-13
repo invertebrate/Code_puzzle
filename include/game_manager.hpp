@@ -108,7 +108,7 @@ class GameManager
 		void render_frame();
 		void render_objects();
 		void render_grid();
-		uint32_t game_object_create(e_object_type type);
+		GameObject *game_object_create(e_object_type type);
 		void game_object_destroy();
 		void fps_start();
 		void fps_end();

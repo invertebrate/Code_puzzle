@@ -249,7 +249,7 @@ void print_map(t_pf_data *data)
 		printf("%s\n", map_string.c_str());
 }
 
-void path_find(uint32_t *map, uint32_t width, uint32_t height, t_path *path)
+void path_find(uint32_t *map, t_upair start, uint32_t width, uint32_t height, t_path *path)
 {
 		srand(time(NULL));
 		t_pf_data data;
@@ -258,6 +258,7 @@ void path_find(uint32_t *map, uint32_t width, uint32_t height, t_path *path)
 		data.width = width;
 		data.height = height;
 		data.path = path;
+		data.start = start;
 		// create_map(&data);
 		data.node_states = node_states_init(width, height);
 		printf("finding path: w %u, h %u\n", width, height);

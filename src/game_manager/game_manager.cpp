@@ -53,7 +53,7 @@ GameWindow *GameManager::game_window_get()
 {
 		return (game_window);
 }
-uint32_t GameManager::game_object_create(e_object_type type)
+GameObject *GameManager::game_object_create(e_object_type type)
 {
 		printf("Creating a game object of type %d\n", type);
 		GameObject *object;
@@ -65,7 +65,7 @@ uint32_t GameManager::game_object_create(e_object_type type)
 				object_count++;
 				game_grid_get()->add_object_at(object, {0, 0});
 				player = object;
-				return (e_object_type_hero);
+				return (object);
 		}
 		if (type == e_object_type_enemy)
 		{
@@ -74,7 +74,7 @@ uint32_t GameManager::game_object_create(e_object_type type)
 				game_grid_get()->add_object_at(object, {0, 0});
 				object->move_to(Vector2int{3, 3});
 				object_count++;
-				return (e_object_type_enemy);
+				return (object);
 		}
 		if (type == e_object_type_enemy_2)
 		{
@@ -87,7 +87,7 @@ uint32_t GameManager::game_object_create(e_object_type type)
 				game_grid_get()->add_object_at(object, {0, 0});
 				object->move_to(Vector2int{3, 1});
 				object_count++;
-				return (e_object_type_enemy);
+				return (object);
 		}
 		if (type == e_object_type_obstacle_1)
 		{
@@ -96,7 +96,7 @@ uint32_t GameManager::game_object_create(e_object_type type)
 				game_grid_get()->add_object_at(object, {0, 0});
 				object->move_to(Vector2int{5, 5});
 				object_count++;
-				return (e_object_type_obstacle_1);
+				return (object);
 		}
 		if (type == e_object_type_finish)
 		{
@@ -105,7 +105,7 @@ uint32_t GameManager::game_object_create(e_object_type type)
 				game_grid_get()->add_object_at(object, {0, 0});
 				object->move_to(Vector2int{9, 9});
 				object_count++;
-				return (e_object_type_finish);
+				return (object);
 		}
 		return (0);
 }
@@ -393,15 +393,21 @@ void GameManager::time_step_handle()
 void GameManager::game_loop()
 {
 		SDL_Event e;
-		this->game_object_create(e_object_type_enemy);
-		this->game_object_create(e_object_type_enemy_2);
-		this->game_object_create(e_object_type_obstacle_1);
-		this->game_object_create(e_object_type_finish);
-		t_path *path = new t_path();
-		ai_find_path_to_target(this->game_grid_get(), t_upair(0, 0), t_upair(5, 6), path);
-		(void)path;
+		auto enemy1 = this->game_object_create(e_object_type_enemy);
+		auto enemy2 = this->game_object_create(e_object_type_enemy_2);
+		auto obstacle1 = this->game_object_create(e_object_type_obstacle_1);
+		auto finish1 = this->game_object_create(e_object_type_finish);
+		(void)enemy1;
+		(void)enemy2;
+		(void)obstacle1;
+		(void)finish1;
+
 		while (game_running)
 		{
+				t_path *path = new t_path();
+				ai_find_path_to_target(
+					this->game_grid_get(), t_upair(enemy2->coordinates_get().x, enemy2->coordinates_get().y),
+					t_upair(this->player->coordinates_get().x, this->player->coordinates_get().y), path);
 				this->fps_start();
 				///////GAME LOOP START
 				events_handle(&e);
@@ -414,6 +420,7 @@ void GameManager::game_loop()
 				time_step_handle();
 				//////GAME LOOP END
 				this->fps_end();
+				delete path;
 		}
 }
 

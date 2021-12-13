@@ -48,5 +48,5 @@ void ai_find_path_to_target(GameGrid *game_grid, t_upair start, t_upair target, 
 		uint32_t height = game_grid->grid_height_get();
 
 		map = ai_map_create(game_grid, Vector2int(start.first, start.second), Vector2int(target.first, target.second));
-		path_find(map, width, height, path);
+		path_find(map, start, width, height, path);
 }

@@ -45,6 +45,6 @@ typedef struct s_pf_data
 		t_queue *queue;
 } t_pf_data;
 
-void path_find(uint32_t *map, uint32_t width, uint32_t height, t_path *path);
+void path_find(uint32_t *map, t_upair start, uint32_t width, uint32_t height, t_path *path);
 
 #endif
