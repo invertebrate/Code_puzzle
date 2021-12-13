@@ -30,6 +30,8 @@ typedef std::function<void(GameObject *, GameObject *, void *)> f_gameobject_ope
 typedef std::function<void(GameObject *, GameObject *, void *, void *)> f_gameobject_operation_pair_param;
 typedef std::function<void(GameObject *, void *, void *)> f_gameobject_operation_single_param;
 
+typedef std::map<uint32_t, std::vector<GameObject *> *> t_grid;
+
 enum e_object_type : unsigned int
 {
 		e_object_type_null = 10,
@@ -126,13 +128,13 @@ class GameGrid
 		float grid_line_width = 0;
 		uint32_t grid_sqr_size = GRID_SQR_SIZE;
 
-		std::map<uint32_t, std::vector<GameObject *> *> grid;
+		t_grid grid;
 		SDL_Texture *sdl_texture;
 
 	  public:
 		GameGrid(GameManager *manager);
 		~GameGrid();
-		std::map<uint32_t, std::vector<GameObject *> *> *grid_get();
+		t_grid *grid_get();
 		void texture_set(SDL_Texture *texture);
 		SDL_Texture *texture_get();
 		float line_width_get();

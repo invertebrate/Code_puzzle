@@ -378,6 +378,7 @@ void GameManager::time_step_handle()
 		if (timer > step_time)
 		{
 				// printf("advancing time step: %d\n", step_counter);
+				execute_command_line(this, step_counter);
 				step_counter++;
 				timer = 0;
 				for (auto it = this->game_objects.begin(); it != this->game_objects.end(); it++)
@@ -392,11 +393,13 @@ void GameManager::time_step_handle()
 void GameManager::game_loop()
 {
 		SDL_Event e;
-		// this->game_object_create(e_object_type_enemy);
+		this->game_object_create(e_object_type_enemy);
 		this->game_object_create(e_object_type_enemy_2);
 		this->game_object_create(e_object_type_obstacle_1);
 		this->game_object_create(e_object_type_finish);
-
+		t_path *path = new t_path();
+		ai_find_path_to_target(this->game_grid_get(), t_upair(0, 0), t_upair(5, 6), path);
+		(void)path;
 		while (game_running)
 		{
 				this->fps_start();

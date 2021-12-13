@@ -45,6 +45,7 @@
 		"cinttypes": "cpp",
 		"typeinfo": "cpp",
 		"map": "cpp",
-		"iostream": "cpp"
+		"iostream": "cpp",
+		"cstring": "cpp"
 	}
 }

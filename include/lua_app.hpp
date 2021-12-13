@@ -48,5 +48,6 @@ enum e_command_log
 
 void settings_read(GameManager *manager, const char *file);
 void commands_init(GameManager *manager, const char *file);
+void execute_command_line(GameManager *manager, int line_nb);
 
 #endif

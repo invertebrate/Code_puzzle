@@ -29,7 +29,11 @@ int main()
 // TODO!
 // Game start, game end, paused states
 // Static obstacles >> 0.1 done
-// Dynamic obstacles
+// Dynamic obstacles -create step resolve priority so obstacles are resolved first
 // More complex enemy behaviour
 // Pathfinding for enemies?
-// Turn based command reading -adds comments after command lines for executed commands<-
+// Turn based command reading -adds comments after command lines for executed commands<- >> 0.7 done
+//
+// MID-PROJECT PROJECT
+//	DIJKSTRA's pathfinding algorithm
+//

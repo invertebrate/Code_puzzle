@@ -50,12 +50,14 @@ SOURCES =	main.cpp \
 			rendering/renderer.cpp \
 			game_objects/game_object.cpp \
 			game_objects/ai_object.cpp \
+			game_objects/pathfinding.cpp \
 			game_manager/game_manager.cpp \
 			game_manager/grid.cpp \
 			vector2/vector2.cpp \
 			events/events.cpp \
 			lua_app/lua_app.cpp \
 			lua_app/lua_commands.cpp \
+
 
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.cpp=.o))
 
