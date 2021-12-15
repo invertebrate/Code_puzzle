@@ -72,7 +72,7 @@ class AIObject // an addon object to GameObject that has runtime functionality
 						printf("%u %u\n", i->first, i->second);
 				}
 				printf("step: %u %u\n", step.x, step.y);
-				// host->move_to(step);
+				host->move_to(step);
 				// delete path; // unnecessary?>
 		}
 		void patrol_step_resolve()

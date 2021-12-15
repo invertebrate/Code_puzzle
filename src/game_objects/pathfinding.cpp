@@ -256,6 +256,7 @@ void path_find(int32_t *map, t_upair start, uint32_t width, uint32_t height,
 			   t_path *path) // path should contain both the target and start points
 {
 		srand(time(NULL));
+
 		t_pf_data data;
 		data.queue = new t_queue();
 		data.map = map;

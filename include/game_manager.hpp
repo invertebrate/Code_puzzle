@@ -21,7 +21,7 @@
 #define WINDOW_SIZE 1800
 #define GRID_WIDTH 900
 #define GRID_HEIGHT 900
-#define GRID_DIMENSIONS_X 10
+#define GRID_DIMENSIONS_X 10 // todo: dynamic dimension support
 #define GRID_DIMENSIONS_Y 10
 #define GRID_SQR_SIZE 89
 #define TARGET_FPS 60

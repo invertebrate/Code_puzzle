@@ -392,22 +392,34 @@ void GameManager::time_step_handle()
 }
 void GameManager::game_loop()
 {
+		srand(time(NULL));
 		SDL_Event e;
-		auto enemy1 = this->game_object_create(e_object_type_enemy);
+		GameGrid *grid = game_grid_get();
+		// auto enemy1 = this->game_object_create(e_object_type_enemy);
 		auto enemy2 = this->game_object_create(e_object_type_enemy_2);
-		auto obstacle1 = this->game_object_create(e_object_type_obstacle_1);
-		auto obstacle2 = this->game_object_create(e_object_type_obstacle_1);
-		auto obstacle3 = this->game_object_create(e_object_type_obstacle_1);
-		auto obstacle4 = this->game_object_create(e_object_type_obstacle_1);
-		auto obstacle5 = this->game_object_create(e_object_type_obstacle_1);
-		obstacle2->move_to(Vector2int(6, 6));
-		obstacle3->move_to(Vector2int(7, 7));
-		obstacle4->move_to(Vector2int(4, 5));
-		obstacle5->move_to(Vector2int(8, 5));
+		enemy2->move_to(Vector2int(9, 9));
+		for (int i = 0; i < grid->grid_width_get() * grid->grid_height_get(); i++)
+		{
+				auto coords = grid->grid_coords_get(i);
+				auto obstacle1 = this->game_object_create(e_object_type_obstacle_1);
+				if (rand() % 100 < PF_VALUE_OBSTACLE_DENSITY)
+				{
+						obstacle1->move_to(coords); // todo: init enemy path to 0, dont move if 0, check if pathfind
+													// gives nice path when no path and when start and end are the same
+				}
+		}
+		// auto obstacle2 = this->game_object_create(e_object_type_obstacle_1);
+		// auto obstacle3 = this->game_object_create(e_object_type_obstacle_1);
+		// auto obstacle4 = this->game_object_create(e_object_type_obstacle_1);
+		// auto obstacle5 = this->game_object_create(e_object_type_obstacle_1);
+		// obstacle2->move_to(Vector2int(6, 6));
+		// obstacle3->move_to(Vector2int(7, 7));
+		// obstacle4->move_to(Vector2int(4, 5));
+		// obstacle5->move_to(Vector2int(8, 5));
 		auto finish1 = this->game_object_create(e_object_type_finish);
-		(void)enemy1;
+		// (void)enemy1;
 		(void)enemy2;
-		(void)obstacle1;
+		// (void)obstacle1;
 		(void)finish1;
 
 		while (game_running)
