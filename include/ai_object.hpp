@@ -19,7 +19,7 @@ enum e_task_type
 };
 
 void ai_check_for_obstacles(GameObject *object, void *param, void *res);
-uint32_t *ai_map_create(GameGrid *game_grid, Vector2int start, Vector2int target);
+int32_t *ai_map_create(GameGrid *game_grid, Vector2int start, Vector2int target);
 void ai_find_path_to_target(GameGrid *game_grid, t_upair start, t_upair target, t_path *path);
 
 class AIObject // an addon object to GameObject that has runtime functionality
