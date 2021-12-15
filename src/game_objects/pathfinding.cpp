@@ -82,10 +82,10 @@ void trace_path(t_pf_data *data, t_upair end_coords)
 		data->path->push_front(end_coords);
 		while (true)
 		{
-				coords = find_smallest_neighbour(data, coords);
-				data->path->push_front(coords);
 				if (data->map[get_index(data, coords.first, coords.second)] == PF_VALUE_START)
 						break;
+				coords = find_smallest_neighbour(data, coords);
+				data->path->push_front(coords);
 		}
 		printf("route size i.e. step amount: %lu\n", data->path->size());
 }
