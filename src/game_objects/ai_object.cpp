@@ -7,8 +7,9 @@ void ai_check_for_obstacles(GameObject *object, void *param, void *res)
 		if (object->is_solid())
 		{
 				*((uint32_t *)res) = PF_VALUE_OBSTACLE;
-				printf("found obstacle at %u %u res is %u\n", object->coordinates_get().x, object->coordinates_get().y,
-					   *((uint32_t *)res));
+				// printf("found obstacle at %u %u res is %u\n", object->coordinates_get().x,
+				// object->coordinates_get().y,
+				// 	   *((uint32_t *)res));
 				return;
 		}
 		(void)param;
@@ -30,10 +31,15 @@ int32_t *ai_map_create(GameGrid *game_grid, Vector2int start, Vector2int target)
 												 &temp_res);
 				if (temp_res == PF_VALUE_OBSTACLE)
 				{
-						printf("res was obstacle: %u \n", temp_res);
+						// printf("res was obstacle: %u \n", temp_res);
 						map[i] = PF_VALUE_OBSTACLE;
 				}
 				temp_res = PF_VALUE_EMPTY;
+		}
+		if (start == target && map != NULL)
+		{
+				free(map);
+				return (NULL);
 		}
 		map[game_grid->grid_index_get(start)] = PF_VALUE_START;
 		map[game_grid->grid_index_get(target)] = PF_VALUE_FINISH;
@@ -48,5 +54,10 @@ void ai_find_path_to_target(GameGrid *game_grid, t_upair start, t_upair target, 
 		uint32_t height = game_grid->grid_height_get();
 
 		map = ai_map_create(game_grid, Vector2int(start.first, start.second), Vector2int(target.first, target.second));
-		path_find(map, start, width, height, path);
+		if (map != NULL)
+		{
+				path_find(map, start, width, height, path);
+				free(map);
+				map = NULL;
+		}
 }

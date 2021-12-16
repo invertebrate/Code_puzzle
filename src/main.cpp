@@ -34,8 +34,7 @@ int main()
 // More complex enemy behaviour
 // Pathfinding for enemies?
 // Turn based command reading -adds comments after command lines for executed commands<- >> 0.7 done
+// Move functions and defitions around so hpp and cpp are consistent
 //
 // MID-PROJECT PROJECT
-//	DIJKSTRA's pathfinding algorithm --almost done
-// FIX pathfinding 0 length path errors
-//
+//	DIJKSTRA's pathfinding algorithm --close enough

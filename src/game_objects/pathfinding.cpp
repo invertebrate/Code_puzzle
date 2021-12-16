@@ -264,6 +264,11 @@ void path_find(int32_t *map, t_upair start, uint32_t width, uint32_t height,
 		data.height = height;
 		data.path = path;
 		data.start = start;
+		if (map[get_index(&data, start.first, start.second)] == PF_VALUE_FINISH)
+		{
+				path->clear();
+				return;
+		}
 		// create_map(&data);
 		data.node_states = node_states_init(width, height);
 		printf("finding path: w %u, h %u\n", width, height);

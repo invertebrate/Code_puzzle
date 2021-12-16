@@ -65,15 +65,22 @@ class AIObject // an addon object to GameObject that has runtime functionality
 
 				// distance = host->game_manager_get()->player->coordinates_get() - host->coordinates_get();
 				// step = calculate_next_step(distance);
-				step = Vector2int((path->begin() + 1)->first, (path->begin() + 1)->second);
-				printf("path: \n");
-				for (auto i = path->begin(); i < path->end(); i++)
+				if (path->size() > 0)
 				{
-						printf("%u %u\n", i->first, i->second);
+						step = Vector2int((path->begin() + 1)->first, (path->begin() + 1)->second);
+						printf("path: \n");
+						for (auto i = path->begin(); i < path->end(); i++)
+						{
+								printf("%u %u\n", i->first, i->second);
+						}
+						printf("step: %u %u\n", step.x, step.y);
+						host->move_to(step);
+						// delete path; // unnecessary?>}
 				}
-				printf("step: %u %u\n", step.x, step.y);
-				host->move_to(step);
-				// delete path; // unnecessary?>
+				else
+				{
+						printf("path was empty\n");
+				}
 		}
 		void patrol_step_resolve()
 		{
