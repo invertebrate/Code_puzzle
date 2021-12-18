@@ -450,13 +450,8 @@ GameGrid::GameGrid(GameManager *manager)
 		{
 				// img_width = manager->window_size_get().x;
 				// img_height = manager->window_size_get().y;
-				;
 		}
-		if (manager->grid_size_get() >= (Vector2int){1, 1})
-		{
-
-				;
-		}
+		// grid_sqr_size =
 		grid_line_width = (img_width - (width * grid_sqr_size)) / (width - 1);
 		for (uint32_t h = 0; h < height; h++)
 		{

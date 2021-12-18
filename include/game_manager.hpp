@@ -15,6 +15,8 @@
 #define ENEMY_TEXTURE "assets/enemy.png"
 #define OBSTACLE_TEXTURE "assets/obstacle.png"
 #define GRID_TEXTURE "assets/grid.png"
+#define GRID_TEXTURE15 "assets/grid15.png"
+#define GRID_TEXTURE8 "assets/grid8.png"
 #define FINISH_TEXTURE "assets/finish.png"
 #define SETTINGS_FILE "settings.lua"
 

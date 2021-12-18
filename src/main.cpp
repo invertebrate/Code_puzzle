@@ -13,6 +13,7 @@ GameManager *game_manager_init()
 		game_manager = new GameManager();
 		game_manager->init();
 		game_manager->game_grid_get()->texture_set(game_manager->game_renderer_get()->texture_create(GRID_TEXTURE));
+
 		return (game_manager);
 }
 
@@ -27,8 +28,9 @@ int main()
 }
 
 // TODO!
+// !!DYNAMIC grid dimensions, refactor to create the grid image from individual squares and lines!!
+
 // Game start, game end, paused states
-// dynamic grid dimensions
 // Static obstacles >> 0.1 done
 // Dynamic obstacles -create step resolve priority so obstacles are resolved first
 // More complex enemy behaviour

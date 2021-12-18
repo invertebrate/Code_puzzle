@@ -1,9 +1,4 @@
 #include "lua_app.hpp"
-#define S_WINDOW_SIZE_X "window_size_x"
-#define S_WINDOW_SIZE_Y "window_size_y"
-#define S_STEP_TIME "step_time"
-#define S_FPS_CAP "fps_cap"
-#define S_SETTINGS "settings"
 
 static int check_lua(lua_State *L, int r)
 {
@@ -29,7 +24,6 @@ static void settings_window_size_get(GameManager *manager, lua_State *L)
 				size.x = (int)lua_tonumber(L, -1);
 		}
 		lua_pop(L, 1);
-
 		lua_pushstring(L, S_WINDOW_SIZE_Y);
 		lua_gettable(L, -2);
 		if (lua_isnumber(L, -1))
@@ -37,7 +31,6 @@ static void settings_window_size_get(GameManager *manager, lua_State *L)
 				size.y = (int)lua_tonumber(L, -1);
 		}
 		lua_pop(L, 1);
-
 		if (size >= Vector2int{1, 1})
 		{
 				manager->window_size_set(size);
@@ -63,15 +56,40 @@ static void settings_step_time_get(GameManager *manager, lua_State *L)
 		{
 				manager->step_time_set((float)lua_tonumber(L, -1));
 				printf("step time read: %f\n", (float)lua_tonumber(L, -1));
+		}
+		lua_pop(L, 1);
+}
+static void settings_grid_size_get(GameManager *manager, lua_State *L)
+{
+		Vector2int grid_size = {GRID_DIMENSIONS_X, GRID_DIMENSIONS_Y};
+		lua_pushstring(L, S_GRID_SIZEX);
+		lua_gettable(L, -2);
+		if (lua_isnumber(L, -1))
+		{
+				grid_size.x = lua_tonumber(L, -1);
+				printf("grid size x read: %f\n", (float)lua_tonumber(L, -1));
+				lua_pop(L, 1);
+		}
+		lua_pushstring(L, S_GRID_SIZEY);
+		lua_gettable(L, -2);
+		if (lua_isnumber(L, -1))
+		{
+				grid_size.y = lua_tonumber(L, -1);
+				printf("grid size y read: %f\n", (float)lua_tonumber(L, -1));
 				lua_pop(L, 1);
 		}
 		lua_pop(L, 1);
+		manager->grid_size_set(grid_size);
+		printf("grid size set: %d %d\n", manager->grid_size_get().x, manager->grid_size_get().y);
+		(void)grid_size;
+		(void)manager;
 }
 static void settings_parse(GameManager *manager, lua_State *L)
 {
 		settings_window_size_get(manager, L);
 		settings_fps_cap_get(manager, L);
 		settings_step_time_get(manager, L);
+		settings_grid_size_get(manager, L);
 }
 
 void settings_read(GameManager *manager, const char *file)

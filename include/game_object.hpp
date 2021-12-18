@@ -44,7 +44,7 @@ class GameObject
 		GameManager *game_manager_get();
 		void render_layer_set(uint16_t layer);
 		uint16_t render_layer_get();
-		void move_to(Vector2int location);
+		void move_to(Vector2int coords);
 		Vector2int coordinates_get();
 		void size_set(Vector2int size);
 		Vector2int size_get();

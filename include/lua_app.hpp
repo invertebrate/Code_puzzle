@@ -36,6 +36,13 @@
 #define F_COMMANDS_INIT_FILE "init.lua"
 #define F_COMMANDS_FILE "commands.lua"
 #define F_SETTINGS_FILE "settings.lua"
+#define S_WINDOW_SIZE_X "window_size_x"
+#define S_WINDOW_SIZE_Y "window_size_y"
+#define S_STEP_TIME "step_time"
+#define S_GRID_SIZEX "grid_size_x"
+#define S_GRID_SIZEY "grid_size_y"
+#define S_FPS_CAP "fps_cap"
+#define S_SETTINGS "settings"
 
 enum e_command_error
 {
