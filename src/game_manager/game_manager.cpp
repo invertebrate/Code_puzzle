@@ -92,7 +92,6 @@ GameObject *GameManager::game_object_create(e_object_type type)
 				object = GameObject::obstacle_1_object_create(this, object);
 				object->type_set(type);
 				game_grid_get()->add_object_at(object, {0, 0});
-				object->move_to(Vector2int{5, 5});
 				object_count++;
 				return (object);
 		}
@@ -101,7 +100,6 @@ GameObject *GameManager::game_object_create(e_object_type type)
 				object = GameObject::finish_object_create(this, object);
 				object->type_set(type);
 				game_grid_get()->add_object_at(object, {0, 0});
-				object->move_to(Vector2int{9, 9});
 				object_count++;
 				return (object);
 		}
@@ -221,12 +219,13 @@ void GameManager::win_condition_check(GameObject *obj1, GameObject *obj2, void *
 void GameManager::lose_condition_check(GameObject *obj1, GameObject *obj2, void *res)
 {
 		if (*(int *)res == 1)
+		{
 				return;
+		}
 		if (obj1->type_get() == e_object_type_hero)
 		{
 				if (obj2->type_get() == e_object_type_enemy || obj2->type_get() == e_object_type_enemy_2)
 				{
-
 						*(int *)res = 1;
 						return;
 						// lose;
@@ -278,23 +277,20 @@ void GameManager::end_condition_check()
 		int res = -1;
 		for (int w = 0; w < this->game_grid_get()->grid_width_get(); w++)
 		{
-				for (int h = 0; h < this->game_grid_get()->grid_width_get(); h++)
+				for (int h = 0; h < this->game_grid_get()->grid_height_get(); h++)
 				{
 						game_grid_get()->operate_pairwise_at(lose_condition_check, {w, h}, &res);
-						if (res == true)
+						if (res == 1)
 						{
-								// printf("GAME OVER!\n");
 								custom_event_add(e_event_code_gamelost, NULL, NULL);
 						}
 						res = -1;
 						game_grid_get()->operate_pairwise_at(win_condition_check, {w, h}, &res);
-
-						if (res == true)
+						if (res == 1)
 						{
 								custom_event_add(e_event_code_gamewon, NULL, NULL);
-
-								// printf("GAME WON!\n");
 						}
+						res = -1;
 				}
 		}
 }
@@ -415,8 +411,9 @@ void GameManager::game_loop()
 		// obstacle4->move_to(Vector2int(4, 5));
 		// obstacle5->move_to(Vector2int(8, 5));
 		auto finish1 = this->game_object_create(e_object_type_finish);
+		finish1->move_to(Vector2int(6, 6));
 		// (void)enemy1;
-		(void)enemy2;
+		// (void)enemy2;
 		// (void)obstacle1;
 		(void)finish1;
 		(void)grid;
