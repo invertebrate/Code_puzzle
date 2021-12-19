@@ -396,16 +396,16 @@ void GameManager::game_loop()
 		// auto enemy1 = this->game_object_create(e_object_type_enemy);
 		auto enemy2 = this->game_object_create(e_object_type_enemy_2);
 		enemy2->move_to(Vector2int(8, 8));
-		// for (int i = 0; i < grid->grid_width_get() * grid->grid_height_get(); i++)
-		// {
-		// 		auto coords = grid->grid_coords_get(i);
-		// 		auto obstacle1 = this->game_object_create(e_object_type_obstacle_1);
-		// 		if (rand() % 100 < PF_VALUE_OBSTACLE_DENSITY)
-		// 		{
-		// 				obstacle1->move_to(coords); // todo: init enemy path to 0, dont move if 0, check if pathfind
-		// 											// gives nice path when no path and when start and end are the same
-		// 		}
-		// }
+		for (int i = 0; i < grid->grid_width_get() * grid->grid_height_get(); i++)
+		{
+				auto coords = grid->grid_coords_get(i);
+				auto obstacle1 = this->game_object_create(e_object_type_obstacle_1);
+				if (rand() % 100 < PF_VALUE_OBSTACLE_DENSITY)
+				{
+						obstacle1->move_to(coords); // todo: init enemy path to 0, dont move if 0, check if pathfind
+													// gives nice path when no path and when start and end are the same
+				}
+		}
 		// auto obstacle2 = this->game_object_create(e_object_type_obstacle_1);
 		// auto obstacle3 = this->game_object_create(e_object_type_obstacle_1);
 		// auto obstacle4 = this->game_object_create(e_object_type_obstacle_1);
@@ -607,11 +607,11 @@ uint32_t GameGrid::img_height_get()
 }
 int GameGrid::grid_cell_width_get()
 {
-		return (img_width / width);
+		return (cell_width);
 }
 int GameGrid::grid_cell_height_get()
 {
-		return (img_height / width);
+		return (cell_height);
 }
 void GameGrid::grid_objects_print()
 {

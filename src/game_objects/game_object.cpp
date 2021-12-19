@@ -47,10 +47,11 @@ GameObject *GameObject::enemy_object_create(GameManager *manager, GameObject *ob
 		uint32_t window_y = manager->window_size_get().y;
 		uint32_t grid_x = manager->game_grid_get()->img_width_get();
 		uint32_t grid_y = manager->game_grid_get()->img_height_get();
-		uint32_t sqr_size = manager->game_grid_get()->grid_cell_width_get();
+		uint32_t cell_width = manager->game_grid_get()->grid_cell_width_get();
+		uint32_t cell_height = manager->game_grid_get()->grid_cell_height_get();
 		obj = new GameObject(
 			manager, ENEMY_TEXTURE,
-			Vector2int((float)sqr_size * ((float)window_x / grid_x), (float)sqr_size * ((float)window_y / grid_y)),
+			Vector2int((float)cell_width * ((float)window_x / grid_x), (float)cell_height * ((float)window_y / grid_y)),
 			Vector2int(0, 0));
 		obj->collision = true;
 		obj->solid = false;
@@ -64,10 +65,11 @@ GameObject *GameObject::enemy_2_object_create(GameManager *manager, GameObject *
 		uint32_t window_y = manager->window_size_get().y;
 		uint32_t grid_x = manager->game_grid_get()->img_width_get();
 		uint32_t grid_y = manager->game_grid_get()->img_height_get();
-		uint32_t sqr_size = manager->game_grid_get()->grid_cell_width_get();
+		uint32_t cell_width = manager->game_grid_get()->grid_cell_width_get();
+		uint32_t cell_height = manager->game_grid_get()->grid_cell_height_get();
 		obj = new GameObject(
 			manager, ENEMY_TEXTURE,
-			Vector2int((float)sqr_size * ((float)window_x / grid_x), (float)sqr_size * ((float)window_y / grid_y)),
+			Vector2int((float)cell_width * ((float)window_x / grid_x), (float)cell_height * ((float)window_y / grid_y)),
 			Vector2int(0, 0));
 		obj->collision = true;
 		obj->solid = false;
@@ -81,10 +83,11 @@ GameObject *GameObject::obstacle_1_object_create(GameManager *manager, GameObjec
 		uint32_t window_y = manager->window_size_get().y;
 		uint32_t grid_x = manager->game_grid_get()->img_width_get();
 		uint32_t grid_y = manager->game_grid_get()->img_height_get();
-		uint32_t sqr_size = manager->game_grid_get()->grid_cell_width_get();
+		uint32_t cell_width = manager->game_grid_get()->grid_cell_width_get();
+		uint32_t cell_height = manager->game_grid_get()->grid_cell_height_get();
 		obj = new GameObject(
 			manager, OBSTACLE_TEXTURE,
-			Vector2int((float)sqr_size * ((float)window_x / grid_x), (float)sqr_size * ((float)window_y / grid_y)),
+			Vector2int((float)cell_width * ((float)window_x / grid_x), (float)cell_height * ((float)window_y / grid_y)),
 			Vector2int(0, 0));
 		obj->collision = true;
 		obj->solid = true;
@@ -98,10 +101,11 @@ GameObject *GameObject::finish_object_create(GameManager *manager, GameObject *o
 		uint32_t window_y = manager->window_size_get().y;
 		uint32_t grid_x = manager->game_grid_get()->img_width_get();
 		uint32_t grid_y = manager->game_grid_get()->img_height_get();
-		uint32_t sqr_size = manager->game_grid_get()->grid_cell_width_get();
+		uint32_t cell_width = manager->game_grid_get()->grid_cell_width_get();
+		uint32_t cell_height = manager->game_grid_get()->grid_cell_height_get();
 		obj = new GameObject(
 			manager, FINISH_TEXTURE,
-			Vector2int((float)sqr_size * ((float)window_x / grid_x), (float)sqr_size * ((float)window_y / grid_y)),
+			Vector2int((float)cell_width * ((float)window_x / grid_x), (float)cell_height * ((float)window_y / grid_y)),
 			Vector2int(0, 0));
 		obj->collision = true;
 		obj->solid = false;
