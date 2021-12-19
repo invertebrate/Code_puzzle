@@ -473,8 +473,8 @@ void GameGrid::grid_texture_create(GameManager *manager)
 		{
 				for (int w = 0; w < grid->grid_width_get(); w++)
 				{
-						cell_rect.x = 0.0 + w * img_width / grid_width_get();
-						cell_rect.y = 0.0 + h * img_height / grid_height_get();
+						cell_rect.x = 0.0 + w * grid->cell_width;
+						cell_rect.y = 0.0 + h * grid->cell_height;
 						cell_rect.w = grid->cell_width;
 						cell_rect.h = grid->cell_height;
 						cell = manager->game_renderer_get()->texture_load(GRID_CELL_TEXTURE);
@@ -494,9 +494,11 @@ GameGrid::GameGrid(GameManager *manager)
 		}
 		if (manager->window_size_get() >= (Vector2int){1, 1})
 		{
-				// img_width = manager->window_size_get().x;
-				// img_height = manager->window_size_get().y;
+				img_width = manager->window_size_get().x;
+				img_height = manager->window_size_get().y;
 		}
+		cell_width = img_width / width;
+		cell_height = img_height / height;
 		// create game grid texture here
 		grid_texture_create(manager);
 		for (uint32_t h = 0; h < height; h++)
@@ -603,9 +605,13 @@ uint32_t GameGrid::img_height_get()
 {
 		return (img_height);
 }
-int GameGrid::grid_cell_size_get()
+int GameGrid::grid_cell_width_get()
 {
-		return (cell_width);
+		return (img_width / width);
+}
+int GameGrid::grid_cell_height_get()
+{
+		return (img_height / width);
 }
 void GameGrid::grid_objects_print()
 {

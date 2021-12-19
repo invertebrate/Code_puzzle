@@ -142,7 +142,8 @@ class GameGrid
 		float line_width_get();
 		int grid_width_get();
 		int grid_height_get();
-		int grid_cell_size_get();
+		int grid_cell_width_get();
+		int grid_cell_height_get();
 		uint32_t grid_index_get(Vector2int coords);
 		Vector2int grid_coords_get(uint32_t index);
 		void operate_pairwise_at(f_gameobject_operation f_operation, Vector2int coords, void *res);
