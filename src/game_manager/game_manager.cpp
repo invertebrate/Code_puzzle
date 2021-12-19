@@ -35,14 +35,14 @@ void GameManager::init()
 void GameManager::load_assets()
 {
 		SDL_Texture *tex;
-		tex = this->game_renderer_get()->texture_create(
+		tex = this->game_renderer_get()->texture_load(
 			HERO_TEXTURE); // shouldnt cause memory leaks bc .insert allocates and deallocates
 		this->asset_textures.insert({HERO_TEXTURE, tex});
-		tex = this->game_renderer_get()->texture_create(ENEMY_TEXTURE);
+		tex = this->game_renderer_get()->texture_load(ENEMY_TEXTURE);
 		this->asset_textures.insert({ENEMY_TEXTURE, tex});
-		tex = this->game_renderer_get()->texture_create(FINISH_TEXTURE);
+		tex = this->game_renderer_get()->texture_load(FINISH_TEXTURE);
 		this->asset_textures.insert({FINISH_TEXTURE, tex});
-		tex = this->game_renderer_get()->texture_create(OBSTACLE_TEXTURE);
+		tex = this->game_renderer_get()->texture_load(OBSTACLE_TEXTURE);
 		this->asset_textures.insert({OBSTACLE_TEXTURE, tex});
 }
 GameRenderer *GameManager::game_renderer_get()
@@ -55,7 +55,7 @@ GameWindow *GameManager::game_window_get()
 }
 GameObject *GameManager::game_object_create(e_object_type type)
 {
-		printf("Creating a game object of type %d\n", type);
+		// printf("Creating a game object of type %d\n", type);
 		GameObject *object;
 		object = NULL;
 		if (type == e_object_type_hero)
@@ -72,7 +72,6 @@ GameObject *GameManager::game_object_create(e_object_type type)
 				object = GameObject::enemy_object_create(this, object);
 				object->type_set(type);
 				game_grid_get()->add_object_at(object, {0, 0});
-				object->move_to(Vector2int{3, 3});
 				object_count++;
 				return (object);
 		}
@@ -85,7 +84,6 @@ GameObject *GameManager::game_object_create(e_object_type type)
 				object->type_set(type);
 				object->ai_object = new AIObject(object, e_behaviour_type_follow, patrol_path);
 				game_grid_get()->add_object_at(object, {0, 0});
-				object->move_to(Vector2int{3, 1});
 				object_count++;
 				return (object);
 		}
@@ -397,17 +395,17 @@ void GameManager::game_loop()
 		GameGrid *grid = game_grid_get();
 		// auto enemy1 = this->game_object_create(e_object_type_enemy);
 		auto enemy2 = this->game_object_create(e_object_type_enemy_2);
-		enemy2->move_to(Vector2int(9, 9));
-		for (int i = 0; i < grid->grid_width_get() * grid->grid_height_get(); i++)
-		{
-				auto coords = grid->grid_coords_get(i);
-				auto obstacle1 = this->game_object_create(e_object_type_obstacle_1);
-				if (rand() % 100 < PF_VALUE_OBSTACLE_DENSITY)
-				{
-						obstacle1->move_to(coords); // todo: init enemy path to 0, dont move if 0, check if pathfind
-													// gives nice path when no path and when start and end are the same
-				}
-		}
+		enemy2->move_to(Vector2int(8, 8));
+		// for (int i = 0; i < grid->grid_width_get() * grid->grid_height_get(); i++)
+		// {
+		// 		auto coords = grid->grid_coords_get(i);
+		// 		auto obstacle1 = this->game_object_create(e_object_type_obstacle_1);
+		// 		if (rand() % 100 < PF_VALUE_OBSTACLE_DENSITY)
+		// 		{
+		// 				obstacle1->move_to(coords); // todo: init enemy path to 0, dont move if 0, check if pathfind
+		// 											// gives nice path when no path and when start and end are the same
+		// 		}
+		// }
 		// auto obstacle2 = this->game_object_create(e_object_type_obstacle_1);
 		// auto obstacle3 = this->game_object_create(e_object_type_obstacle_1);
 		// auto obstacle4 = this->game_object_create(e_object_type_obstacle_1);
@@ -421,6 +419,7 @@ void GameManager::game_loop()
 		(void)enemy2;
 		// (void)obstacle1;
 		(void)finish1;
+		(void)grid;
 
 		while (game_running)
 		{
@@ -439,6 +438,53 @@ void GameManager::game_loop()
 		}
 }
 
+// static struct {
+//     SDL_Window * handle;
+//     int width, height;
+//     SDL_Renderer * renderer;
+//     SDL_Texture * texture1;
+//     SDL_Texture * texture2;
+//     SDL_Texture * texture_target;
+// } Window;
+
+// static void draw_to_target_texture()
+// {
+//     /* Direct the draw commands to the target texture. */
+//     SDL_SetRenderTarget(Window.renderer, Window.texture_target);
+
+//     /* It's always a good idea to clear the whole thing first. */
+//     SDL_SetRenderDrawColor(Window.renderer, 0, 0, 0, 0);
+//     SDL_RenderClear(Window.renderer);
+
+//     /* Let's copy the other textures onto the target texture. */
+//     SDL_RenderCopy(Window.renderer, Window.texture1, NULL, NULL);
+//     SDL_RenderCopy(Window.renderer, Window.texture2, NULL, NULL);
+
+void GameGrid::grid_texture_create(GameManager *manager)
+{
+		GameGrid *grid = this;
+		SDL_Renderer *renderer = manager->game_renderer_get()->sdl_renderer;
+		SDL_Texture *cell = NULL;
+		SDL_Rect cell_rect;
+		this->sdl_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+											  this->img_width, this->img_height);
+		SDL_SetRenderTarget(renderer, this->sdl_texture);
+		for (int h = 0; h < grid->grid_height_get(); h++)
+		{
+				for (int w = 0; w < grid->grid_width_get(); w++)
+				{
+						cell_rect.x = 0.0 + w * img_width / grid_width_get();
+						cell_rect.y = 0.0 + h * img_height / grid_height_get();
+						cell_rect.w = grid->cell_width;
+						cell_rect.h = grid->cell_height;
+						cell = manager->game_renderer_get()->texture_load(GRID_CELL_TEXTURE);
+						SDL_RenderCopy(renderer, cell, NULL, &cell_rect);
+						;
+				}
+		}
+		SDL_SetRenderTarget(renderer, NULL);
+}
+
 GameGrid::GameGrid(GameManager *manager)
 {
 		if (manager->grid_size_get() >= (Vector2int){1, 1})
@@ -451,8 +497,8 @@ GameGrid::GameGrid(GameManager *manager)
 				// img_width = manager->window_size_get().x;
 				// img_height = manager->window_size_get().y;
 		}
-		// grid_sqr_size =
-		grid_line_width = (img_width - (width * grid_sqr_size)) / (width - 1);
+		// create game grid texture here
+		grid_texture_create(manager);
 		for (uint32_t h = 0; h < height; h++)
 		{
 				for (uint32_t w = 0; w < width; w++)
@@ -549,10 +595,6 @@ void GameGrid::remove_object_at(GameObject *obj, Vector2int coords)
 				objects->erase(std::remove(objects->begin(), objects->end(), obj), objects->end());
 		}
 }
-uint32_t GameGrid::grid_sqr_size_get()
-{
-		return (grid_sqr_size);
-}
 uint32_t GameGrid::img_width_get()
 {
 		return (img_width);
@@ -560,6 +602,10 @@ uint32_t GameGrid::img_width_get()
 uint32_t GameGrid::img_height_get()
 {
 		return (img_height);
+}
+int GameGrid::grid_cell_size_get()
+{
+		return (cell_width);
 }
 void GameGrid::grid_objects_print()
 {

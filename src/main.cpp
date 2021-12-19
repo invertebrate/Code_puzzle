@@ -12,7 +12,8 @@ GameManager *game_manager_init()
 		TTF_Init();
 		game_manager = new GameManager();
 		game_manager->init();
-		game_manager->game_grid_get()->texture_set(game_manager->game_renderer_get()->texture_create(GRID_TEXTURE));
+		// game_manager->game_grid_get()->texture_set(
+		// 	game_manager->game_renderer_get()->texture_load(GRID_TEXTURE)); // remove this
 
 		return (game_manager);
 }

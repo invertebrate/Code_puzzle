@@ -14,7 +14,7 @@ class GameRenderer
 		GameRenderer(SDL_Window *window);
 		~GameRenderer();
 		void render();
-		SDL_Texture *texture_create(const char *file);
+		SDL_Texture *texture_load(const char *file);
 
 	  private:
 		GameRenderer(const GameRenderer &);

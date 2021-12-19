@@ -18,7 +18,7 @@ void GameRenderer::render()
 		SDL_RenderPresent(this->sdl_renderer);
 }
 
-SDL_Texture *GameRenderer::texture_create(const char *file)
+SDL_Texture *GameRenderer::texture_load(const char *file)
 {
 		SDL_Texture *new_texture = NULL;
 		SDL_Surface *loaded_surface = IMG_Load(file);

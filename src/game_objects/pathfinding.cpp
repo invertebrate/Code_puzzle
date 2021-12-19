@@ -87,7 +87,7 @@ void trace_path(t_pf_data *data, t_upair end_coords)
 				coords = find_smallest_neighbour(data, coords);
 				data->path->push_front(coords);
 		}
-		printf("route size i.e. step amount: %lu\n", data->path->size());
+		// printf("route size i.e. step amount: %lu\n", data->path->size());
 }
 
 uint32_t update_node(t_pf_data *data, uint32_t x, uint32_t y, int32_t current_weight)
@@ -149,7 +149,7 @@ uint32_t update_neighbors(t_pf_data *data, t_upair node)
 		r = maximum(update_node(data, x, y + 1, current_weight), r);
 		if (r == 2)
 		{
-				printf("found finish\n");
+				// printf("found finish\n");
 				trace_path(data, (t_upair){x, y});
 				for (auto it = data->path->begin(); it != data->path->end(); it++)
 				{
@@ -194,7 +194,7 @@ void path_solve(t_pf_data *data)
 		static uint32_t queue_max = 0;
 		static uint32_t queue_bottom = 0;
 		data->queue->push_back(data->start);
-		printf("start: %u %u \n", data->start.first, data->start.second);
+		// printf("start: %u %u \n", data->start.first, data->start.second);
 		while (data->queue->size() > 0)
 		{
 				auto first_in_queue = data->queue->front();
@@ -217,7 +217,7 @@ void path_solve(t_pf_data *data)
 				(void)last_in_queue;
 		}
 		(void)queue_bottom;
-		printf("queue max: %u\n", queue_max);
+		// printf("queue max: %u\n", queue_max);
 }
 
 uint8_t *node_states_init(uint32_t sizex, uint32_t sizey)
@@ -249,7 +249,7 @@ void print_map(t_pf_data *data)
 						map_string.append(str);
 				}
 		}
-		printf("%s\n", map_string.c_str());
+		// printf("%s\n", map_string.c_str());
 }
 
 void path_find(int32_t *map, t_upair start, uint32_t width, uint32_t height,
@@ -271,10 +271,10 @@ void path_find(int32_t *map, t_upair start, uint32_t width, uint32_t height,
 		}
 		// create_map(&data);
 		data.node_states = node_states_init(width, height);
-		printf("finding path: w %u, h %u\n", width, height);
-		print_map(&data);
-		printf("\n==============================================\n\n");
+		// printf("finding path: w %u, h %u\n", width, height);
+		// print_map(&data);
+		// printf("\n==============================================\n\n");
 		path_solve(&data);
-		printf("\nRESULT:==============================\n\n");
-		print_map(&data);
+		// printf("\nRESULT:==============================\n\n");
+		// print_map(&data);
 }

@@ -173,6 +173,6 @@ void execute_command_line(GameManager *manager, int line_nb)
 		int r = luaL_dostring(manager->lua_instance_get(), line.c_str());
 		if ((r = check_lua(manager->lua_instance_get(), r)))
 		{
-				printf("command line number %d read successfully: %s\n", line_nb, line.c_str());
+				// printf("command line number %d read successfully: %s\n", line_nb, line.c_str());
 		}
 } // called every time step

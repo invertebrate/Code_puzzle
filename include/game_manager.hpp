@@ -15,8 +15,7 @@
 #define ENEMY_TEXTURE "assets/enemy.png"
 #define OBSTACLE_TEXTURE "assets/obstacle.png"
 #define GRID_TEXTURE "assets/grid.png"
-#define GRID_TEXTURE15 "assets/grid15.png"
-#define GRID_TEXTURE8 "assets/grid8.png"
+#define GRID_CELL_TEXTURE "assets/cell.png"
 #define FINISH_TEXTURE "assets/finish.png"
 #define SETTINGS_FILE "settings.lua"
 
@@ -25,7 +24,7 @@
 #define GRID_HEIGHT 900
 #define GRID_DIMENSIONS_X 10 // todo: dynamic dimension support
 #define GRID_DIMENSIONS_Y 10
-#define GRID_SQR_SIZE 89
+#define GRID_CELL_SIZE 90
 #define TARGET_FPS 60
 
 typedef std::function<void(GameObject *, GameObject *, void *)> f_gameobject_operation;
@@ -125,13 +124,14 @@ class GameGrid
 	  private:
 		uint32_t width = GRID_DIMENSIONS_X;
 		uint32_t height = GRID_DIMENSIONS_Y;
+		uint32_t cell_width = GRID_CELL_SIZE;
+		uint32_t cell_height = GRID_CELL_SIZE;
 		uint32_t img_width = GRID_WIDTH;
 		uint32_t img_height = GRID_HEIGHT;
 		float grid_line_width = 0;
-		uint32_t grid_sqr_size = GRID_SQR_SIZE;
-
 		t_grid grid;
 		SDL_Texture *sdl_texture;
+		void grid_texture_create(GameManager *manager);
 
 	  public:
 		GameGrid(GameManager *manager);
@@ -142,6 +142,7 @@ class GameGrid
 		float line_width_get();
 		int grid_width_get();
 		int grid_height_get();
+		int grid_cell_size_get();
 		uint32_t grid_index_get(Vector2int coords);
 		Vector2int grid_coords_get(uint32_t index);
 		void operate_pairwise_at(f_gameobject_operation f_operation, Vector2int coords, void *res);
@@ -151,7 +152,6 @@ class GameGrid
 								   void *res);
 		void add_object_at(GameObject *obj, Vector2int coords);
 		void remove_object_at(GameObject *obj, Vector2int coords);
-		uint32_t grid_sqr_size_get();
 		uint32_t img_width_get();
 		uint32_t img_height_get();
 

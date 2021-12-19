@@ -68,18 +68,18 @@ class AIObject // an addon object to GameObject that has runtime functionality
 				if (path->size() > 0)
 				{
 						step = Vector2int((path->begin() + 1)->first, (path->begin() + 1)->second);
-						printf("path: \n");
-						for (auto i = path->begin(); i < path->end(); i++)
-						{
-								printf("%u %u\n", i->first, i->second);
-						}
-						printf("step: %u %u\n", step.x, step.y);
+						// printf("path: \n");
+						// for (auto i = path->begin(); i < path->end(); i++)
+						// {
+						// 		printf("%u %u\n", i->first, i->second);
+						// }
+						// printf("step: %u %u\n", step.x, step.y);
 						host->move_to(step);
 						// delete path; // unnecessary?>}
 				}
 				else
 				{
-						printf("path was empty\n");
+						// printf("path was empty\n");
 				}
 		}
 		void patrol_step_resolve()
